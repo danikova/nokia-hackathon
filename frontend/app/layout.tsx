@@ -1,0 +1,39 @@
+import './globals.css';
+import localFont from 'next/font/local';
+
+const nokiaFont = localFont({
+  src: [
+    {
+      path: './fonts/NokiaPureText-Regular.woff',
+      weight: '400',
+      style: 'normal',
+    },
+    {
+      path: './fonts/NokiaPureText-Light.woff',
+      weight: '200',
+      style: 'normal',
+    },
+    {
+      path: './fonts/NokiaPureText-Medium.woff',
+      weight: '600',
+      style: 'normal',
+    },
+    {
+      path: './fonts/NokiaPureText-Bold.woff',
+      weight: '700',
+      style: 'normal',
+    },
+  ],
+});
+
+export const metadata = {
+  title: 'Nokia-Hackathon',
+};
+
+export default function RootLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <html lang="en">
+      <body className={nokiaFont.className}>{children}</body>
+    </html>
+  );
+}
