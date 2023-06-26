@@ -1,4 +1,4 @@
-import { navBarItems } from '@/app/constans/navBar';
+import { navBarItems } from '@/app/_constans/navBar';
 import NavBarItem from './NavBarItem';
 
 export default function SideNavBar() {

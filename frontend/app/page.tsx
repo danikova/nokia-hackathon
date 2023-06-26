@@ -1,7 +1,7 @@
-import AppBar from './components/AppBar';
-import BottomNavBar from './components/NavBar/BottomNavBar';
-import ContentContainer from './components/ContentContainer';
-import SideNavBar from './components/NavBar/SideNavBar';
+import AppBar from './_components/AppBar';
+import BottomNavBar from './_components/NavBar/BottomNavBar';
+import ContentContainer from './_components/ContentContainer';
+import SideNavBar from './_components/NavBar/SideNavBar';
 
 export default function Home() {
   return (

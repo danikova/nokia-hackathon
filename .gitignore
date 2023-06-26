@@ -52,3 +52,7 @@ node_modules/
 
 # dotenv environment variables file
 .env
+
+# backend
+backend/pocketbase*
+backend/pb_data

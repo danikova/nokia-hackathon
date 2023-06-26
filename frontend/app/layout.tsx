@@ -4,22 +4,22 @@ import localFont from 'next/font/local';
 const nokiaFont = localFont({
   src: [
     {
-      path: './fonts/NokiaPureText-Regular.woff',
+      path: './_fonts/NokiaPureText-Regular.woff',
       weight: '400',
       style: 'normal',
     },
     {
-      path: './fonts/NokiaPureText-Light.woff',
+      path: './_fonts/NokiaPureText-Light.woff',
       weight: '200',
       style: 'normal',
     },
     {
-      path: './fonts/NokiaPureText-Medium.woff',
+      path: './_fonts/NokiaPureText-Medium.woff',
       weight: '600',
       style: 'normal',
     },
     {
-      path: './fonts/NokiaPureText-Bold.woff',
+      path: './_fonts/NokiaPureText-Bold.woff',
       weight: '700',
       style: 'normal',
     },

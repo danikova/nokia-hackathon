@@ -5,6 +5,21 @@
     },
     {
       "path": "./frontend"
+    },
+    {
+      "path": "./backend"
     }
-  ]
+  ],
+  "launch": {
+    "version": "0.2.0",
+    "configurations": [
+      {
+        "type": "node-terminal",
+        "name": "frontend dev",
+        "request": "launch",
+        "command": "npm run dev",
+        "cwd": "${workspaceFolder}/frontend"
+      }
+    ]
+  }
 }
