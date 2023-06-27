@@ -17,11 +17,10 @@ export async function middleware(request: NextRequest) {
   }
 
   const response = NextResponse.next();
-  response.headers.append('set-cookie', pb.authStore.exportToCookie());
 
   return response;
 }
 
 export const config = {
-  matcher: ['/info/:path*'],
+  matcher: ['/info/:path*', '/code/:path*', '/results/:path*', '/settings/:path*'],
 };
