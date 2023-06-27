@@ -1,4 +1,4 @@
-import { getPB } from '../_lib/pocketbase';
+import { getPB } from '../../_lib/pocketbase';
 
 export default function InfoHome() {
   const pb = getPB();

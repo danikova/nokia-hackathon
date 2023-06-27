@@ -33,7 +33,9 @@ export const metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body className={nokiaFont.className}>{children}</body>
+      <body className={nokiaFont.className}>
+        <main>{children}</main>
+      </body>
     </html>
   );
 }

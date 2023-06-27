@@ -11,7 +11,7 @@ export default function AppBar({
   children?: ReactElement;
 }) {
   return (
-    <div className="drop-shadow-md h-full bg-primary px-4">
+    <div className="h-full bg-primary px-4 z-50">
       <div className="min-h-full flex items-center">
         <div className="inline-block">
           <Image src="/nokia.svg" height={30} width={90} alt="Nokia logo" />

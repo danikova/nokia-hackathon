@@ -1,24 +1,31 @@
-import { IconType } from 'react-icons';
+import { ReactElement } from 'react';
 import { FaCodeBranch, FaCircleInfo, FaList, FaWrench } from 'react-icons/fa6';
 
-export const navBarItems: {
-  icon: IconType;
+export type NavBarItem = {
+  icon: ReactElement;
   title: string;
-}[] = [
+  rootPath: string;
+};
+
+export const navBarItems: readonly NavBarItem[] = [
   {
-    icon: FaCircleInfo,
+    icon: <FaCircleInfo className="h-6 w-6" />,
     title: 'Info',
+    rootPath: '/info',
   },
   {
-    icon: FaCodeBranch,
+    icon: <FaCodeBranch className="h-6 w-6" />,
     title: 'Code',
+    rootPath: '/code',
   },
   {
-    icon: FaList,
-    title: 'Result',
+    icon: <FaList className="h-6 w-6" />,
+    title: 'Results',
+    rootPath: '/results',
   },
   {
-    icon: FaWrench,
+    icon: <FaWrench className="h-6 w-6" />,
     title: 'Settings',
+    rootPath: '/settings',
   },
-];
+] as const;
