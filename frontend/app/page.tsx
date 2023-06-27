@@ -8,10 +8,7 @@ export default function Home() {
     <main>
       <div className="bg-secondary-bg min-h-screen text-primary_text grid grid-cols-main grid-rows-main overflow-hidden">
         <div className="col-span-2">
-          <AppBar
-            title="Hackathon"
-            // subTitle="2023.10"
-          />
+          <AppBar title={process.env.APP_TITLE as string} subTitle={process.env.APP_SUB_TITLE as string} />
         </div>
         <div className="max-md:hidden col-span-1 row-span-2">
           <SideNavBar />

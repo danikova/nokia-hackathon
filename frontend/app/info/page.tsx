@@ -1,3 +1,6 @@
+import { getPB } from '../_lib/pocketbase';
+
 export default function InfoHome() {
-  return <div>info</div>;
+  const pb = getPB();
+  return <div>info {JSON.stringify(pb.authStore.model)}</div>;
 }

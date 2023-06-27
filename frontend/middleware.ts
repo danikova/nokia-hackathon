@@ -1,12 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { POCKETBASE_AUTH_COOKIE, getPB } from './app/_lib/pocketbase';
+import { getPB } from './app/_lib/pocketbase';
 
 export async function middleware(request: NextRequest) {
-  const pb = await getPB(request);
+  const pb = getPB(request);
 
   try {
     pb.authStore.isValid && (await pb.collection('users').authRefresh());
-  } catch (_) {
+  } catch (e) {
     pb.authStore.clear();
   }
 
@@ -17,9 +17,7 @@ export async function middleware(request: NextRequest) {
   }
 
   const response = NextResponse.next();
-
-  const resCookie = pb.authStore.exportToCookie();
-  response.cookies.set(POCKETBASE_AUTH_COOKIE, resCookie);
+  response.headers.append('set-cookie', pb.authStore.exportToCookie());
 
   return response;
 }
