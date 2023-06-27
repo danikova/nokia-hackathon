@@ -10,7 +10,7 @@ module.exports = {
     extend: {
       colors: {
         primary_text: 'rgb(117, 117, 117)',
-        primary: 'rgb(37, 88, 246)',
+        primary: { DEFAULT: '#2558F6', 50: '#D5DFFD', 100: '#C2D0FC', 200: '#9BB2FB', 300: '#7394F9', 400: '#4C76F8', 500: '#2558F6', 600: '#093CDA', 700: '#072DA4', 800: '#051E6E', 900: '#020F38', 950: '#01081D' },
         secondary: {
           bg: 'rgb(255,255,255)',
           menu: 'rgb(250,250,250)',
