@@ -3,13 +3,18 @@
 import Image from 'next/image';
 import { Menu } from '@headlessui/react';
 import { setPBCookie, usePocketBase } from '../_lib/clientPocketbase';
-import Dropdown, { MenuItem } from './inputs/Dropdown';
+import Dropdown, { MenuItem, DropdownProps } from './inputs/Dropdown';
 import { useMemo } from 'react';
 import { FaUserLarge } from 'react-icons/fa6';
 import { BiLogOut } from 'react-icons/bi';
 import { useRouter } from 'next/navigation';
 
-export default function UserAvatar() {
+type UserAvatarProps = {
+  className?: string;
+  dropdownProps?: Pick<DropdownProps, 'menuItemsClass'>;
+};
+
+export default function UserAvatar({ className, dropdownProps }: UserAvatarProps) {
   const pb = usePocketBase();
   const { model } = pb.authStore;
 
@@ -38,7 +43,11 @@ export default function UserAvatar() {
       );
     }
   }, [model]);
-  return <Dropdown menuButton={menuButton} menuItems={menuItems} />;
+  return (
+    <div className={className}>
+      <Dropdown menuButton={menuButton} menuItems={menuItems} {...dropdownProps} />
+    </div>
+  );
 }
 
 function LogoutButton({ active }: { active: boolean }) {

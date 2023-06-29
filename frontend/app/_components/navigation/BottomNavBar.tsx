@@ -1,5 +1,6 @@
 import { navBarItems } from '@/app/_constans/navBar';
 import NavBarItem from './NavBarItem';
+import UserAvatar from '../UserAvatar';
 
 export default function BottomNavBar() {
   return (
@@ -11,6 +12,14 @@ export default function BottomNavBar() {
           </div>
         );
       })}
+      <div className="hover:bg-secondary-divider hover:cursor-pointer flex-1">
+        <div className="flex min-h-full content-center justify-center flex-wrap">
+          <UserAvatar
+            className="flex min-h-full content-center justify-center flex-wrap h-10 w-10 border-2 rounded-full border-primary_text"
+            dropdownProps={{ menuItemsClass: 'right-0 bottom-[2.7rem] origin-bottom-right' }}
+          />
+        </div>
+      </div>
     </div>
   );
 }

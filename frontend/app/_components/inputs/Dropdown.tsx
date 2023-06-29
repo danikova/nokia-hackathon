@@ -12,12 +12,21 @@ export type MenuItem = {
   };
 };
 
-type DropdownProps = {
+export type DropdownProps = {
   menuButton: ReactElement;
   menuItems: MenuItem[];
+  position?: 'top' | 'bottom' | 'left' | 'right';
+  menuItemsClass?: string;
 };
 
-export default function Dropdown({ menuButton, menuItems }: DropdownProps) {
+const positionStyles = {
+  bottom: 'right-0 origin-top-right',
+  top: 'right-0 bottom-0 origin-bottom-right',
+  left: '',
+  right: '',
+};
+
+export default function Dropdown({ menuButton, menuItems, menuItemsClass }: DropdownProps) {
   return (
     <>
       <Menu as="div" className="relative inline-block text-left">
@@ -31,7 +40,9 @@ export default function Dropdown({ menuButton, menuItems }: DropdownProps) {
           leaveFrom="transform opacity-100 scale-100"
           leaveTo="transform opacity-0 scale-95"
         >
-          <Menu.Items className="absolute right-0 mt-2 w-56 origin-top-right divide-y divide-gray-100 rounded-md bg-white drop-shadow-default focus:outline-none">
+          <Menu.Items
+            className={`absolute right-0 origin-top-right mt-2 w-56 divide-y divide-gray-100 rounded-md bg-white drop-shadow-default focus:outline-none ${menuItemsClass}`}
+          >
             {menuItems.map((item) => (
               <Menu.Item key={item.key} {...item?.menuItemProps}>
                 {item.component}
