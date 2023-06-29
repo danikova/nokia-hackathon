@@ -6,14 +6,11 @@ import Textfield from '../_components/inputs/Textfield';
 import { FaGithub, FaGoogle, FaRegCircleUser } from 'react-icons/fa6';
 import { Dispatch, SetStateAction, SyntheticEvent, useCallback, useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { setPBCookie } from '../_lib/clientPocketbase';
 
 type CompProps = {
   setLoading: Dispatch<SetStateAction<boolean>>;
 };
-
-function setPBCookie(pb: PocketBase) {
-  document.cookie = pb.authStore.exportToCookie({ httpOnly: false }, process.env.NEXT_PUBLIC_PB_COOKIE_KEY);
-}
 
 export default function Login() {
   const [loading, setLoading] = useState(false);

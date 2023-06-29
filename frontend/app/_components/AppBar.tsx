@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import Link from 'next/link';
 import { ReactElement } from 'react';
 
 export default function AppBar({
@@ -13,9 +14,9 @@ export default function AppBar({
   return (
     <div className="h-full bg-primary px-4 z-50">
       <div className="min-h-full flex items-center">
-        <div className="inline-block">
+        <Link href="/" className="inline-block">
           <Image src="/nokia.svg" height={30} width={90} alt="Nokia logo" />
-        </div>
+        </Link>
         <h1 className="ml-4 text-white text-xl">{title}</h1>
         {subTitle && <p className="ml-4 text-white text-xl opacity-70 font-light">{subTitle}</p>}
         {children}
