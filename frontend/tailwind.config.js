@@ -21,12 +21,6 @@ module.exports = {
         info: 'rgb(77,155,242)',
         success: 'rgb(138,201,193)',
       },
-      gridTemplateColumns: {
-        main: '4rem 1fr',
-      },
-      gridTemplateRows: {
-        main: '3rem 1fr 4rem',
-      },
       dropShadow: {
         'default': '0 0.25rem 0.25rem rgba(0,0,0,0.40)'
       }

@@ -6,8 +6,14 @@ import UserAvatar from '../_components/UserAvatar';
 
 export default async function MainLayout({ children }: { children: ReactElement }) {
   return (
-    <div className="bg-secondary-bg min-h-screen text-primary_text grid grid-cols-main grid-rows-main overflow-hidden">
-      <div className="col-span-2 drop-shadow-default">
+    <div
+      className="bg-secondary-bg min-h-screen text-primary_text grid overflow-hidden"
+      style={{
+        gridTemplateColumns: '[start] 4rem [sidebar-end] 1fr [end]',
+        gridTemplateRows: '[start] 3rem [appbar-end] 1fr [content-end] 4rem [end]',
+      }}
+    >
+      <div className="drop-shadow-default col-[start/end] row-[start/appbar-end]">
         <AppBar title={process.env.APP_TITLE as string} subTitle={process.env.APP_SUB_TITLE as string}>
           <div className="flex-auto max-md:hidden">
             <div className="flex justify-end">
@@ -16,11 +22,13 @@ export default async function MainLayout({ children }: { children: ReactElement 
           </div>
         </AppBar>
       </div>
-      <div className="max-md:hidden col-span-1 row-span-2 shadow-inner shadow-slate-400">
+      <div className="max-md:hidden col-[start/sidebar-end] row-[appbar-end/end]">
         <SideNavBar />
       </div>
-      <div className="max-md:col-span-2 md:row-span-2">{children}</div>
-      <div className="md:hidden col-span-2 row-start-3">
+      <div className="md:row-[appbar-end/end] md:col-[sidebar-end/end] max-md:row-[appbar-end/content-end] max-md:col-[start/end]">
+        {children}
+      </div>
+      <div className="md:hidden col-[start/end] row-[content-end/end]">
         <BottomNavBar />
       </div>
     </div>
