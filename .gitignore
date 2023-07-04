@@ -54,5 +54,5 @@ node_modules/
 .env
 
 # backend
-backend/pocketbase*
+backend/*.exe
 backend/pb_data

@@ -18,7 +18,17 @@
         "name": "frontend dev",
         "request": "launch",
         "command": "npm run dev",
-        "cwd": "${workspaceFolder}/frontend"
+        "cwd": "${workspaceFolder:frontend}"
+      },
+      {
+        "name": "backend dev",
+        "type": "go",
+        "request": "launch",
+        "mode": "debug",
+        "program": "${workspaceFolder:backend}/main.go",
+        "args": [
+          "serve"
+        ]
       }
     ]
   }
