@@ -1,0 +1,3 @@
+[submodule "example_project"]
+	path = example_project
+	url = git@github.com:danikova/example_project.git
