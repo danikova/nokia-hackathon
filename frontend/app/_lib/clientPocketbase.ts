@@ -1,11 +1,15 @@
+'use client';
+
 import PocketBase from 'pocketbase';
-import { useMemo } from 'react';
+import { atom, useAtom } from 'jotai';
+
+const pocketbaseAtom = atom(() => {
+  return new PocketBase(process.env.NEXT_PUBLIC_PB_HOST);
+});
 
 export function usePocketBase() {
-  const pb = useMemo(() => {
-    return new PocketBase(process.env.NEXT_PUBLIC_PB_HOST);
-  }, []);
-  return pb;
+  const [pocketbase] = useAtom(pocketbaseAtom);
+  return pocketbase;
 }
 
 export function setPBCookie(pb: PocketBase) {
