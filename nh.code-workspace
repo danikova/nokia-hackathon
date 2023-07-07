@@ -8,6 +8,9 @@
     },
     {
       "path": "./backend"
+    },
+    {
+      "path": "./example_project"
     }
   ],
   "launch": {

@@ -2,6 +2,7 @@ package events
 
 import (
 	"net/http"
+	"os"
 
 	"github.com/labstack/echo/v5"
 	"github.com/pocketbase/pocketbase"
@@ -11,6 +12,8 @@ import (
 
 func OnBeforeServe(app *pocketbase.PocketBase) {
 	app.OnBeforeServe().Add(func(e *core.ServeEvent) error {
+		e.Router.GET("/*", apis.StaticDirectoryHandler(os.DirFS("./pb_public"), false))
+
 		e.Router.AddRoute(echo.Route{
 			Method: http.MethodGet,
 			Path:   "/github-bot-register/",
