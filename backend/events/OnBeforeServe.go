@@ -50,11 +50,14 @@ func OnBeforeServe(app *pocketbase.PocketBase) {
 			Path:   "/github-bot-register/",
 			Handler: func(c echo.Context) error {
 				var reqBody GithubRequestBody
+				run_results_collection := "run_results"
+				workspaces_collection := "workspaces"
+
 				if err := c.Bind(&reqBody); err != nil {
 					return err
 				}
 
-				records, err := app.Dao().FindRecordsByExpr("run_results",
+				records, err := app.Dao().FindRecordsByExpr(run_results_collection,
 					dbx.HashExp{"run_id": reqBody.Meta.Run_id},
 				)
 				if err != nil {
@@ -66,7 +69,7 @@ func OnBeforeServe(app *pocketbase.PocketBase) {
 
 				repo_url := "https://github.com/" + reqBody.Meta.Repository
 
-				workspace, err := app.Dao().FindFirstRecordByData("workspaces", "repo_url", repo_url)
+				workspace, err := app.Dao().FindFirstRecordByData(workspaces_collection, "repo_url", repo_url)
 				if err != nil {
 					return err
 				}
@@ -74,7 +77,7 @@ func OnBeforeServe(app *pocketbase.PocketBase) {
 					return echo.NewHTTPError(http.StatusNotAcceptable, "This repository ("+reqBody.Meta.Repository+") is not connected with any workspace")
 				}
 
-				collection, err := app.Dao().FindCollectionByNameOrId("run_results")
+				collection, err := app.Dao().FindCollectionByNameOrId(run_results_collection)
 				if err != nil {
 					return err
 				}
@@ -105,7 +108,7 @@ func OnBeforeServe(app *pocketbase.PocketBase) {
 					Message: strconv.Itoa(counter) + " new record(s) generated",
 				}
 
-				return c.JSON(http.StatusOK, resBody)
+				return c.JSON(http.StatusCreated, resBody)
 			},
 			Middlewares: []echo.MiddlewareFunc{
 				apis.ActivityLogger(app),
