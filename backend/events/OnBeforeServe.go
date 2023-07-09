@@ -1,6 +1,8 @@
 package events
 
 import (
+	"hackathon-backend/types"
+	"hackathon-backend/utils"
 	"net/http"
 	"os"
 	"strconv"
@@ -13,26 +15,6 @@ import (
 	"github.com/pocketbase/pocketbase/forms"
 	"github.com/pocketbase/pocketbase/models"
 )
-
-type GithubMetaType struct {
-	Repository string `json:"repository"`
-	Run_id     string `json:"run_id"`
-}
-
-type GithubTaskType struct {
-	Output         string  `json:"output"`
-	Execution_time float32 `json:"execution_time"`
-}
-
-type GithubRequestBody struct {
-	Meta  GithubMetaType            `json:"meta"`
-	Tasks map[string]GithubTaskType `json:"tasks"`
-}
-
-type GithubResponseBody struct {
-	Code    int    `json:"code"`
-	Message string `json:"message"`
-}
 
 func min(a, b int) int {
 	if a < b {
@@ -49,29 +31,35 @@ func OnBeforeServe(app *pocketbase.PocketBase) {
 			Method: http.MethodPost,
 			Path:   "/github-bot-register/",
 			Handler: func(c echo.Context) error {
-				var reqBody GithubRequestBody
+				var reqBody types.GithubRequestBody
 				run_results_collection := "run_results"
 				workspaces_collection := "workspaces"
+				var err error
 
-				if err := c.Bind(&reqBody); err != nil {
-					return err
+				if err = c.Bind(&reqBody); err != nil {
+					return echo.NewHTTPError(http.StatusBadRequest, err)
 				}
 
 				records, err := app.Dao().FindRecordsByExpr(run_results_collection,
-					dbx.HashExp{"run_id": reqBody.Meta.Run_id},
+					dbx.HashExp{"run_id": reqBody.Meta.RunId},
 				)
 				if err != nil {
-					return err
+					return echo.NewHTTPError(http.StatusBadRequest, err)
 				}
 				if len(records) != 0 {
-					return echo.NewHTTPError(http.StatusNotAcceptable, "This run_id ("+reqBody.Meta.Run_id+") is already registered")
+					return echo.NewHTTPError(http.StatusNotAcceptable, "This run_id ("+reqBody.Meta.RunId+") is already registered")
+				}
+
+				err = utils.CheckRunIdIsValid(reqBody.Meta)
+				if err != nil {
+					return echo.NewHTTPError(http.StatusBadRequest, err)
 				}
 
 				repo_url := "https://github.com/" + reqBody.Meta.Repository
 
 				workspace, err := app.Dao().FindFirstRecordByData(workspaces_collection, "repo_url", repo_url)
 				if err != nil {
-					return err
+					return echo.NewHTTPError(http.StatusBadRequest, err)
 				}
 				if workspace == nil {
 					return echo.NewHTTPError(http.StatusNotAcceptable, "This repository ("+reqBody.Meta.Repository+") is not connected with any workspace")
@@ -79,7 +67,7 @@ func OnBeforeServe(app *pocketbase.PocketBase) {
 
 				collection, err := app.Dao().FindCollectionByNameOrId(run_results_collection)
 				if err != nil {
-					return err
+					return echo.NewHTTPError(http.StatusBadRequest, err)
 				}
 
 				counter := 0
@@ -90,20 +78,20 @@ func OnBeforeServe(app *pocketbase.PocketBase) {
 
 					form.LoadData(map[string]any{
 						"workspace":      workspace.Id,
-						"run_id":         reqBody.Meta.Run_id,
+						"run_id":         reqBody.Meta.RunId,
 						"task":           task,
 						"output":         data.Output[0:min(len(data.Output), 1000)],
 						"execution_time": data.Execution_time,
 					})
 
 					if err := form.Submit(); err != nil {
-						return err
+						return echo.NewHTTPError(http.StatusBadRequest, err)
 					}
 
 					counter += 1
 				}
 
-				resBody := &GithubResponseBody{
+				resBody := &types.GithubResponseBody{
 					Code:    201,
 					Message: strconv.Itoa(counter) + " new record(s) generated",
 				}
