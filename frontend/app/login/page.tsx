@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import Login from './Login';
 
 export default async function LoginHome() {
@@ -6,10 +7,10 @@ export default async function LoginHome() {
       <div className="md:hidden basis-32 overflow-hidden">
         <Background />
       </div>
-      <div className="flex-auto">
+      <div className="flex-[1_1_60%] max-md:flex-auto">
         <LoginWrapper />
       </div>
-      <div className="max-md:hidden flex-auto">
+      <div className="max-md:hidden flex-[1_1_40%]">
         <Background />
       </div>
     </div>
@@ -31,14 +32,8 @@ function Background() {
 
 function LoginWrapper() {
   return (
-    <div className="p-24 max-h-screen overflow-auto">
-      <div
-        style={{
-          background: 'url(/nokia-b.svg) no-repeat',
-          backgroundSize: 'contain',
-        }}
-        className="h-32 md:mb-24 mb-2"
-      />
+    <div className="p-24 max-h-screen overflow-auto box-border">
+      <Image height={128} width={500} alt="nokia logo" src="/nokia-b.svg" className='md:mb-24 mb-2' />
       <Login />
     </div>
   );
