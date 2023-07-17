@@ -1,19 +1,11 @@
 package events
 
 import (
+	"hackathon-backend/utils"
+
 	"github.com/pocketbase/pocketbase"
 	"github.com/pocketbase/pocketbase/core"
 )
-
-func contains(s []string, str string) bool {
-	for _, v := range s {
-		if v == str {
-			return true
-		}
-	}
-
-	return false
-}
 
 func enforceReadonlyFieldsByUser(app *pocketbase.PocketBase, e *core.RecordUpdateEvent, editableFields []string) {
 	originalRecord, err := app.Dao().FindRecordById(e.Record.Collection().Name, e.Record.Id, nil)
@@ -23,7 +15,7 @@ func enforceReadonlyFieldsByUser(app *pocketbase.PocketBase, e *core.RecordUpdat
 
 	for _, field := range e.Record.Collection().Schema.Fields() {
 		fieldKey := field.Name
-		if !contains(editableFields, fieldKey) && e.Record.Get(fieldKey) != originalRecord.Get(fieldKey) {
+		if !utils.Contains(editableFields, fieldKey) && e.Record.Get(fieldKey) != originalRecord.Get(fieldKey) {
 			e.Record.Set(fieldKey, originalRecord.Get(fieldKey))
 		}
 	}

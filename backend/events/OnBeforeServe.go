@@ -19,13 +19,6 @@ import (
 var runResultsCollectionName = "run_results"
 var workspacesCollectionName = "workspaces"
 
-func min(a, b int) int {
-	if a < b {
-		return a
-	}
-	return b
-}
-
 func OnBeforeServe(app *pocketbase.PocketBase) {
 	app.OnBeforeServe().Add(func(e *core.ServeEvent) error {
 		e.Router.GET("/*", apis.StaticDirectoryHandler(os.DirFS("./pb_public"), false))
@@ -98,7 +91,7 @@ func OnBeforeServe(app *pocketbase.PocketBase) {
 						"run_id":         reqBody.Meta.RunId,
 						"is_success":     true,
 						"task":           task,
-						"output":         data.Output[0:min(len(data.Output), 1000)],
+						"output":         data.Output[0:utils.Min(len(data.Output), 1000)],
 						"execution_time": data.Execution_time,
 					})
 
