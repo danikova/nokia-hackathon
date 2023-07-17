@@ -1,9 +1,9 @@
-export default function Spinner() {
+export default function Spinner({ className }: { className?: string }) {
   return (
-    <div role="status">
+    <div role="status" className={className}>
       <svg
         aria-hidden="true"
-        className="w-8 h-8 mr-2 text-primary-700 animate-spin dark:text-gray-600 fill-primary-700"
+        className="text-slate-400 animate-spin dark:text-gray-600 fill-primary-700"
         viewBox="0 0 100 101"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"

@@ -4,10 +4,11 @@ import Image from 'next/image';
 import { Menu } from '@headlessui/react';
 import { setPBCookie, usePocketBase } from '../_lib/clientPocketbase';
 import Dropdown, { MenuItem, DropdownProps } from './inputs/Dropdown';
-import { useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { FaUserLarge } from 'react-icons/fa6';
 import { BiLogOut } from 'react-icons/bi';
 import { useRouter } from 'next/navigation';
+import type { Record, Admin } from "pocketbase"
 
 type UserAvatarProps = {
   className?: string;
@@ -16,7 +17,14 @@ type UserAvatarProps = {
 
 export default function UserAvatar({ className, dropdownProps }: UserAvatarProps) {
   const pb = usePocketBase();
-  const { model } = pb.authStore;
+  const [model, setModel] = useState<Record | Admin | null>(null);
+
+  useEffect(() => {
+    pb.collection('users').authRefresh()
+    pb.authStore.onChange((_, model) => {
+      setModel(model)
+    });
+  }, [pb, setModel])
 
   const menuItems = useMemo<MenuItem[]>(
     () => [
@@ -29,10 +37,11 @@ export default function UserAvatar({ className, dropdownProps }: UserAvatarProps
   );
 
   const menuButton = useMemo(() => {
-    if (model?.avatar) {
+    console.log(model)
+    if (model?.avatarUrl) {
       return (
         <Menu.Button className="focus:ring-4 focus:outline-none focus:ring-blue-300">
-          <Image height={40} width={40} className="w-8 h-8 rounded-full" src={model?.avatar} alt={model?.email} />
+          <Image height={40} width={40} className="w-8 h-8 rounded-full" src={model?.avatarUrl} alt={model?.email} />
         </Menu.Button>
       );
     } else {
