@@ -2,21 +2,48 @@
 
 import Button from '@/app/_components/inputs/Button';
 import Textfield from '@/app/_components/inputs/Textfield';
-import { useCallback } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { RepoState, repoRe } from './consts';
 import { testGithubRepo } from './action';
-import { Workspace } from './page';
 import { usePocketBase } from '@/app/_lib/clientPocketbase';
 
-export default function WorkspaceForm({ workspace }: { workspace: Workspace }) {
+export type Workspace = {
+  id: string;
+  user: string;
+  repo_url: string;
+  [k: string]: any;
+};
+
+function useUserWorkspace() {
   const pb = usePocketBase();
+  const [workspace, setWorkspace] = useState<Workspace | null>(null);
+
+  useEffect(() => {
+    const _ = async () => {
+      const records = await pb.collection('workspaces').getFullList();
+      setWorkspace(records.length !== 0 ? records[0] as never as Workspace : null);
+    }
+    _();
+  }, [pb]);
+
+  return workspace;
+}
+
+export default function WorkspaceForm() {
+  const pb = usePocketBase();
+  const workspace = useUserWorkspace();
   const {
     register,
+    reset,
     handleSubmit,
     setError,
     formState: { errors },
-  } = useForm({ defaultValues: workspace });
+  } = useForm();
+
+  useEffect(() => {
+    if (workspace) reset(workspace);
+  }, [reset, workspace]);
 
   const onSubmit = useCallback(
     async (data: any) => {
@@ -25,7 +52,7 @@ export default function WorkspaceForm({ workspace }: { workspace: Workspace }) {
         setError('repo_url', { type: 'repoState' });
         return;
       }
-      await pb.collection('workspaces').update(workspace.id, {
+      await pb.collection('workspaces').update(workspace?.id as string, {
         repo_url: data.repo_url,
       });
     },
