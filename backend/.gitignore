@@ -1,0 +1,5 @@
+.env
+
+*.exe
+pb_data
+pb_git_sandbox

@@ -52,7 +52,3 @@ node_modules/
 
 # dotenv environment variables file
 .env
-
-# backend
-backend/*.exe
-backend/pb_data
