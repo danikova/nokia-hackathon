@@ -25,8 +25,10 @@ export default async function MainLayout({ children }: { children: ReactElement 
       <div className="max-md:hidden col-[start/sidebar-end] row-[appbar-end/end]">
         <SideNavBar />
       </div>
-      <div className="md:row-[appbar-end/end] md:col-[sidebar-end/end] max-md:row-[appbar-end/content-end] max-md:col-[start/end]">
-        {children}
+      <div className="md:row-[appbar-end/end] md:col-[sidebar-end/end] max-md:row-[appbar-end/content-end] max-md:col-[start/end] flex flex-col">
+        <div className='flex-auto h-0 overflow-y-auto'>
+          {children}
+        </div>
       </div>
       <div className="md:hidden col-[start/end] row-[content-end/end]">
         <BottomNavBar />
