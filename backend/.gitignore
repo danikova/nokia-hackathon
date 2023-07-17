@@ -2,4 +2,4 @@
 
 *.exe
 pb_data
-pb_git_sandbox
+pb_git_sandbox/*
