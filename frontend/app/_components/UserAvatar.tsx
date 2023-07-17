@@ -44,7 +44,7 @@ export default function UserAvatar({ className, dropdownProps }: UserAvatarProps
     }
   }, [model]);
   return (
-    <div className={className}>
+    <div className={`flex items-center justify-center ${className}`}>
       <Dropdown menuButton={menuButton} menuItems={menuItems} {...dropdownProps} />
     </div>
   );

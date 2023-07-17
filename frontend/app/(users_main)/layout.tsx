@@ -15,8 +15,8 @@ export default async function MainLayout({ children }: { children: ReactElement 
     >
       <div className="drop-shadow-default col-[start/end] row-[start/appbar-end]">
         <AppBar title={process.env.APP_TITLE as string} subTitle={process.env.APP_SUB_TITLE as string}>
-          <div className="flex-auto max-md:hidden">
-            <div className="flex justify-end">
+          <div className="flex flex-auto flex-row-reverse max-md:hidden">
+            <div className="flex items-center justify-center">
               <UserAvatar />
             </div>
           </div>
