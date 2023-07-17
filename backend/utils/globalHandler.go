@@ -6,8 +6,9 @@ import (
 )
 
 var PrimaryProjectKey = "primary_project"
+var DisableLoginKey = "disable_login"
 
-var FixGlobalKeys = []string{PrimaryProjectKey}
+var FixGlobalKeys = []string{PrimaryProjectKey, DisableLoginKey}
 var GlobalCollectionName = "globals"
 var GlobalCollectionKeyName = "key"
 

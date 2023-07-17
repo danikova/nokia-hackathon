@@ -19,6 +19,7 @@ func main() {
 	e.OnRecordAfterCreateRequest(app)
 	e.OnBeforeServe(app)
 	e.OnAfterBootstrap(app)
+	e.OnRecordBeforeAuth(app)
 
 	migratecmd.MustRegister(app, app.RootCmd, &migratecmd.Options{
 		Automigrate: true,
