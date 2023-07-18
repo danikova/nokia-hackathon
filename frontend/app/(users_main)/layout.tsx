@@ -26,7 +26,7 @@ export default async function MainLayout({ children }: { children: ReactElement 
         <SideNavBar />
       </div>
       <div className="md:row-[appbar-end/end] md:col-[sidebar-end/end] max-md:row-[appbar-end/content-end] max-md:col-[start/end] flex flex-col">
-        <div className='flex-auto h-0 overflow-y-auto'>
+        <div className='flex-auto h-0 overflow-y-auto overflow-x-hidden'>
           {children}
         </div>
       </div>
