@@ -82,7 +82,7 @@ function LogoutButton({ active }: { active: boolean }) {
       onClick={() => {
         pb.authStore.clear();
         setPBCookie(pb);
-        router.push('/');
+        router.push('/login');
       }}
     >
       <BiLogOut className="w-6 h-6 mr-2" />

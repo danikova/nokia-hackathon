@@ -41,7 +41,7 @@ export default function Dropdown({ menuButton, menuItems, menuItemsClass }: Drop
           leaveTo="transform opacity-0 scale-95"
         >
           <Menu.Items
-            className={`absolute right-0 origin-top-right mt-2 w-56 divide-y divide-gray-100 rounded-md bg-white drop-shadow-default focus:outline-none ${menuItemsClass}`}
+            className={`overflow-hidden absolute right-0 origin-top-right mt-2 w-56 divide-y divide-gray-100 rounded-md bg-white drop-shadow-default focus:outline-none ${menuItemsClass}`}
           >
             {menuItems.map((item) => (
               <Menu.Item key={item.key} {...item?.menuItemProps}>
