@@ -11,27 +11,23 @@ import (
 func OnRecordAfterCreateRequest(app *pocketbase.PocketBase) {
 	app.OnRecordAfterCreateRequest().Add(func(e *core.RecordCreateEvent) error {
 		if e.Record.Collection().Name == "users" {
-			err := addWorkspaceOnNewUser(app, e)
-			if err == nil {
-				return err
-			}
+			CreateWorkspaceForUser(app, &e.Record.Id)
 		}
 		return nil
 	})
 }
 
-func addWorkspaceOnNewUser(app *pocketbase.PocketBase, e *core.RecordCreateEvent) error {
-	targetCollection := "workspaces"
-	userFieldKey := "user"
-	userId := e.Record.Id
+var WorkspaceCollectionName = "workspaces"
+var UserFieldKey = "user"
 
-	collection, err := app.Dao().FindCollectionByNameOrId(targetCollection)
+func CreateWorkspaceForUser(app *pocketbase.PocketBase, userId *string) error {
+	collection, err := app.Dao().FindCollectionByNameOrId(WorkspaceCollectionName)
 	if err != nil {
 		return err
 	}
 
 	record := models.NewRecord(collection)
-	record.Set(userFieldKey, userId)
+	record.Set(UserFieldKey, userId)
 
 	if err := app.Dao().SaveRecord(record); err != nil {
 		return err

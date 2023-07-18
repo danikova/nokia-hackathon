@@ -7,6 +7,10 @@ import (
 
 func OnRecordAfterAuth(app *pocketbase.PocketBase) {
 	app.OnRecordAfterAuthWithOAuth2Request().Add(func(e *core.RecordAuthWithOAuth2Event) error {
+		if record, _ := app.Dao().FindFirstRecordByData(WorkspaceCollectionName, UserFieldKey, e.Record.Id); record == nil {
+			CreateWorkspaceForUser(app, &e.Record.Id)
+		}
+
 		if e.OAuth2User.Username != "" {
 			e.Record.Set("username", e.OAuth2User.Username)
 		}
