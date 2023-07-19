@@ -49,3 +49,26 @@ export const errorSB = React.forwardRef<HTMLDivElement, CustomContentProps>(func
     </SnackbarContent>
   )
 })
+
+export const successSB = React.forwardRef<HTMLDivElement, CustomContentProps>(function ReportComplete(props, ref) {
+  const {
+    id,
+    message,
+    ...other
+  } = props
+
+  return (
+    <SnackbarContent ref={ref} role="alert" {...other}>
+      <div
+        className="group flex gap-2 bg-green-100 border-l-4 border-green-500 text-green-700 p-4 rounded-md cursor-pointer"
+        role="alert"
+        onClick={() => {
+          closeSnackbar(id);
+        }}
+      >
+        <p>{message}</p>
+        <button className='transition delay-[75ms] opacity-10 group-hover:opacity-90'><FaXmark className="h-5 w-5" /></button>
+      </div>
+    </SnackbarContent>
+  )
+})

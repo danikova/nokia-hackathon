@@ -5,6 +5,7 @@ import { CompProps } from "./Login";
 import { FaGithub, FaGoogle } from 'react-icons/fa6';
 import { errSnackbar, setPBCookie, usePocketBase } from "../_lib/clientPocketbase";
 import { useRouter } from "next/navigation";
+import { enqueueSnackbar } from "notistack";
 
 
 export function GithubLogIn({ setLoading }: CompProps) {
@@ -17,6 +18,7 @@ export function GithubLogIn({ setLoading }: CompProps) {
       await errSnackbar(pb.collection('users').authWithOAuth2({ provider: 'github' }));
       setPBCookie(pb);
       router.push('/info');
+      enqueueSnackbar('Successful login', { variant: 'success' });
     } catch (_) { }
     setLoading(false);
   }, [pb, setLoading, router]);
@@ -43,6 +45,7 @@ export function GoogleLogIn({ setLoading }: CompProps) {
       await errSnackbar(pb.collection('users').authWithOAuth2({ provider: 'google' }));
       setPBCookie(pb);
       router.push('/info');
+      enqueueSnackbar('Successful login', { variant: 'success' });
     } catch (_) { }
     setLoading(false);
   }, [pb, setLoading, router]);
