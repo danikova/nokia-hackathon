@@ -3,7 +3,7 @@
 import { useCallback } from "react";
 import { CompProps } from "./Login";
 import { FaGithub, FaGoogle } from 'react-icons/fa6';
-import { setPBCookie, usePocketBase } from "../_lib/clientPocketbase";
+import { errSnackbar, setPBCookie, usePocketBase } from "../_lib/clientPocketbase";
 import { useRouter } from "next/navigation";
 
 
@@ -14,7 +14,7 @@ export function GithubLogIn({ setLoading }: CompProps) {
   const onClick = useCallback(async () => {
     setLoading(true);
     try {
-      await pb.collection('users').authWithOAuth2({ provider: 'github' });
+      await errSnackbar(pb.collection('users').authWithOAuth2({ provider: 'github' }));
       setPBCookie(pb);
       router.push('/info');
     } catch (_) { }
@@ -40,7 +40,7 @@ export function GoogleLogIn({ setLoading }: CompProps) {
   const onClick = useCallback(async () => {
     setLoading(true);
     try {
-      await pb.collection('users').authWithOAuth2({ provider: 'google' });
+      await errSnackbar(pb.collection('users').authWithOAuth2({ provider: 'google' }));
       setPBCookie(pb);
       router.push('/info');
     } catch (_) { }

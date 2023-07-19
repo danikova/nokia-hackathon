@@ -63,19 +63,22 @@ export default function WorkspaceForm() {
     <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
       <Textfield
         type="text"
-        placeholder="used repo"
+        label="Used repo"
+        placeholder="https://github.com/(owner)/(repo)"
         error={errors.repo_url}
         {...register('repo_url', { required: true, pattern: repoRe })}
       />
-      {errors.repo_url?.type === 'required' && <p>Repo url is required.</p>}
-      {errors.repo_url?.type === 'pattern' && (
-        <p>
-          Repo url must be a valid github repo url.{' '}
-          <p className="text-sm text-primary_text opacity-70">https://github.com/(owner)/(repo)</p>
-        </p>
-      )}
-      {errors.repo_url?.type === 'repoState' && <p>Repo what you submited is not existing or not a public repo.</p>}
-      <Button type="submit" className="min-w-full mr-0 mb-0">
+      <div className='text-red-400'>
+        {errors.repo_url?.type === 'required' && <p>Repo url is required.</p>}
+        {errors.repo_url?.type === 'pattern' && (
+          <p>
+            Repo url must be a valid github repo url.{' '}
+            <p className="text-sm text-primary_text opacity-70">https://github.com/(owner)/(repo)</p>
+          </p>
+        )}
+        {errors.repo_url?.type === 'repoState' && <p>Repo what you submited is not existing or not a public repo.</p>}
+      </div>
+      <Button type="submit" className="min-w-full">
         Update
       </Button>
     </form>

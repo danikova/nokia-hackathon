@@ -5,7 +5,7 @@ import Textfield from '../_components/inputs/Textfield';
 import { FaRegCircleUser } from 'react-icons/fa6';
 import { SyntheticEvent, useCallback, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { setPBCookie, usePocketBase } from '../_lib/clientPocketbase';
+import { errSnackbar, setPBCookie, usePocketBase } from '../_lib/clientPocketbase';
 import { CompProps } from './Login';
 
 export function UsernameLogIn({ setLoading }: CompProps) {
@@ -20,7 +20,7 @@ export function UsernameLogIn({ setLoading }: CompProps) {
       e.preventDefault();
       setLoading(true);
       try {
-        await pb.collection('users').authWithPassword(email, password);
+        await errSnackbar(pb.collection('users').authWithPassword(email, password));
         setPBCookie(pb);
         router.push('/info');
       } catch (_) { }
@@ -34,7 +34,8 @@ export function UsernameLogIn({ setLoading }: CompProps) {
       <Textfield
         autoComplete="new-email"
         type="text"
-        placeholder="Email"
+        label="User identifier"
+        placeholder="Email or Username"
         className="md:mb-8 mb-2"
         value={email}
         onChange={(e: SyntheticEvent) => {
@@ -44,7 +45,7 @@ export function UsernameLogIn({ setLoading }: CompProps) {
       <Textfield
         autoComplete="new-password"
         type="password"
-        placeholder="Password"
+        label="Password"
         className="md:mb-8 mb-2"
         value={password}
         onChange={(e: SyntheticEvent) => {

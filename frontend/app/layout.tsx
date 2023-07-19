@@ -1,4 +1,5 @@
 import './globals.css';
+import Snackbar from './Snackbar';
 import localFont from 'next/font/local';
 
 const nokiaFont = localFont({
@@ -34,7 +35,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en">
       <body className={nokiaFont.className}>
-        <main>{children}</main>
+        <main>
+          {children}
+          <Snackbar />
+        </main>
       </body>
     </html>
   );
