@@ -1,10 +1,10 @@
 'use client';
 
-import { UsernameLogIn } from './UsernameLogIn';
+import Spinner from '../_components/Spinner';
+import { UsernameLogIn } from './PasswordAuth';
+import { GithubLogIn, GoogleLogIn } from './OAuth';
 import { usePocketBase } from "../_lib/clientPocketbase"
 import { Dispatch, SetStateAction, useEffect, useMemo, useState } from 'react';
-import { GithubLogIn, GoogleLogIn } from './Oauth';
-import Spinner from '../_components/Spinner';
 
 export type CompProps = {
   setLoading: Dispatch<SetStateAction<boolean>>;

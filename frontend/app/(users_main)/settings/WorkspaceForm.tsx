@@ -7,6 +7,7 @@ import { useForm } from 'react-hook-form';
 import { RepoState, repoRe } from './consts';
 import { testGithubRepo } from './action';
 import { usePocketBase } from '@/app/_lib/clientPocketbase';
+import ErrorText from '@/app/_components/inputs/ErrorText';
 
 export type Workspace = {
   id: string;
@@ -68,7 +69,7 @@ export default function WorkspaceForm() {
         error={errors.repo_url}
         {...register('repo_url', { required: true, pattern: repoRe })}
       />
-      <div className='text-red-400'>
+      <ErrorText>
         {errors.repo_url?.type === 'required' && <p>Repo url is required.</p>}
         {errors.repo_url?.type === 'pattern' && (
           <p>
@@ -77,7 +78,7 @@ export default function WorkspaceForm() {
           </p>
         )}
         {errors.repo_url?.type === 'repoState' && <p>Repo what you submited is not existing or not a public repo.</p>}
-      </div>
+      </ErrorText>
       <Button type="submit" className="min-w-full">
         Update
       </Button>
