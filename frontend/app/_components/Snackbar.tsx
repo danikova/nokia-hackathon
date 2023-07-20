@@ -1,7 +1,7 @@
 'use client'
 
 import { SnackbarProvider } from "notistack"
-import { defaultSB, errorSB, successSB } from "./_components/SnackbarVariants"
+import { defaultSB, errorSB, successSB } from "./SnackbarVariants"
 
 export default function Snackbar() {
   return <>

@@ -9,6 +9,7 @@ import { FaUserLarge } from 'react-icons/fa6';
 import { BiLogOut } from 'react-icons/bi';
 import { useRouter } from 'next/navigation';
 import type { Record, Admin } from "pocketbase"
+import { enqueueSnackbar } from 'notistack';
 
 type UserAvatarProps = {
   className?: string;
@@ -83,6 +84,7 @@ function LogoutButton({ active }: { active: boolean }) {
         pb.authStore.clear();
         setPBCookie(pb);
         router.push('/login');
+        enqueueSnackbar('Successful logout', { variant: 'success' });
       }}
     >
       <BiLogOut className="w-6 h-6 mr-2" />

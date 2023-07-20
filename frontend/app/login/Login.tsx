@@ -3,7 +3,7 @@
 import Spinner from '../_components/Spinner';
 import { UsernameLogIn } from './PasswordAuth';
 import { GithubLogIn, GoogleLogIn } from './OAuth';
-import { usePocketBase } from "../_lib/clientPocketbase"
+import { snackbarWrapper, usePocketBase } from "../_lib/clientPocketbase"
 import { Dispatch, SetStateAction, useEffect, useMemo, useState } from 'react';
 
 export type CompProps = {
@@ -24,7 +24,7 @@ function useAuthMethods() {
 
   useEffect(() => {
     const _ = async () => {
-      const result = await pb.collection('users').listAuthMethods();
+      const result = await snackbarWrapper(pb.collection('users').listAuthMethods());
       setAuthMethods(result);
     }
     _();

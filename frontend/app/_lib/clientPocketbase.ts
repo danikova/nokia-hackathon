@@ -17,12 +17,14 @@ export function setPBCookie(pb: PocketBase) {
   document.cookie = pb.authStore.exportToCookie({ httpOnly: false }, process.env.NEXT_PUBLIC_PB_COOKIE_KEY);
 }
 
-export async function errSnackbar(pbPromise: Promise<any>) {
+export async function snackbarWrapper<T extends Object>(pbPromise: T, successMessage?: string): Promise<T> {
   try {
-    await pbPromise;
+    const result = await pbPromise;
+    successMessage && enqueueSnackbar(successMessage, { variant: 'success' });
+    return result;
   } catch (error) {
     if (error instanceof ClientResponseError) {
-      enqueueSnackbar(error.message, { variant: 'error' });
+      enqueueSnackbar(error.message, { variant: 'error', preventDuplicate: true });
     }
     throw error;
   }
