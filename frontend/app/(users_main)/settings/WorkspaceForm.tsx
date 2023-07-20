@@ -6,8 +6,9 @@ import { useCallback, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { RepoState, repoRe } from './consts';
 import { testGithubRepo } from './action';
-import { usePocketBase } from '@/app/_lib/clientPocketbase';
+import { snackbarWrapper, usePocketBase } from '@/app/_lib/clientPocketbase';
 import ErrorText from '@/app/_components/inputs/ErrorText';
+import ClientForm from '@/app/_components/inputs/ClientForm';
 
 export type Workspace = {
   id: string;
@@ -22,7 +23,7 @@ function useUserWorkspace() {
 
   useEffect(() => {
     const _ = async () => {
-      const records = await pb.collection('workspaces').getFullList();
+      const records = await snackbarWrapper(pb.collection('workspaces').getFullList());
       setWorkspace(records.length !== 0 ? records[0] as never as Workspace : null);
     }
     _();
@@ -53,35 +54,37 @@ export default function WorkspaceForm() {
         setError('repo_url', { type: 'repoState' });
         return;
       }
-      await pb.collection('workspaces').update(workspace?.id as string, {
+      await snackbarWrapper(pb.collection('workspaces').update(workspace?.id as string, {
         repo_url: data.repo_url,
-      });
+      }), 'Workspace updated');
     },
     [setError, pb, workspace]
   );
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
-      <Textfield
-        type="text"
-        label="Used repo"
-        placeholder="https://github.com/(owner)/(repo)"
-        error={errors.repo_url}
-        {...register('repo_url', { required: true, pattern: repoRe })}
-      />
-      <ErrorText>
-        {errors.repo_url?.type === 'required' && <p>Repo url is required.</p>}
-        {errors.repo_url?.type === 'pattern' && (
-          <p>
-            Repo url must be a valid github repo url.{' '}
-            <p className="text-sm text-primary_text opacity-70">https://github.com/(owner)/(repo)</p>
-          </p>
-        )}
-        {errors.repo_url?.type === 'repoState' && <p>Repo what you submited is not existing or not a public repo.</p>}
-      </ErrorText>
+    <ClientForm onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
+      <div>
+        <Textfield
+          type="text"
+          label="Used repo"
+          placeholder="https://github.com/(owner)/(repo)"
+          error={errors.repo_url}
+          {...register('repo_url', { required: true, pattern: repoRe })}
+        />
+        <ErrorText>
+          {errors.repo_url?.type === 'required' && <p>Repo url is required.</p>}
+          {errors.repo_url?.type === 'pattern' && (
+            <p>
+              Repo url must be a valid github repo url.{' '}
+              <p className="text-sm text-primary_text opacity-70">https://github.com/(owner)/(repo)</p>
+            </p>
+          )}
+          {errors.repo_url?.type === 'repoState' && <p>Repo what you submited is not existing or not a public repo.</p>}
+        </ErrorText>
+      </div>
       <Button type="submit" className="min-w-full">
         Update
       </Button>
-    </form>
+    </ClientForm>
   );
 }

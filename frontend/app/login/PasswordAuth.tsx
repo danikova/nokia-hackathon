@@ -1,15 +1,15 @@
 'use client';
 
+import { CompProps } from './Login';
+import { useCallback } from 'react';
+import { useForm } from 'react-hook-form';
+import { useRouter } from 'next/navigation';
+import { FaRegCircleUser } from 'react-icons/fa6';
 import Button from '../_components/inputs/Button';
 import Textfield from '../_components/inputs/Textfield';
-import { FaRegCircleUser } from 'react-icons/fa6';
-import { SyntheticEvent, useCallback } from 'react';
-import { useRouter } from 'next/navigation';
-import { errSnackbar, setPBCookie, usePocketBase } from '../_lib/clientPocketbase';
-import { CompProps } from './Login';
-import { useForm } from 'react-hook-form';
 import ErrorText from '../_components/inputs/ErrorText';
-import { enqueueSnackbar } from 'notistack';
+import ClientForm from '../_components/inputs/ClientForm';
+import { snackbarWrapper, setPBCookie, usePocketBase } from '../_lib/clientPocketbase';
 
 export function UsernameLogIn({ setLoading }: CompProps) {
   const pb = usePocketBase();
@@ -26,10 +26,9 @@ export function UsernameLogIn({ setLoading }: CompProps) {
       const { identifier, password } = data;
       setLoading(true);
       try {
-        await errSnackbar(pb.collection('users').authWithPassword(identifier, password));
+        await snackbarWrapper(pb.collection('users').authWithPassword(identifier, password), 'Successful login');
         setPBCookie(pb);
         router.push('/info');
-        enqueueSnackbar('Successful login', { variant: 'success' });
       } catch (_) { }
       setLoading(false);
     },
@@ -37,13 +36,14 @@ export function UsernameLogIn({ setLoading }: CompProps) {
   );
 
   return (
-    <form className=" flex flex-col gap-8 max-md:gap-2 md:mt-12 mt-4" onSubmit={handleSubmit(onSubmit)}>
+    <ClientForm className=" flex flex-col gap-8 max-md:gap-2 md:mt-12 mt-4" onSubmit={handleSubmit(onSubmit)}>
       <div >
         <Textfield
           autoComplete="new-email"
           type="text"
           label="User identifier"
           placeholder="Email or Username"
+          error={errors.identifier}
           {...register('identifier', { required: true })}
         />
         {errors.identifier?.type === 'required' && <ErrorText>User identifier is required.</ErrorText>}
@@ -53,6 +53,7 @@ export function UsernameLogIn({ setLoading }: CompProps) {
           autoComplete="new-password"
           type="password"
           label="Password"
+          error={errors.password}
           {...register('password', { required: true })}
         />
         {errors.password?.type === 'required' && <ErrorText>Password is required.</ErrorText>}
@@ -64,6 +65,6 @@ export function UsernameLogIn({ setLoading }: CompProps) {
           <p className="max-md:hidden ml-1"> with email and password</p>
         </div>
       </Button>
-    </form>
+    </ClientForm>
   );
 }
