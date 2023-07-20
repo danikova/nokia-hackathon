@@ -13,9 +13,15 @@ import (
 var userWhitelistCollectionName = "user_whitelist"
 
 func isUserAcceptedToLogIn(app *pocketbase.PocketBase, username, email string) bool {
-	records, err := app.Dao().FindRecordsByExpr(userWhitelistCollectionName,
-		dbx.Or(dbx.HashExp{"username": username}, dbx.HashExp{"email": username}),
-	)
+	var expressions []dbx.Expression
+	if username != "" {
+		expressions = append(expressions, dbx.HashExp{"username": username})
+	}
+	if email != "" {
+		expressions = append(expressions, dbx.HashExp{"email": email})
+	}
+
+	records, err := app.Dao().FindRecordsByExpr(userWhitelistCollectionName, dbx.Or(expressions[:]...))
 	if len(records) == 0 || err != nil {
 		return false
 	}
