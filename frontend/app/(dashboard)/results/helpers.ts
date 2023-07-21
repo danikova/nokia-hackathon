@@ -14,20 +14,20 @@ export type RunResult = {
   is_success: boolean;
 };
 
-export type GroupedRunResult = {
-  [groupName: string]: RunResult[];
-};
+export type GroupedRunResult = Map<string, RunResult[]>;
 
-export function getGroupedRunResults(runResults: ListResult<RunResult>) {
-  const groups: GroupedRunResult = {};
+export function getGroupedRunResults(runResults: ListResult<RunResult>, groupKey: keyof RunResult, omitEmpty = true) {
+  const groups = new Map<string, RunResult[]>();
   for (const runResult of runResults.items) {
-    const groupName = runResult.task;
-    if (groupName in groups) groups[groupName].push(runResult);
-    else groups[groupName] = [runResult];
+    const groupName = `${runResult[groupKey]}`;
+    if (omitEmpty && !groupName) continue;
+    const runResults = groups.get(groupName);
+    if (runResults) runResults.push(runResult);
+    else groups.set(groupName, [runResult]);
   }
   return groups;
 }
 
 export function getGroupedKeys(groupedRunResults: GroupedRunResult) {
-  return Object.keys(groupedRunResults).sort((a, b) => a.localeCompare(b));
+  return [...groupedRunResults.keys()].sort((a, b) => a.localeCompare(b));
 }
