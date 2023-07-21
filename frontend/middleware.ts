@@ -17,7 +17,8 @@ export async function middleware(request: NextRequest) {
   }
 
   const response = NextResponse.next();
-
+  const cookieStr = pb.authStore.exportToCookie();
+  response.headers.append('set-cookie', cookieStr.replace('pb_auth', process.env.NEXT_PUBLIC_PB_COOKIE_KEY as string));
   return response;
 }
 

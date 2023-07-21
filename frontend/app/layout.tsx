@@ -2,6 +2,8 @@ import './globals.css';
 import Snackbar from './_components/Snackbar';
 import localFont from 'next/font/local';
 
+import './index';
+
 const nokiaFont = localFont({
   src: [
     {
