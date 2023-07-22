@@ -1,4 +1,5 @@
 import { getPB } from '../../_lib/pocketbase';
+import RunChart from './RunChart';
 import { RunResultDisplay } from "./[runId]/RunResultDisplay";
 import { RunResult, GroupedRunResult, getGroupedRunResults } from './helpers';
 
@@ -21,17 +22,28 @@ export default async function ResultsHome() {
   const lastCells = getLastNGridCell(runResultsGroupedByRunId, taskKeys, n);
   const fastCells = getFastestGridCells(runResultsGroupedByTask);
 
-  return <div className='grid gap-x-8 gap-y-2 m-16 max-md:m-8' style={{
-    gridTemplateColumns: 'minmax(400px, 1fr) '.repeat(taskKeys.length)
-  }}>
-    <h2 className='text-2xl col-span-full'>
-      Result of the last {n > 1 ? `${n} runs` : 'run'}
-    </h2>
-    {taskKeys.map((key) => <div key={key} className='text-lg'>{key}</div>)}
-    {lastCells}
-    <h2 className='text-2xl mt-8'>Fastest Solutions <sub className='text-sm'>(based on the last {perPage} runs)</sub></h2>
-    {fastCells}
-  </div>
+  return (
+    <div className='w-full overflow-x-auto'>
+      <div className='grid gap-x-8 gap-y-2 m-16 max-md:m-8' style={{
+        gridTemplateColumns: `repeat(${taskKeys.length},minmax(300px, 1fr))`
+      }}>
+        <h2 className='text-2xl col-span-full'>
+          State of the last {n > 1 ? `${n} runs` : 'run'}
+        </h2>
+        {taskKeys.map((key) => <div key={key} className='text-lg'>{key}</div>)}
+        {lastCells}
+        <h2 className='text-2xl mt-8'>Fastest Solutions <sub className='text-sm max-md:block'>(based on the last {perPage} runs)</sub></h2>
+        {fastCells}
+        <div className='col-start-2' style={{
+          gridRowStart: `${n + 3}`,
+          gridRowEnd: `span ${fastCells.length + 1}`,
+          gridColumnEnd: `span ${taskKeys.length - 1}`
+        }}>
+          <RunChart className='flex items-center justify-center h-full w-full' />
+        </div>
+      </div>
+    </div>
+  )
 }
 
 function getLastNGridCell(runResultsGroupedByRunId: GroupedRunResult, taskKeys: string[], n: number) {
