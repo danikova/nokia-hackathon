@@ -1,5 +1,5 @@
 import { getPB } from '../../_lib/pocketbase';
-import RunChart from './RunChart';
+import BarChart, { defaultColors } from '../../_components/BarChart';
 import { RunResultDisplay } from "./[runId]/RunResultDisplay";
 import { RunResult, GroupedRunResult, getGroupedRunResults } from './helpers';
 
@@ -20,7 +20,7 @@ export default async function ResultsHome() {
   const n = 3;
 
   const lastCells = getLastNGridCell(runResultsGroupedByRunId, taskKeys, n);
-  const fastCells = getFastestGridCells(runResultsGroupedByTask);
+  const { fastestCells, fastestSolutions } = getFastestGridCells(runResultsGroupedByTask);
 
   return (
     <div className='w-full overflow-x-auto'>
@@ -33,13 +33,13 @@ export default async function ResultsHome() {
         {taskKeys.map((key) => <div key={key} className='text-lg'>{key}</div>)}
         {lastCells}
         <h2 className='text-2xl mt-8'>Fastest Solutions <sub className='text-sm max-md:block'>(based on the last {perPage} runs)</sub></h2>
-        {fastCells}
+        {fastestCells}
         <div className='col-start-2' style={{
-          gridRowStart: `${n + 3}`,
-          gridRowEnd: `span ${fastCells.length + 1}`,
+          gridRowStart: `${n + 3 + 1}`,
+          gridRowEnd: `span ${fastestCells.length + 1}`,
           gridColumnEnd: `span ${taskKeys.length - 1}`
         }}>
-          <RunChart className='flex items-center justify-center h-full w-full' />
+          <ResultCharts runResultsGroupedByTask={runResultsGroupedByTask} fastestSolutions={fastestSolutions} />
         </div>
       </div>
     </div>
@@ -87,10 +87,12 @@ function getLastNGridCell(runResultsGroupedByRunId: GroupedRunResult, taskKeys: 
 
 function getFastestGridCells(runResultsGroupedByTask: GroupedRunResult) {
   const fastestCells = [];
+  const fastestSolutions = [];
   for (const [taskId, runResults] of runResultsGroupedByTask) {
     const fastestSolution = runResults.reduce(function (prev, current) {
       return ((prev.execution_time || Infinity) < (current.execution_time || Infinity)) ? prev : current
     })
+    fastestSolutions.push(fastestSolution);
     fastestCells.push(
       <RunResultDisplay
         key={taskId}
@@ -100,5 +102,32 @@ function getFastestGridCells(runResultsGroupedByTask: GroupedRunResult) {
       />
     );
   }
-  return fastestCells;
+  return { fastestCells, fastestSolutions };
+}
+
+function ResultCharts({ runResultsGroupedByTask, fastestSolutions }: { runResultsGroupedByTask: GroupedRunResult, fastestSolutions: RunResult[] }) {
+  const averageData = [];
+  for (const [taskKey, runResults] of runResultsGroupedByTask) averageData.push({
+    label: taskKey,
+    data: runResults.reduce((acc, curr) => curr.execution_time ? acc + curr.execution_time : acc, 0) / runResults.length
+  });
+
+  return <div className='w-full h-full flex items-start justify-center'>
+    <BarChart
+      className='w-full'
+      labels={averageData.map(i => i.label)}
+      datasets={[
+        {
+          label: 'Average execution time',
+          data: averageData.map(i => i.data),
+          backgroundColor: defaultColors,
+        },
+        {
+          label: 'Fastest execution time',
+          data: fastestSolutions.map(i => i.execution_time || NaN),
+          backgroundColor: defaultColors,
+        }
+      ]}
+    />
+  </div>
 }
