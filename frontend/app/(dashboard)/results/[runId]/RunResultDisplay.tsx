@@ -12,13 +12,13 @@ import Button from "@/app/_components/inputs/Button";
 import { useEffect, useMemo, useState } from "react";
 import { FaCircle, FaCircleXmark } from 'react-icons/fa6';
 
-const openCodeId = atom<null | string>(null);
+const activeIdAtom = atom<null | string>(null);
 
 export function RunResultDisplay({
   runResult, hideOutput = false, hideTaskName = false, className, href
 }: { runResult: RunResult; hideOutput?: boolean; hideTaskName?: boolean; className?: string, href?: string }) {
   const id = useMemo<string>(() => uuidv4(), []);
-  const [activeId, setActiveId] = useAtom(openCodeId);
+  const [activeId, setActiveId] = useAtom(activeIdAtom);
   const [showMore, setShowMore] = useState(false);
 
   useEffect(() => {
