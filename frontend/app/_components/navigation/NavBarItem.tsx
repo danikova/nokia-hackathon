@@ -6,18 +6,19 @@ import { useMemo } from 'react';
 import { atom, useAtom } from 'jotai';
 import { usePathname } from 'next/navigation';
 import { NavBarItem } from '@/app/_constans/navBar';
+import { BreadCrumbItem } from '@/app/_constans/breadCrumb';
 
-export const currentNavBarItemAtom = atom<NavBarItem | null>(null);
+export const globalBreadCrumbAtom = atom<BreadCrumbItem[]>([]);
 
 export default function NavBarItem({ item }: { item: NavBarItem }) {
   const pathname = usePathname();
-  const [_, setCurrentNavBarItem] = useAtom(currentNavBarItemAtom);
+  const [_, setGlobalBreadCrumb] = useAtom(globalBreadCrumbAtom);
 
   const isActive = useMemo(() => {
     const isActive = pathname.startsWith(item.rootPath)
-    if (isActive) setCurrentNavBarItem(item);
+    if (isActive) setGlobalBreadCrumb([item]);
     return isActive;
-  }, [item, pathname, setCurrentNavBarItem]);
+  }, [item, pathname, setGlobalBreadCrumb]);
 
   return (
     <Link
