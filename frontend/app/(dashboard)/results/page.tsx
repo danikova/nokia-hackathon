@@ -1,6 +1,6 @@
 import { getPB } from '../../_lib/pocketbase';
+import RunResultDisplay from "./[runId]/RunResultDisplay";
 import BarChart, { defaultColors } from '../../_components/BarChart';
-import { RunResultDisplay } from "./[runId]/RunResultDisplay";
 import { RunResult, GroupedRunResult, getGroupedRunResults } from './helpers';
 
 const perPage = 50;
@@ -27,8 +27,8 @@ export default async function ResultsHome() {
       <div className='grid gap-x-8 gap-y-2 m-16 max-md:m-8' style={{
         gridTemplateColumns: `repeat(${taskKeys.length},minmax(300px, 1fr))`
       }}>
-        <h2 className='text-2xl col-span-full'>
-          State of the last {n > 1 ? `${n} runs` : 'run'}
+        <h2 className='text-2xl col-span-full pb-8'>
+          State of the last runs
         </h2>
         {taskKeys.map((key) => <div key={key} className='text-lg'>{key}</div>)}
         {lastCells}
