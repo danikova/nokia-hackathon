@@ -32,7 +32,7 @@ export default async function ResultsHome() {
         </h2>
         {taskKeys.map((key) => <div key={key} className='text-lg'>{key}</div>)}
         {lastCells}
-        <h2 className='text-2xl mt-8'>Fastest Solutions <sub className='text-sm max-md:block'>(based on the last {perPage} runs)</sub></h2>
+        <h2 className='text-2xl my-8'>Fastest Solutions <sub className='text-sm max-md:block'>(based on the last {perPage} runs)</sub></h2>
         {fastestCells}
         <div className='col-start-2' style={{
           gridRowStart: `${n + 3 + 1}`,
