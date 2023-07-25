@@ -3,6 +3,7 @@ import { getPB } from "@/app/_lib/pocketbase";
 import RunResultDisplay from "./RunResultDisplay";
 import BreadCrumbPush from "../../../_components/navigation/BreadCrumbPush";
 import { RunResult, getGroupedKeys, getGroupedRunResults } from '../helpers';
+import { notFound } from "next/navigation";
 
 async function getRunResultByGithubRunId(runId: number) {
   const pb = getPB();
@@ -16,6 +17,10 @@ export default async function RunDetail({ params }: {
   params: { runId: number }
 }) {
   const runResults = await getRunResultByGithubRunId(params.runId);
+
+  if (runResults.items.length === 0) {
+    notFound();
+  }
 
   if (runResults.items && runResults.items[0] && !runResults.items[0].is_success)
     return <DetailWrapper runId={params.runId}>
