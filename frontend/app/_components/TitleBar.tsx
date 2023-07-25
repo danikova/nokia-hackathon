@@ -17,10 +17,10 @@ export default function TitleBar() {
             <Link key={bcItem.title} href={bcItem.rootPath}>{bcItem.title}</Link> :
             <div key={bcItem.title}>{bcItem.title}</div>;
 
-          return <>
-            {titleItem}
-            {!isLast && <FaChevronRight key={`${bcItem.title}-chevron`} />}
-          </>
+          return [
+            titleItem,
+            !isLast && <FaChevronRight key={`${bcItem.title}-chevron`} />
+          ]
         })}
       </div>
     </div >
