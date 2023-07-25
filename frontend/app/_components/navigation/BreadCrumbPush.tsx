@@ -9,12 +9,12 @@ export default function BreadCrumbPush({ item }: { item: BreadCrumbItem }) {
   const [_, setGlobalBreadCrumb] = useAtom(globalBreadCrumbAtom);
 
   useEffect(() => {
-    setGlobalBreadCrumb((old) => {
-      return [...old, { ...item }]
-    });
+    setGlobalBreadCrumb((old) => [...old, { ...item }]);
     return () => {
       setGlobalBreadCrumb((old) => {
-        return [...old.slice(0, old.length)]
+        const newArr = [...old];
+        newArr.splice(-1);
+        return newArr;
       });
     }
   }, [setGlobalBreadCrumb, item]);
