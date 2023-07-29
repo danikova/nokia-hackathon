@@ -22,14 +22,9 @@ export default function UserAvatar({ className, dropdownProps }: UserAvatarProps
   const [model, setModel] = useState<Record | Admin | null>(null);
 
   useEffect(() => {
-    const cancelKey = "authrefresh"
-    pb.collection('users').authRefresh({ $cancelKey: cancelKey }).catch(() => { })
     pb.authStore.onChange((_, model) => {
       setModel(model)
     });
-    return () => {
-      pb.cancelRequest(cancelKey);
-    }
   }, [pb, setModel])
 
   const InfoComp = useCallback(({ active }: { active: boolean }) =>
