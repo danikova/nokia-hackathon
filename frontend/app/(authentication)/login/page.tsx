@@ -1,19 +1,24 @@
-import Image from 'next/image';
 import Login from './Login';
+import Image from 'next/image';
+import EnforceLogout from './EnforceLogout';
 
 export default async function LoginHome() {
+
   return (
-    <div className="flex min-h-screen max-md:flex-col">
-      <div className="md:hidden basis-32 overflow-hidden">
-        <Background />
+    <>
+      <EnforceLogout />
+      <div className="flex min-h-screen max-md:flex-col">
+        <div className="md:hidden basis-32 overflow-hidden">
+          <Background />
+        </div>
+        <div className="flex-[1_1_60%] max-md:flex-auto">
+          <LoginWrapper />
+        </div>
+        <div className="max-md:hidden flex-[1_1_40%]">
+          <Background />
+        </div>
       </div>
-      <div className="flex-[1_1_60%] max-md:flex-auto">
-        <LoginWrapper />
-      </div>
-      <div className="max-md:hidden flex-[1_1_40%]">
-        <Background />
-      </div>
-    </div>
+    </>
   );
 }
 
