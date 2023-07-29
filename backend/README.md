@@ -4,4 +4,6 @@ testuser@test.com
 
 ## first run
 
-go run main.go migrate && go run main.go
+- go mod download
+- go run main.go migrate
+- go run main.go

@@ -17,9 +17,12 @@ export default async function CodeHome() {
   return (
     <Modal title='Editor view' acknowledgeBtn={
       <Button disabled={!isRepoUrlSet}>
-        <Link href={`https://vscode.dev/${workspace?.repo_url}`}>
-          Open workspace editor
-        </Link>
+        <>
+          {workspace?.repo_url && <Link href={`https://vscode.dev/${workspace?.repo_url}`}>
+            Open workspace editor
+          </Link>}
+          {!workspace?.repo_url && <div>Open workspace editor</div>}
+        </>
       </Button>
     } >
       <>

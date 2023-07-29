@@ -39,10 +39,9 @@ export default function Login() {
 
   const OAuthButtons = useMemo(() => {
     const btns = [];
-    for (const iterator of authMethods.authProviders || []) {
-      if (iterator.name === 'google') btns.push(GoogleLogIn);
-      if (iterator.name === 'github') btns.push(GithubLogIn);
-    }
+    const providerNames = (authMethods.authProviders || []).map(i => i.name);
+    if (providerNames.includes('google')) btns.push(GoogleLogIn);
+    if (providerNames.includes('github')) btns.push(GithubLogIn);
     return btns;
   }, [authMethods]);
 
