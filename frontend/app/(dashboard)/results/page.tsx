@@ -22,6 +22,12 @@ export default async function ResultsHome() {
   const lastCells = getLastNGridCell(runResultsGroupedByRunId, taskKeys, n);
   const { fastestCells, fastestSolutions } = getFastestGridCells(runResultsGroupedByTask);
 
+  if (runResultsGroupedByRunId.size === 0) return <div className='m-16 max-md:m-8'>
+    <h2 className='text-2xl col-span-full pb-8'>
+      There are no registered run results {':('}
+    </h2>
+  </div>
+
   return (
     <div className='w-full overflow-x-auto'>
       <div className='grid gap-x-8 gap-y-2 m-16 max-md:m-8' style={{
