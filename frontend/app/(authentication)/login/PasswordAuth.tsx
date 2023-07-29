@@ -2,14 +2,15 @@
 
 import { CompProps } from './Login';
 import { useCallback } from 'react';
+import { loginFlow } from '../actions';
 import { useForm } from 'react-hook-form';
 import { useRouter } from 'next/navigation';
 import { FaRegCircleUser } from 'react-icons/fa6';
-import Button from '../_components/inputs/Button';
-import Textfield from '../_components/inputs/Textfield';
-import ErrorText from '../_components/inputs/ErrorText';
-import ClientForm from '../_components/inputs/ClientForm';
-import { snackbarWrapper, setPBCookie, usePocketBase } from '../_lib/clientPocketbase';
+import Button from '../../_components/inputs/Button';
+import Textfield from '../../_components/inputs/Textfield';
+import ErrorText from '../../_components/inputs/ErrorText';
+import ClientForm from '../../_components/inputs/ClientForm';
+import { snackbarWrapper, usePocketBase } from '../../_lib/clientPocketbase';
 
 export function UsernameLogIn({ setLoading }: CompProps) {
   const pb = usePocketBase();
@@ -27,7 +28,7 @@ export function UsernameLogIn({ setLoading }: CompProps) {
       setLoading(true);
       try {
         await snackbarWrapper(pb.collection('users').authWithPassword(identifier, password), 'Successful login');
-        setPBCookie(pb);
+        loginFlow(pb.authStore.exportToCookie({}, process.env.NEXT_PUBLIC_PB_COOKIE_KEY));
         router.push('/info');
       } catch (_) { }
       setLoading(false);

@@ -1,9 +1,9 @@
 'use client';
 
-import Spinner from '../_components/Spinner';
+import Spinner from '../../_components/Spinner';
 import { UsernameLogIn } from './PasswordAuth';
 import { GithubLogIn, GoogleLogIn } from './OAuth';
-import { snackbarWrapper, usePocketBase } from "../_lib/clientPocketbase"
+import { snackbarWrapper, usePocketBase } from "../../_lib/clientPocketbase"
 import { Dispatch, SetStateAction, useEffect, useMemo, useState } from 'react';
 
 export type CompProps = {

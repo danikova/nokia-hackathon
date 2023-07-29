@@ -13,10 +13,6 @@ export function usePocketBase() {
   return pocketbase;
 }
 
-export function setPBCookie(pb: PocketBase) {
-  document.cookie = pb.authStore.exportToCookie({ httpOnly: false }, process.env.NEXT_PUBLIC_PB_COOKIE_KEY);
-}
-
 export async function snackbarWrapper<T extends Object>(pbPromise: T, successMessage?: string): Promise<T> {
   try {
     const result = await pbPromise;
@@ -25,6 +21,8 @@ export async function snackbarWrapper<T extends Object>(pbPromise: T, successMes
   } catch (error) {
     if (error instanceof ClientResponseError) {
       enqueueSnackbar(error.message, { variant: 'error', preventDuplicate: true });
+    } else {
+      enqueueSnackbar('Some unexpected error occured, sorry :(', { variant: 'error', preventDuplicate: true });
     }
     throw error;
   }

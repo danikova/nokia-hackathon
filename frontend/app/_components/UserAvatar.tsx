@@ -2,14 +2,15 @@
 
 import Image from 'next/image';
 import { Menu } from '@headlessui/react';
-import { setPBCookie, usePocketBase } from '../_lib/clientPocketbase';
-import Dropdown, { MenuItem, DropdownProps } from './inputs/Dropdown';
-import { useCallback, useEffect, useMemo, useState } from 'react';
-import { FaUserLarge } from 'react-icons/fa6';
 import { BiLogOut } from 'react-icons/bi';
 import { useRouter } from 'next/navigation';
-import type { Record, Admin } from "pocketbase"
 import { enqueueSnackbar } from 'notistack';
+import { FaUserLarge } from 'react-icons/fa6';
+import type { Record, Admin } from "pocketbase"
+import { logoutFlow } from '../(authentication)/actions';
+import { usePocketBase } from '../_lib/clientPocketbase';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import Dropdown, { MenuItem, DropdownProps } from './inputs/Dropdown';
 
 type UserAvatarProps = {
   className?: string;
@@ -82,7 +83,7 @@ function LogoutButton({ active }: { active: boolean }) {
       className={`flex min-w-full px-4 py-2 ${active ? 'bg-primary-50 text-primary-700' : ''}`}
       onClick={() => {
         pb.authStore.clear();
-        setPBCookie(pb);
+        logoutFlow();
         router.push('/login');
         enqueueSnackbar('Successful logout', { variant: 'success' });
       }}

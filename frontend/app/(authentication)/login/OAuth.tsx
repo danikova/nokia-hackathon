@@ -2,9 +2,10 @@
 
 import { useCallback } from "react";
 import { CompProps } from "./Login";
+import { loginFlow } from "../actions";
 import { useRouter } from "next/navigation";
 import { FaGithub, FaGoogle } from 'react-icons/fa6';
-import { snackbarWrapper, setPBCookie, usePocketBase } from "../_lib/clientPocketbase";
+import { snackbarWrapper, usePocketBase } from "../../_lib/clientPocketbase";
 
 
 export function GithubLogIn({ setLoading }: CompProps) {
@@ -15,7 +16,7 @@ export function GithubLogIn({ setLoading }: CompProps) {
     setLoading(true);
     try {
       await snackbarWrapper(pb.collection('users').authWithOAuth2({ provider: 'github' }), 'Successful login');
-      setPBCookie(pb);
+      loginFlow(pb.authStore.exportToCookie({}, process.env.NEXT_PUBLIC_PB_COOKIE_KEY));
       router.push('/info');
     } catch (_) { }
     setLoading(false);
@@ -41,7 +42,7 @@ export function GoogleLogIn({ setLoading }: CompProps) {
     setLoading(true);
     try {
       await snackbarWrapper(pb.collection('users').authWithOAuth2({ provider: 'google' }), 'Successful login');
-      setPBCookie(pb);
+      loginFlow(pb.authStore.exportToCookie({}, process.env.NEXT_PUBLIC_PB_COOKIE_KEY));
       router.push('/info');
     } catch (_) { }
     setLoading(false);
