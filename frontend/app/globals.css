@@ -17,3 +17,23 @@
 .debug * {
   border: 1px solid black;
 }
+
+* {
+  --fake-scrollbar-width: 4px;
+}
+
+::-webkit-scrollbar {
+  width: 20px;
+}
+
+::-webkit-scrollbar-track {
+  border-right: var(--fake-scrollbar-width) solid rgba(0, 0, 0, 0.1);
+}
+
+.content-with-scrollbar::-webkit-scrollbar-track {
+  margin-top: var(--cm-titlebar-h);
+}
+
+::-webkit-scrollbar-thumb {
+  border-right: var(--fake-scrollbar-width) solid rgb(37, 88, 246);
+}
