@@ -50,6 +50,7 @@ export default function RunResultDisplay({
         {runResult.output}
       </Code>
       <Button
+        variant='call-to-action'
         className="absolute right-2 bottom-2"
         onClick={(e: Event) => {
           e.preventDefault();

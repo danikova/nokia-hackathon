@@ -82,7 +82,7 @@ export default function WorkspaceForm() {
           {errors.repo_url?.type === 'repoState' && <p>Repo what you submited is not existing or not a public repo.</p>}
         </ErrorText>
       </div>
-      <Button type="submit" className="min-w-full">
+      <Button type="submit" className="min-w-full" variant='call-to-action'>
         Update
       </Button>
     </ClientForm>

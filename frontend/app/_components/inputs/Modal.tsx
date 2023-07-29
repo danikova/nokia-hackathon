@@ -39,7 +39,7 @@ export default function Modal({
             </div>
             <div className="bg-gray-50 px-4 py-3 flex sm:flex-row-reverse sm:px-6 gap-4">
               {acknowledgeBtn}
-              <Button className="from-inherit via-inherit to-inherit text-primary border-primary border-2 py-[8px]" onClick={_onCancel}>Cancel</Button>
+              <Button onClick={_onCancel}>Cancel</Button>
             </div>
           </div>
         </div>

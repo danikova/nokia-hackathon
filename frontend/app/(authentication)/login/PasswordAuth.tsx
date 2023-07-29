@@ -59,7 +59,7 @@ export function UsernameLogIn({ setLoading }: CompProps) {
         />
         {errors.password?.type === 'required' && <ErrorText>Password is required.</ErrorText>}
       </div>
-      <Button type="submit" className="min-w-full">
+      <Button type="submit" className="min-w-full" variant='call-to-action'>
         <div className="flex justify-center">
           <FaRegCircleUser className="text-lg mr-2" />
           <p>Log in</p>
