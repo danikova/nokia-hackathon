@@ -66,7 +66,7 @@ func OnBeforeServe(app *pocketbase.PocketBase) {
 
 				primaryProject, err := utils.GetGlobalValueByKey(app, utils.PrimaryProjectKey)
 				if err != nil {
-					return echo.NewHTTPError(http.StatusBadRequest, "primary_project not found")
+					return echo.NewHTTPError(http.StatusBadRequest, "primary_project not found, please contact with an admin")
 				}
 
 				err = utils.CheckGithubFolderContent(&reqBody.Meta, primaryProject)
@@ -91,7 +91,9 @@ func OnBeforeServe(app *pocketbase.PocketBase) {
 						"run_id":         reqBody.Meta.RunId,
 						"is_success":     true,
 						"task":           task,
-						"output":         data.Output[0:utils.Min(len(data.Output), 1000)],
+						"output":         data.Output,
+						"stderr":         data.Stderr,
+						"returncode":     data.Returncode,
 						"execution_time": data.Execution_time,
 					})
 

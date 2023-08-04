@@ -7,6 +7,8 @@ type GithubMetaType struct {
 
 type GithubTaskType struct {
 	Output         string  `json:"output"`
+	Stderr         string  `json:"stderr"`
+	Returncode     int     `json:"returncode"`
 	Execution_time float32 `json:"execution_time"`
 }
 
