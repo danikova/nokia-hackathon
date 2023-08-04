@@ -36,7 +36,7 @@ export default function RunResultDisplay({
         {
           runResult.is_success && <>
             <span className="text-lg">/</span>
-            <div>{humanizeDuration((runResult.execution_time || 0) * 1000)}</div>
+            <div>{humanizeDuration((runResult.execution_time || 0) * 1000, { maxDecimalPoints: 3 })}</div>
           </>
         }
       </div>
