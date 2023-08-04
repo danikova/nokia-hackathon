@@ -4,6 +4,7 @@ import BarChart, { defaultColors } from '../../_components/BarChart';
 import { RunResult, GroupedRunResult, getGroupedRunResults } from './helpers';
 
 const perPage = 50;
+const lastN = 5;
 
 async function getRunResults() {
   const pb = getPB();
@@ -17,9 +18,8 @@ export default async function ResultsHome() {
   const runResultsGroupedByRunId = getGroupedRunResults(runResults, 'run_id');
   const runResultsGroupedByTask = new Map([...getGroupedRunResults(runResults, 'task').entries()].sort());
   const taskKeys = [...runResultsGroupedByTask.keys()];
-  const n = 3;
 
-  const lastCells = getLastNGridCell(runResultsGroupedByRunId, taskKeys, n);
+  const lastCells = getLastNGridCell(runResultsGroupedByRunId, taskKeys, lastN);
   const { fastestCells, fastestSolutions } = getFastestGridCells(runResultsGroupedByTask);
 
   if (runResultsGroupedByRunId.size === 0) return <div className='m-16 max-md:m-8'>
@@ -38,10 +38,10 @@ export default async function ResultsHome() {
         </h2>
         {taskKeys.map((key) => <div key={key} className='text-lg'>{key}</div>)}
         {lastCells}
-        <h2 className='text-2xl my-8'>Fastest Solutions <sub className='text-sm max-md:block'>(based on the last {perPage} runs)</sub></h2>
+        <h2 className='text-2xl my-8'>Fastest Solutions <sub className='text-sm max-md:block'>(based on the last {perPage} records)</sub></h2>
         {fastestCells}
         <div className='col-start-2' style={{
-          gridRowStart: `${n + 3 + 1}`,
+          gridRowStart: `${lastN + 3 + 1}`,
           gridRowEnd: `span ${fastestCells.length + 1}`,
           gridColumnEnd: `span ${taskKeys.length - 1}`
         }}>
@@ -115,7 +115,7 @@ function ResultCharts({ runResultsGroupedByTask, fastestSolutions }: { runResult
   const averageData = [];
   for (const [taskKey, runResults] of runResultsGroupedByTask) averageData.push({
     label: taskKey,
-    data: runResults.reduce((acc, curr) => curr.execution_time ? acc + curr.execution_time : acc, 0) / runResults.length
+    data: runResults.filter(curr => curr.returncode === 0).reduce((acc, curr) => curr.execution_time ? acc + curr.execution_time : acc, 0) / runResults.length
   });
 
   return <div className='w-full h-full flex items-start justify-center'>

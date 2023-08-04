@@ -1,7 +1,7 @@
 import { ReactElement } from "react";
 import { getPB } from "@/app/_lib/pocketbase";
 import RunResultDisplay from "./RunResultDisplay";
-import BreadCrumbPush from "../../../_components/navigation/BreadCrumbPush";
+// import BreadCrumbPush from "../../../_components/navigation/BreadCrumbPush";
 import { RunResult, getGroupedKeys, getGroupedRunResults } from '../helpers';
 import { notFound } from "next/navigation";
 
@@ -40,7 +40,7 @@ export default async function RunDetail({ params }: {
 
 function DetailWrapper({ children, runId }: { children: ReactElement | ReactElement[], runId: number }) {
   return <div className="m-16 max-md:m-8 flex flex-col gap-8">
-    <BreadCrumbPush item={{ title: `Details of ${runId}` }} />
+    {/* <BreadCrumbPush item={{ title: `Details of ${runId}` }} /> */}
     {children}
   </div>
 }

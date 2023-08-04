@@ -14,21 +14,42 @@ import { FaCircle, FaCircleXmark } from 'react-icons/fa6';
 
 const activeIdAtom = atom<null | string>(null);
 
+type RunResultDisplayProps = {
+  runResult: RunResult;
+  hideOutput?: boolean;
+  hideTaskName?: boolean;
+  className?: string,
+  href?: string,
+  defaultOpen?: boolean
+}
+
 export default function RunResultDisplay({
   runResult, hideOutput = false, hideTaskName = false, className, href, defaultOpen: defaultIsOpen = false
-}: { runResult: RunResult; hideOutput?: boolean; hideTaskName?: boolean; className?: string, href?: string, defaultOpen?: boolean }) {
+}: RunResultDisplayProps) {
   const id = useMemo<string>(() => uuidv4(), []);
   const [activeId, setActiveId] = useAtom(activeIdAtom);
   const [showMore, setShowMore] = useState(defaultIsOpen);
 
   useEffect(() => {
-    if (!hideOutput && activeId && activeId !== id) setShowMore(false);
-  }, [id, activeId, hideOutput])
+    if (!hideOutput && !defaultIsOpen) {
+      if (activeId && activeId !== id) setShowMore(false);
+    }
+  }, [id, activeId, hideOutput, defaultIsOpen]);
 
   const header = useMemo(() => (
     <div className="flex justify-between gap-2 h-8 whitespace-nowrap p-2 rounded-md bg-[rgba(0,0,0,0.04)]">
       <div className="flex justify-start items-center gap-2">
-        {runResult.is_success ? <div><FaCircle className="text-green-500 h-5 w-5" /></div> : <div><FaCircleXmark className="text-red-500 h-5 w-5" /></div>}
+        {
+          runResult.is_success ? <div>
+            {
+              runResult.returncode !== 0 ?
+                <FaCircle className="text-orange-500 h-5 w-5" /> :
+                <FaCircle className="text-green-500 h-5 w-5" />
+            }
+          </div> : <div>
+            <FaCircleXmark className="text-red-500 h-5 w-5" />
+          </div>
+        }
         {!hideTaskName && <div className="text-lg">{runResult.task}</div>}
       </div>
       <div className="flex justify-start items-center gap-2">

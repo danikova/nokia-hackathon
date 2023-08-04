@@ -11,7 +11,9 @@ export type RunResult = {
   task: string;
   execution_time?: number;
   output: string;
+  returncode: number;
   is_success: boolean;
+  stderr?: string;
 };
 
 export type GroupedRunResult = Map<string, RunResult[]>;
