@@ -1,14 +1,16 @@
 'use client';
 
+import * as z from "zod"
 import { testGithubRepo } from './action';
 import { useForm } from 'react-hook-form';
 import { RepoState, repoRe } from './consts';
+import { Input } from "@/components/ui/input";
 import { Button } from '@/components/ui/button';
+import { zodResolver } from "@hookform/resolvers/zod"
 import { useCallback, useEffect, useState } from 'react';
-import Textfield from '@/app/_components/inputs/Textfield';
-import ErrorText from '@/app/_components/inputs/ErrorText';
 import ClientForm from '@/app/_components/inputs/ClientForm';
 import { snackbarWrapper, usePocketBase } from '@/app/_lib/clientPocketbase';
+import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 
 export type Workspace = {
   id: string;
@@ -16,6 +18,20 @@ export type Workspace = {
   repo_url: string;
   [k: string]: any;
 };
+
+const formSchema = z.object({
+  repo_url: z.string({
+    required_error: 'Repo url is required.',
+    invalid_type_error: 'Repo url must be a valid github repo url. For example: https://github.com/(owner)/(repo)',
+  }).regex(repoRe, {
+    message: 'Repo url must be a valid github repo url. For example: https://github.com/(owner)/(repo)',
+  }).refine(async (repo_url) => {
+    const result = await testGithubRepo(repo_url);
+    return result === RepoState.SUCCESS;
+  }, {
+    message: 'Repo what you try to submit is not exists or not a public repo.',
+  })
+})
 
 function useUserWorkspace() {
   const pb = usePocketBase();
@@ -35,53 +51,41 @@ function useUserWorkspace() {
 export default function WorkspaceForm() {
   const pb = usePocketBase();
   const workspace = useUserWorkspace();
-  const {
-    register,
-    reset,
-    handleSubmit,
-    setError,
-    formState: { errors },
-  } = useForm();
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+  });
 
   useEffect(() => {
-    if (workspace) reset(workspace);
-  }, [reset, workspace]);
+    if (workspace) form.reset(workspace);
+  }, [form, workspace]);
 
   const onSubmit = useCallback(
-    async (data: any) => {
-      const result = await testGithubRepo(data);
-      if (result !== RepoState.SUCCESS) {
-        setError('repo_url', { type: 'repoState' });
-        return;
-      }
+    async (data: z.infer<typeof formSchema>) => {
       await snackbarWrapper(pb.collection('workspaces').update(workspace?.id as string, {
         repo_url: data.repo_url,
       }), 'Workspace updated');
     },
-    [setError, pb, workspace]
+    [pb, workspace]
   );
 
   return (
-    <ClientForm onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
-      <div>
-        <Textfield
-          type="text"
-          label="Used repo"
-          placeholder="https://github.com/(owner)/(repo)"
-          error={errors.repo_url}
-          {...register('repo_url', { required: true, pattern: repoRe })}
-        />
-        <ErrorText>
-          {errors.repo_url?.type === 'required' && <p>Repo url is required.</p>}
-          {errors.repo_url?.type === 'pattern' && (
-            <p>
-              Repo url must be a valid github repo url.{' '}
-              <p className="text-sm text-secondary-foreground opacity-70">https://github.com/(owner)/(repo)</p>
-            </p>
-          )}
-          {errors.repo_url?.type === 'repoState' && <p>Repo what you submited is not existing or not a public repo.</p>}
-        </ErrorText>
-      </div>
+    <ClientForm form={form} onSubmit={onSubmit} className="flex flex-col gap-4">
+      <FormField
+        control={form.control}
+        name="repo_url"
+        render={({ field }) => (
+          <FormItem>
+            <FormLabel>Used repo</FormLabel>
+            <FormControl>
+              <Input placeholder="https://github.com/(owner)/(repo)" {...field} />
+            </FormControl>
+            <FormDescription>
+              This repo will be used to store and collect your run data. It must be a public repo.
+            </FormDescription>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
       <Button type="submit" className="min-w-full">
         Update
       </Button>
