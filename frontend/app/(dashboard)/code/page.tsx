@@ -1,8 +1,8 @@
+import Link from 'next/link';
 import { getPB } from '../../_lib/pocketbase';
 import Modal from '@/app/_components/inputs/Modal';
-import Button from '@/app/_components/inputs/Button';
 import { Workspace } from '../settings/WorkspaceForm';
-import Link from 'next/link';
+import { Button } from '@/components/ui/button';
 
 async function getUserWorkspace() {
   const pb = getPB();
@@ -16,7 +16,7 @@ export default async function CodeHome() {
 
   return (
     <Modal title='Editor view' acknowledgeBtn={
-      <Button disabled={!isRepoUrlSet} variant='call-to-action'>
+      <Button disabled={!isRepoUrlSet}>
         <>
           {workspace?.repo_url && <Link href={`https://vscode.dev/${workspace?.repo_url}`}>
             Open workspace editor

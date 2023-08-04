@@ -8,9 +8,9 @@ import { atom, useAtom } from "jotai";
 import { RunResult } from '../helpers';
 import Code from "@/app/_components/Code";
 import humanizeDuration from "humanize-duration";
-import Button from "@/app/_components/inputs/Button";
 import { useEffect, useMemo, useState } from "react";
 import { FaCircle, FaCircleXmark } from 'react-icons/fa6';
+import { Button } from "@/components/ui/button";
 
 const activeIdAtom = atom<null | string>(null);
 
@@ -71,9 +71,8 @@ export default function RunResultDisplay({
         {runResult.output}
       </Code>
       <Button
-        variant='call-to-action'
         className="absolute right-2 bottom-2"
-        onClick={(e: Event) => {
+        onClick={(e) => {
           e.preventDefault();
           setShowMore((v) => !v);
           if (!showMore) setActiveId(id);

@@ -5,8 +5,8 @@ import { useCallback } from 'react';
 import { loginFlow } from '../actions';
 import { useForm } from 'react-hook-form';
 import { useRouter } from 'next/navigation';
+import { Button } from '@/components/ui/button';
 import { FaRegCircleUser } from 'react-icons/fa6';
-import Button from '../../_components/inputs/Button';
 import Textfield from '../../_components/inputs/Textfield';
 import ErrorText from '../../_components/inputs/ErrorText';
 import ClientForm from '../../_components/inputs/ClientForm';
@@ -59,7 +59,7 @@ export function UsernameLogIn({ setLoading }: CompProps) {
         />
         {errors.password?.type === 'required' && <ErrorText>Password is required.</ErrorText>}
       </div>
-      <Button type="submit" className="min-w-full" variant='call-to-action'>
+      <Button type="submit" className="min-w-full">
         <div className="flex justify-center">
           <FaRegCircleUser className="text-lg mr-2" />
           <p>Log in</p>

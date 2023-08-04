@@ -1,8 +1,8 @@
 'use client'
 
+import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import { ReactElement, SyntheticEvent, useCallback } from "react";
-import Button from "./Button";
 
 export default function Modal({
   title,
@@ -39,7 +39,7 @@ export default function Modal({
             </div>
             <div className="bg-gray-50 px-4 py-3 flex sm:flex-row-reverse sm:px-6 gap-4">
               {acknowledgeBtn}
-              <Button onClick={_onCancel}>Cancel</Button>
+              <Button onClick={_onCancel} variant='secondary'>Cancel</Button>
             </div>
           </div>
         </div>

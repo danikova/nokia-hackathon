@@ -1,14 +1,14 @@
 'use client';
 
-import Button from '@/app/_components/inputs/Button';
-import Textfield from '@/app/_components/inputs/Textfield';
-import { useCallback, useEffect, useState } from 'react';
+import { testGithubRepo } from './action';
 import { useForm } from 'react-hook-form';
 import { RepoState, repoRe } from './consts';
-import { testGithubRepo } from './action';
-import { snackbarWrapper, usePocketBase } from '@/app/_lib/clientPocketbase';
+import { Button } from '@/components/ui/button';
+import { useCallback, useEffect, useState } from 'react';
+import Textfield from '@/app/_components/inputs/Textfield';
 import ErrorText from '@/app/_components/inputs/ErrorText';
 import ClientForm from '@/app/_components/inputs/ClientForm';
+import { snackbarWrapper, usePocketBase } from '@/app/_lib/clientPocketbase';
 
 export type Workspace = {
   id: string;
@@ -76,13 +76,13 @@ export default function WorkspaceForm() {
           {errors.repo_url?.type === 'pattern' && (
             <p>
               Repo url must be a valid github repo url.{' '}
-              <p className="text-sm text-primary_text opacity-70">https://github.com/(owner)/(repo)</p>
+              <p className="text-sm text-secondary-foreground opacity-70">https://github.com/(owner)/(repo)</p>
             </p>
           )}
           {errors.repo_url?.type === 'repoState' && <p>Repo what you submited is not existing or not a public repo.</p>}
         </ErrorText>
       </div>
-      <Button type="submit" className="min-w-full" variant='call-to-action'>
+      <Button type="submit" className="min-w-full">
         Update
       </Button>
     </ClientForm>
