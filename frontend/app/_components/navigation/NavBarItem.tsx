@@ -29,7 +29,7 @@ export default function NavBarItem({ item }: { item: NavBarItem }) {
       // href={'/'}
       className={clsx(
         'min-h-full flex items-center justify-center m-auto',
-        isActive && 'bg-primary-50 text-primary-700 md:border-l-4 max-md:border-b-4 border-primary-700 shadow-inner'
+        isActive && 'bg-primary/20 text-primary md:border-l-4 max-md:border-b-4 border-primary shadow-inner'
       )}
     >
       {item.icon}

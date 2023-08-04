@@ -9,7 +9,7 @@ export default function TitleBar() {
   const [globalBreadCrumb] = useAtom(globalBreadCrumbAtom);
 
   return (
-    <div className="h-[--cm-titlebar-h] w-full bg-secondary-bg/50 px-6 drop-shadow-default backdrop-blur-sm">
+    <div className="h-[--cm-titlebar-h] w-full bg-secondary/50 px-6 drop-shadow-default backdrop-blur-sm">
       <div className="min-h-full flex items-center text-xl max-md:text-base gap-2">
         {globalBreadCrumb.map((bcItem, i) => {
           const isLast = i === (globalBreadCrumb.length - 1);

@@ -11,7 +11,7 @@ export default async function MainLayout({ children }: { children: ReactElement 
     <>
       <UserUpdater />
       <div
-        className="bg-secondary-bg min-h-screen text-primary_text grid overflow-hidden"
+        className="bg-background min-h-screen text-secondary-foreground grid overflow-hidden"
         style={{
           gridTemplateColumns: '[start] 4rem [sidebar-end] 1fr [end]',
           gridTemplateRows: '[start] 3rem [appbar-end] 1fr [content-end] 4rem [end]',

@@ -30,12 +30,12 @@ export default async function CodeHome() {
           <span>Workspace details</span>
           <div className="text-sm">
             <p>
-              Repo url: <Link href={workspace.repo_url} className='text-primary-400 hover:underline'>{workspace.repo_url}</Link>
+              Repo url: <Link href={workspace.repo_url} className='text-secondary-foreground hover:underline'>{workspace.repo_url}</Link>
             </p>
           </div>
         </>}
         {!isRepoUrlSet && <p className="text-sm">
-          Currently there are no repo url set in this workspace, please go to the <Link href='/settings' className='text-primary-400 hover:underline'>/settings</Link> and set it correctly.
+          Currently there are no repo url set in this workspace, please go to the <Link href='/settings' className='text-secondary-foreground hover:underline'>/settings</Link> and set it correctly.
         </p>}
       </>
     </Modal>

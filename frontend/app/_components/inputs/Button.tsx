@@ -22,7 +22,7 @@ export default function Button({ text, children, className, variant = 'normal', 
           shadow-blue-500/50 dark:shadow-lg dark:shadow-blue-800/80 
           font-medium rounded-md text-sm px-5 text-center`,
           variant === 'call-to-action' && 'text-white bg-gradient-to-r from-primary via-primary to-blue-700 py-2.5',
-          variant === 'normal' && 'from-inherit via-inherit to-inherit text-primary border-primary border-2 py-[8px]',
+          variant === 'normal' && 'from-inherit via-inherit to-inherit text-secondary-foreground border-primary border-2 py-[8px]',
           props.disabled && 'opacity-60',
           className)
       }

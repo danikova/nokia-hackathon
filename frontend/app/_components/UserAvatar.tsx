@@ -28,7 +28,7 @@ export default function UserAvatar({ className, dropdownProps }: UserAvatarProps
   }, [pb, setModel])
 
   const InfoComp = useCallback(({ active }: { active: boolean }) =>
-    <div className={`flex min-w-full px-4 py-2 flex-col cursor-default ${active ? 'bg-primary-50 text-primary-700' : ''}`}>
+    <div className={`flex min-w-full px-4 py-2 flex-col cursor-default ${active ? 'bg-primary/20 text-secondary-foreground' : ''}`}>
       <p>{model?.name || model?.username}</p>
       <p className='text-[13px] -mt-1 opacity-75'>{model?.email}</p>
     </div>, [model])
@@ -57,7 +57,7 @@ export default function UserAvatar({ className, dropdownProps }: UserAvatarProps
     } else {
       return (
         <Menu.Button className="flex relative w-8 h-8 overflow-hidden bg-gray-100 rounded-full dark:bg-gray-600 focus:ring-4 focus:outline-none focus:ring-blue-300 justify-center items-end">
-          <FaUserLarge className="w-6 h-6 text-primary_text" />
+          <FaUserLarge className="w-6 h-6 text-secondary-foreground" />
         </Menu.Button>
       );
     }
@@ -75,7 +75,7 @@ function LogoutButton({ active }: { active: boolean }) {
 
   return (
     <button
-      className={`flex min-w-full px-4 py-2 ${active ? 'bg-primary-50 text-primary-700' : ''}`}
+      className={`flex min-w-full px-4 py-2 ${active ? 'bg-primary/20 text-secondary-foreground' : ''}`}
       onClick={() => {
         pb.authStore.clear();
         logoutFlow();
