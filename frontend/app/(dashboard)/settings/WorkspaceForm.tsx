@@ -19,6 +19,15 @@ export type Workspace = {
   [k: string]: any;
 };
 
+// test github repo with cache
+const repoCache = new Map<string, RepoState>();
+export async function testGithubRepoWithCache(repo_url: string) {
+  if (repoCache.has(repo_url)) return repoCache.get(repo_url) as RepoState;
+  const result = await testGithubRepo(repo_url);
+  repoCache.set(repo_url, result);
+  return result;
+}
+
 const formSchema = z.object({
   repo_url: z.string({
     required_error: 'Repo url is required.',
@@ -26,12 +35,12 @@ const formSchema = z.object({
   }).regex(repoRe, {
     message: 'Repo url must be a valid github repo url. For example: https://github.com/(owner)/(repo)',
   }).refine(async (repo_url) => {
-    const result = await testGithubRepo(repo_url);
+    const result = await testGithubRepoWithCache(repo_url);
     return result === RepoState.SUCCESS;
   }, {
     message: 'Repo what you try to submit is not exists or not a public repo.',
   })
-})
+}).required();
 
 function useUserWorkspace() {
   const pb = usePocketBase();

@@ -1,7 +1,7 @@
 'use client';
 
 import Spinner from '../../_components/Spinner';
-import { UsernameLogIn } from './PasswordAuth';
+import { PasswordLogin } from './PasswordLogin';
 import { GithubLogIn, GoogleLogIn } from './OAuth';
 import { snackbarWrapper, usePocketBase } from "../../_lib/clientPocketbase"
 import { Dispatch, SetStateAction, useEffect, useMemo, useState } from 'react';
@@ -38,16 +38,16 @@ export default function Login() {
   const authMethods = useAuthMethods();
 
   const OAuthButtons = useMemo(() => {
-    const btns = [];
+    const oAuthButtons = [];
     const providerNames = (authMethods.authProviders || []).map(i => i.name);
-    if (providerNames.includes('google')) btns.push(GoogleLogIn);
-    if (providerNames.includes('github')) btns.push(GithubLogIn);
-    return btns;
+    if (providerNames.includes('google')) oAuthButtons.push(GoogleLogIn);
+    if (providerNames.includes('github')) oAuthButtons.push(GithubLogIn);
+    return oAuthButtons;
   }, [authMethods]);
 
   const Forms = useMemo(() => {
     const forms = [];
-    if (authMethods.usernamePassword || authMethods.emailPassword) forms.push(UsernameLogIn);
+    if (authMethods.usernamePassword || authMethods.emailPassword) forms.push(PasswordLogin);
     return forms;
   }, [authMethods]);
 
