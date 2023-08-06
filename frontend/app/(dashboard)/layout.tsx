@@ -1,7 +1,7 @@
 import { ReactElement } from 'react';
 import AppBar from '../_components/AppBar';
 import TitleBar from '../_components/TitleBar';
-import UserAvatar from '../_components/UserAvatar';
+import UserButton from '../_components/UserButton';
 import UserUpdater from '../_components/UserUpdater';
 import SideNavBar from '../_components/navigation/SideNavBar';
 import BottomNavBar from '../_components/navigation/BottomNavBar';
@@ -21,7 +21,7 @@ export default async function MainLayout({ children }: { children: ReactElement 
           <AppBar title={process.env.APP_TITLE as string} subTitle={process.env.APP_SUB_TITLE as string}>
             <div className="flex flex-auto flex-row-reverse max-md:hidden">
               <div className="flex items-center justify-center">
-                <UserAvatar />
+                <UserButton />
               </div>
             </div>
           </AppBar>

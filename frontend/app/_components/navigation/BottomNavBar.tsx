@@ -1,6 +1,6 @@
-import { navBarItems } from '@/app/_constans/navBar';
 import NavBarItem from './NavBarItem';
-import UserAvatar from '../UserAvatar';
+import UserButton from '../UserButton';
+import { navBarItems } from '@/app/_constans/navBar';
 
 export default function BottomNavBar() {
   return (
@@ -14,10 +14,9 @@ export default function BottomNavBar() {
       })}
       <div className="hover:bg-secondary hover:cursor-pointer flex-1">
         <div className="flex min-h-full content-center justify-center flex-wrap">
-          <UserAvatar
-            className="flex min-h-full content-center justify-center flex-wrap h-10 w-10 rounded-full ring-2 shadow-primary"
-            dropdownProps={{ menuItemsClass: 'right-0 bottom-[2.7rem] origin-bottom-right' }}
-          />
+          <div className="flex min-h-full content-center justify-center flex-wrap h-10 w-10 rounded-full ring-2 shadow-primary">
+            <UserButton />
+          </div>
         </div>
       </div>
     </div>
