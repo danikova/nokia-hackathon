@@ -6,9 +6,9 @@ import { useForm } from 'react-hook-form';
 import { RepoState, repoRe } from './consts';
 import { Input } from "@/components/ui/input";
 import { Button } from '@/components/ui/button';
-import { zodResolver } from "@hookform/resolvers/zod"
+import ClientForm from '@/components/ui/clientForm';
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useCallback, useEffect, useState } from 'react';
-import ClientForm from '@/app/_components/inputs/ClientForm';
 import { snackbarWrapper, usePocketBase } from '@/app/_lib/clientPocketbase';
 import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 

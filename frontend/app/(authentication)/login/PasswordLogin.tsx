@@ -9,8 +9,8 @@ import { useRouter } from 'next/navigation';
 import { Input } from "@/components/ui/input";
 import { Button } from '@/components/ui/button';
 import { FaRegCircleUser } from 'react-icons/fa6';
+import ClientForm from '@/components/ui/clientForm';
 import { zodResolver } from "@hookform/resolvers/zod";
-import ClientForm from '../../_components/inputs/ClientForm';
 import { snackbarWrapper, usePocketBase } from '../../_lib/clientPocketbase';
 import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 
