@@ -1,6 +1,6 @@
 'use client'
 
-import clsx from 'clsx';
+import { cn } from '@/lib/utils';
 import { useEffect, useRef } from 'react';
 import Chart, { ChartDataset } from 'chart.js/auto'
 
@@ -40,7 +40,7 @@ export default function BarChart(props: BarChartProps) {
     }
   }, [props]);
 
-  return <div className={clsx(props.className)}>
+  return <div className={cn(props.className)}>
     <canvas className='w-full, h-full' ref={container} />
   </div>
 }

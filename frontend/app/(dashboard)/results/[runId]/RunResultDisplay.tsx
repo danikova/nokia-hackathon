@@ -1,8 +1,8 @@
 'use client'
 
-import clsx from "clsx";
 import dayjs from "dayjs";
 import Link from "next/link";
+import { cn } from "@/lib/utils";
 import { v4 as uuidv4 } from 'uuid';
 import { atom, useAtom } from "jotai";
 import { RunResult } from '../helpers';
@@ -64,9 +64,9 @@ export default function RunResultDisplay({
     </div>
   ), [hideTaskName, runResult])
 
-  return <div className={clsx("flex flex-col gap-2 bg-[rgba(0,0,0,0.02)] rounded-md min-w-min p-2", className)}>
+  return <div className={cn("flex flex-col gap-2 bg-[rgba(0,0,0,0.02)] rounded-md min-w-min p-2", className)}>
     {href ? <Link href={href}>{header}</Link> : header}
-    {!hideOutput && <div className={clsx("relative transition-all delay-150 duration-200", !showMore && 'h-[80px]', showMore && 'h-[400px]')}>
+    {!hideOutput && <div className={cn("relative transition-all delay-150 duration-200", !showMore && 'h-[80px]', showMore && 'h-[400px]')}>
       <Code language="yaml" className='p-2 rounded-md overflow-auto absolute'>
         {runResult.output}
       </Code>

@@ -1,9 +1,9 @@
 'use client';
 
-import clsx from 'clsx';
 import Link from 'next/link';
-import { useEffect, useMemo } from 'react';
+import { cn } from '@/lib/utils';
 import { atom, useAtom } from 'jotai';
+import { useEffect, useMemo } from 'react';
 import { usePathname } from 'next/navigation';
 import { NavBarItem } from '@/app/_constans/navBar';
 import { BreadCrumbItem } from '@/app/_constans/breadCrumb';
@@ -27,7 +27,7 @@ export default function NavBarItem({ item }: { item: NavBarItem }) {
     <Link
       href={item.rootPath}
       // href={'/'}
-      className={clsx(
+      className={cn(
         'min-h-full flex items-center justify-center m-auto',
         isActive && 'bg-primary/20 text-primary md:border-l-4 max-md:border-b-4 border-primary shadow-inner'
       )}
