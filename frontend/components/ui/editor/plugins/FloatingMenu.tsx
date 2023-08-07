@@ -54,8 +54,6 @@ function FloatingMenu({ show, ...props }: FloatingMenuProps) {
     // native selection (if user selects two ranges consecutively)
   }, [show, nativeSel, nativeSel?.anchorOffset]);
 
-  console.log(props)
-
   return (
     <div
       ref={ref}

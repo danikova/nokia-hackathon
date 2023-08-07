@@ -27,8 +27,6 @@ import {
 } from "./context/EditorHistoryState";
 import { cn } from "@/lib/utils";
 
-export const EDITOR_NAMESPACE = "lexical-editor";
-
 const EDITOR_NODES = [
   AutoLinkNode,
   CodeNode,
@@ -40,11 +38,14 @@ const EDITOR_NODES = [
 ];
 
 type EditorProps = {
+  nameSpace: string;
+  onSave?: (editorState: string) => void;
+  content?: string;
   className?: string;
 };
 
 export default function Editor(props: EditorProps) {
-  const content = localStorage.getItem(EDITOR_NAMESPACE);
+  const content = props.content || localStorage.getItem(props.nameSpace);
 
   return (
     <div
@@ -56,8 +57,9 @@ export default function Editor(props: EditorProps) {
     >
       <EditorHistoryStateContext>
         <LexicalEditor
+          nameSpace={props.nameSpace}
           config={{
-            namespace: EDITOR_NAMESPACE,
+            namespace: props.nameSpace,
             nodes: EDITOR_NODES,
             editorState: content,
             theme: {
@@ -75,6 +77,7 @@ export default function Editor(props: EditorProps) {
               console.log(error);
             },
           }}
+          onSave={props.onSave}
         />
       </EditorHistoryStateContext>
     </div>
@@ -83,6 +86,8 @@ export default function Editor(props: EditorProps) {
 
 type LexicalEditorProps = {
   config: Parameters<typeof LexicalComposer>["0"]["initialConfig"];
+  nameSpace: string;
+  onSave?: (editorState: string) => void;
 };
 
 export function LexicalEditor(props: LexicalEditorProps) {
@@ -105,7 +110,7 @@ export function LexicalEditor(props: LexicalEditorProps) {
       <AutoLinkPlugin />
       <EditLinkPlugin />
       <FloatingMenuPlugin />
-      <LocalStoragePlugin namespace={EDITOR_NAMESPACE} />
+      <LocalStoragePlugin namespace={props.nameSpace} />
       <OpenLinkPlugin />
     </LexicalComposer>
   );

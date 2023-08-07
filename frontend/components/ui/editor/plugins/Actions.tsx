@@ -11,8 +11,14 @@ import {
   UNDO_COMMAND,
 } from "lexical";
 
+import {
+  $convertToMarkdownString,
+  TRANSFORMERS,
+} from '@lexical/markdown';
+
 import { useEditorHistoryState } from "../context/EditorHistoryState";
 import { IconButton } from "../IconButton";
+import { Button } from "../../button";
 
 export function ActionsPlugin() {
   const [editor] = useLexicalComposerContext();
@@ -64,29 +70,41 @@ export function ActionsPlugin() {
   return (
     <>
       {MandatoryPlugins}
-      <div className="flex gap-3 my-4">
-        <IconButton
-          icon="clear"
-          disabled={isEditorEmpty}
-          onClick={() => {
+      <div className="flex justify-between items-center">
+        <div className="flex gap-3 my-4">
+          <IconButton
+            icon="clear"
+            disabled={isEditorEmpty}
+            onClick={() => {
+              editor.dispatchCommand(CLEAR_EDITOR_COMMAND, undefined);
+            }}
+          />
+          <div className="flex gap-1">
+            <IconButton
+              icon="undo"
+              disabled={!hasUndo}
+              onClick={() => {
+                editor.dispatchCommand(UNDO_COMMAND, undefined);
+              }}
+            />
+            <IconButton
+              icon="redo"
+              disabled={!hasRedo}
+              onClick={() => {
+                editor.dispatchCommand(REDO_COMMAND, undefined);
+              }}
+            />
+          </div>
+        </div>
+        <div className="flex gap-4">
+          <Button variant='secondary' onClick={() => {
             editor.dispatchCommand(CLEAR_EDITOR_COMMAND, undefined);
-          }}
-        />
-        <div className="flex gap-1">
-          <IconButton
-            icon="undo"
-            disabled={!hasUndo}
-            onClick={() => {
-              editor.dispatchCommand(UNDO_COMMAND, undefined);
-            }}
-          />
-          <IconButton
-            icon="redo"
-            disabled={!hasRedo}
-            onClick={() => {
-              editor.dispatchCommand(REDO_COMMAND, undefined);
-            }}
-          />
+          }}>Discard</Button>
+          <Button onClick={async () => {
+            editor.getEditorState().read(() => {
+              const markdown = $convertToMarkdownString(TRANSFORMERS);
+            });
+          }}>Save</Button>
         </div>
       </div>
     </>
