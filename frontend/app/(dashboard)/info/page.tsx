@@ -1,11 +1,11 @@
 import { ReactElement } from 'react';
 import { getPB } from '../../_lib/pocketbase';
 import Image from 'next/image';
-import Editor from './Editor';
+import Editor from '@/app/_components/editor';
 
 export default function InfoHome() {
   const pb = getPB();
-  return <div className='m-16 max-md:m-8 flex flex-col gap-8'>
+  return <div className='info-card m-16 max-md:m-8 flex flex-col gap-8'>
     <Editor />
   </div>
 
