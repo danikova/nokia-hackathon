@@ -19,7 +19,7 @@ export default function UserButton() {
     if (!name) return null;
     const parts = name.split(' ');
     if (parts.length === 1) {
-      return name[0].toUpperCase() + name[1].toUpperCase();
+      return name[0].toUpperCase();
     } else {
       return parts[0][0].toUpperCase() + parts[1][0].toUpperCase();
     }

@@ -96,16 +96,11 @@ export function ActionsPlugin() {
             />
           </div>
         </div>
-        <div className="flex gap-4">
-          <Button variant='secondary' onClick={() => {
-            editor.dispatchCommand(CLEAR_EDITOR_COMMAND, undefined);
-          }}>Discard</Button>
-          <Button onClick={async () => {
-            editor.getEditorState().read(() => {
-              const markdown = $convertToMarkdownString(TRANSFORMERS);
-            });
-          }}>Save</Button>
-        </div>
+        <Button onClick={async () => {
+          editor.getEditorState().read(() => {
+            const markdown = $convertToMarkdownString(TRANSFORMERS);
+          });
+        }}>Save</Button>
       </div>
     </>
   );
