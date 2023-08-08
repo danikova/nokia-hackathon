@@ -1,9 +1,8 @@
 import Image from 'next/image';
-import { ReactElement } from 'react';
 import ReactMarkdown from 'react-markdown'
-import { getPB } from '../../_lib/pocketbase';
+import { getPB, getUserRole } from '../../_lib/pocketbase';
 import { cn } from '@/lib/utils';
-import InfoCardEditor from './InfoCardEditor';
+import Link from 'next/link';
 
 export type InfoCard = {
   "id": string,
@@ -24,10 +23,14 @@ async function getInfoCards() {
 
 export default async function InfoHome() {
   const infoCards = await getInfoCards();
+  const role = getUserRole();
 
   return <div className='info-card m-16 max-md:m-8 flex flex-col gap-8'>
     {infoCards.map((infoCard) => {
-      return <Section key={infoCard.id} infoCard={infoCard} />
+      return <div key={infoCard.id}>
+        <Section infoCard={infoCard} />
+        {role === 'staff' && <Link href={`/info/${infoCard.id}`} >Edit card text</Link>}
+      </div>
     })}
   </div>
 }

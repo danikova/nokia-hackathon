@@ -26,6 +26,7 @@ import {
   useEditorHistoryState,
 } from "./context/EditorHistoryState";
 import { cn } from "@/lib/utils";
+import { ReactElement } from "react";
 
 const EDITOR_NODES = [
   AutoLinkNode,
@@ -40,11 +41,13 @@ const EDITOR_NODES = [
 type EditorProps = {
   nameSpace: string;
   onSave?: (editorState: string) => void;
-  content?: string;
+  content?: any;
+  plugins?: ReactElement;
   className?: string;
 };
 
 export default function Editor(props: EditorProps) {
+  const { historyState } = useEditorHistoryState();
   const content = props.content || localStorage.getItem(props.nameSpace);
 
   return (
@@ -56,9 +59,8 @@ export default function Editor(props: EditorProps) {
       )}
     >
       <EditorHistoryStateContext>
-        <LexicalEditor
-          nameSpace={props.nameSpace}
-          config={{
+        <LexicalComposer
+          initialConfig={{
             namespace: props.nameSpace,
             nodes: EDITOR_NODES,
             editorState: content,
@@ -77,42 +79,29 @@ export default function Editor(props: EditorProps) {
               console.log(error);
             },
           }}
-          onSave={props.onSave}
-        />
+        >
+          {/* Official Plugins */}
+          <RichTextPlugin
+            contentEditable={<ContentEditable spellCheck={false} />}
+            placeholder={<Placeholder />}
+            ErrorBoundary={LexicalErrorBoundary}
+          />
+          <HistoryPlugin externalHistoryState={historyState} />
+          <MarkdownShortcutPlugin transformers={TRANSFORMERS} />
+          <ListPlugin />
+          <LinkPlugin validateUrl={isValidUrl} />
+          {/* Custom Plugins */}
+          <ActionsPlugin />
+          <AutoLinkPlugin />
+          <EditLinkPlugin />
+          <FloatingMenuPlugin />
+          <LocalStoragePlugin namespace={props.nameSpace} />
+          <OpenLinkPlugin />
+          {/* Other Custom Plugins */}
+          {props.plugins || <></>}
+        </LexicalComposer>
       </EditorHistoryStateContext>
     </div>
-  );
-}
-
-type LexicalEditorProps = {
-  config: Parameters<typeof LexicalComposer>["0"]["initialConfig"];
-  nameSpace: string;
-  onSave?: (editorState: string) => void;
-};
-
-export function LexicalEditor(props: LexicalEditorProps) {
-  const { historyState } = useEditorHistoryState();
-
-  return (
-    <LexicalComposer initialConfig={props.config}>
-      {/* Official Plugins */}
-      <RichTextPlugin
-        contentEditable={<ContentEditable spellCheck={false} />}
-        placeholder={<Placeholder />}
-        ErrorBoundary={LexicalErrorBoundary}
-      />
-      <HistoryPlugin externalHistoryState={historyState} />
-      <MarkdownShortcutPlugin transformers={TRANSFORMERS} />
-      <ListPlugin />
-      <LinkPlugin validateUrl={isValidUrl} />
-      {/* Custom Plugins */}
-      <ActionsPlugin />
-      <AutoLinkPlugin />
-      <EditLinkPlugin />
-      <FloatingMenuPlugin />
-      <LocalStoragePlugin namespace={props.nameSpace} />
-      <OpenLinkPlugin />
-    </LexicalComposer>
   );
 }
 

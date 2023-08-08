@@ -9,3 +9,8 @@ export function getPB(req?: NextRequest) {
   pb.authStore.save(pbData.token || '', pbData.model || null);
   return pb;
 }
+
+export function getUserRole() {
+  const pb = getPB();
+  return pb.authStore.model?.role;
+}

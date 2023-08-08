@@ -70,37 +70,30 @@ export function ActionsPlugin() {
   return (
     <>
       {MandatoryPlugins}
-      <div className="flex justify-between items-center">
-        <div className="flex gap-3 my-4">
+      <div className="flex gap-3 my-4">
+        <IconButton
+          icon="clear"
+          disabled={isEditorEmpty}
+          onClick={() => {
+            editor.dispatchCommand(CLEAR_EDITOR_COMMAND, undefined);
+          }}
+        />
+        <div className="flex gap-1">
           <IconButton
-            icon="clear"
-            disabled={isEditorEmpty}
+            icon="undo"
+            disabled={!hasUndo}
             onClick={() => {
-              editor.dispatchCommand(CLEAR_EDITOR_COMMAND, undefined);
+              editor.dispatchCommand(UNDO_COMMAND, undefined);
             }}
           />
-          <div className="flex gap-1">
-            <IconButton
-              icon="undo"
-              disabled={!hasUndo}
-              onClick={() => {
-                editor.dispatchCommand(UNDO_COMMAND, undefined);
-              }}
-            />
-            <IconButton
-              icon="redo"
-              disabled={!hasRedo}
-              onClick={() => {
-                editor.dispatchCommand(REDO_COMMAND, undefined);
-              }}
-            />
-          </div>
+          <IconButton
+            icon="redo"
+            disabled={!hasRedo}
+            onClick={() => {
+              editor.dispatchCommand(REDO_COMMAND, undefined);
+            }}
+          />
         </div>
-        <Button onClick={async () => {
-          editor.getEditorState().read(() => {
-            const markdown = $convertToMarkdownString(TRANSFORMERS);
-          });
-        }}>Save</Button>
       </div>
     </>
   );
