@@ -14,7 +14,7 @@ export const defaultSB = React.forwardRef<HTMLDivElement, CustomContentProps>(fu
   return (
     <SnackbarContent ref={ref} role="alert" {...other}>
       <div
-        className="group flex gap-2 bg-primary/25 border-l-4 border-primary/80 secondary-foreground p-4 rounded-md cursor-pointer"
+        className="group flex gap-2 bg-primary/20 border-l-4 border-primary/80 secondary-foreground p-4 rounded-md cursor-pointer"
         role="alert"
         onClick={() => {
           closeSnackbar(id);

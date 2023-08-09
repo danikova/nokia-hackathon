@@ -1,5 +1,5 @@
 import { ReactElement } from 'react';
-import { FaCodeBranch, FaCircleInfo, FaList, FaWrench } from 'react-icons/fa6';
+import { FaCodeBranch, FaCircleInfo, FaListUl, FaWrench, FaListOl } from 'react-icons/fa6';
 
 export type NavBarItem = {
   icon: ReactElement;
@@ -19,9 +19,14 @@ export const navBarItems: readonly NavBarItem[] = [
     rootPath: '/code',
   },
   {
-    icon: <FaList className="h-6 w-6" />,
+    icon: <FaListUl className="h-6 w-6" />,
     title: 'Results',
     rootPath: '/results',
+  },
+  {
+    icon: <FaListOl className="h-6 w-6" />,
+    title: 'Scores',
+    rootPath: '/scoreboard',
   },
   {
     icon: <FaWrench className="h-6 w-6" />,

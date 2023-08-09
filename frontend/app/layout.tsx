@@ -3,6 +3,7 @@ import Snackbar from './_components/Snackbar';
 
 import './globals.css';
 import './index';
+import { TooltipProvider } from '@/components/ui/tooltip';
 
 const nokiaFont = localFont({
   src: [
@@ -42,8 +43,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
       <body className={nokiaFont.className}>
         <main>
-          {children}
-          <Snackbar />
+          <TooltipProvider>
+            {children}
+            <Snackbar />
+          </TooltipProvider>
         </main>
       </body>
     </html>

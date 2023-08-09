@@ -12,7 +12,7 @@ export type Workspace = {
   [k: string]: any;
 };
 
-function useUserWorkspace() {
+export function useUserWorkspace() {
   const pb = usePocketBase();
   const [workspace, setWorkspace] = useState<Workspace | null>(null);
 
