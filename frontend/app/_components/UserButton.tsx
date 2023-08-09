@@ -4,6 +4,7 @@ import { BiLogOut } from 'react-icons/bi';
 import { Admin, Record } from "pocketbase";
 import { enqueueSnackbar } from "notistack";
 import { useRouter } from "next/navigation";
+import { minidenticon } from 'minidenticons';
 import { logoutFlow } from "../(authentication)/actions";
 import { usePocketBase } from "../_lib/clientPocketbase";
 import { useCallback, useEffect, useMemo, useState } from "react";
@@ -24,6 +25,15 @@ export default function UserButton() {
       return parts[0][0].toUpperCase() + parts[1][0].toUpperCase();
     }
   }, [name]);
+  const avatarURI = useMemo(
+    () => {
+      if (model?.avatarUrl)
+        return model?.avatarUrl;
+      else
+        return 'data:image/svg+xml;utf8,' + encodeURIComponent(minidenticon(name, 100, 50))
+    },
+    [name, model]
+  );
 
   useEffect(() => {
     pb.authStore.onChange((_, model) => {
@@ -41,8 +51,8 @@ export default function UserButton() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger className='h-8 w-8 rounded-full'>
-        <Avatar>
-          <AvatarImage src={model?.avatarUrl} alt={model?.email} />
+        <Avatar className='bg-background'>
+          <AvatarImage src={avatarURI} alt={name} />
           <AvatarFallback>{fallback}</AvatarFallback>
         </Avatar>
       </DropdownMenuTrigger>

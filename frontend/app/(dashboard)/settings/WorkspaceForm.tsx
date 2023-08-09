@@ -11,13 +11,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useCallback, useEffect, useState } from 'react';
 import { snackbarWrapper, usePocketBase } from '@/app/_lib/clientPocketbase';
 import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-
-export type Workspace = {
-  id: string;
-  user: string;
-  repo_url: string;
-  [k: string]: any;
-};
+import { Workspace } from "./page";
 
 // test github repo with cache
 const repoCache = new Map<string, RepoState>();
@@ -42,24 +36,8 @@ const formSchema = z.object({
   })
 }).required();
 
-function useUserWorkspace() {
+export default function WorkspaceForm({ workspace }: { workspace: Workspace | null }) {
   const pb = usePocketBase();
-  const [workspace, setWorkspace] = useState<Workspace | null>(null);
-
-  useEffect(() => {
-    const _ = async () => {
-      const records = await snackbarWrapper(pb.collection('workspaces').getFullList());
-      setWorkspace(records.length !== 0 ? records[0] as never as Workspace : null);
-    }
-    _();
-  }, [pb]);
-
-  return workspace;
-}
-
-export default function WorkspaceForm() {
-  const pb = usePocketBase();
-  const workspace = useUserWorkspace();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
   });
