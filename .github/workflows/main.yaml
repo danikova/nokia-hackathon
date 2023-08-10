@@ -13,15 +13,19 @@ jobs:
         with:
           go-version: '1.20'
           cache-dependency-path: backend/go.sum
+          cache: true
 
-      - name: Build
+      - name: Install dependencies
         run: |
           cd backend
           go mod download
-          go build
-          ls -l
+
+      - name: Build executable
+        run: |
+          export CGO_ENABLED=0
+          go build -o hackathon-backend
         
-      - name: rsync deployments
+      - name: Copy to linode
         uses: burnett01/rsync-deployments@6.0.0
         with:
           switches: -avz
@@ -31,7 +35,7 @@ jobs:
           remote_user: ${{ secrets.USER_NAME }}
           remote_key: ${{ secrets.SSH_PRIVATE_KEY }}
         
-      - name: Copy to linode
+      - name: Restart server
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.HOST }}
