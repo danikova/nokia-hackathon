@@ -20,13 +20,25 @@ jobs:
 #          go mod download
 #          go build
 #          ls -l
-
-      - name: Copy to linode
-        uses: appleboy/ssh-action@master
+      - name: create dummy file
+        run: touch test.file
+        
+      - name: rsync deployments
+        uses: burnett01/rsync-deployments@6.0.0
         with:
-          host: ${{ secrets.HOST }}
-          username: ${{ secrets.USER_NAME }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          port: ${{ secrets.PORT }}
-          script: |
-            ls -l
+          switches: -avz
+          path: ./test.file
+          remote_path: /root/
+          remote_host: ${{ secrets.HOST }}
+          remote_user: ${{ secrets.USER_NAME }}
+          remote_key: ${{ secrets.SSH_PRIVATE_KEY }}
+        
+#      - name: Copy to linode
+#        uses: appleboy/ssh-action@master
+#        with:
+#          host: ${{ secrets.HOST }}
+#          username: ${{ secrets.USER_NAME }}
+#          key: ${{ secrets.SSH_PRIVATE_KEY }}
+#          port: ${{ secrets.PORT }}
+#          script: |
+#            ls -l
