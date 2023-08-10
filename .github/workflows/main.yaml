@@ -31,12 +31,12 @@ jobs:
           remote_user: ${{ secrets.USER_NAME }}
           remote_key: ${{ secrets.SSH_PRIVATE_KEY }}
         
-     - name: Copy to linode
-       uses: appleboy/ssh-action@master
-       with:
-         host: ${{ secrets.HOST }}
-         username: ${{ secrets.USER_NAME }}
-         key: ${{ secrets.SSH_PRIVATE_KEY }}
-         port: ${{ secrets.PORT }}
-         script: |
-           ls -l /var/www/pocketbase
+      - name: Copy to linode
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USER_NAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: ${{ secrets.PORT }}
+          script: |
+            ls -l /var/www/pocketbase
