@@ -30,7 +30,8 @@
         "mode": "debug",
         "program": "${workspaceFolder:backend}/main.go",
         "args": [
-          "serve"
+          "serve",
+          "--debug"
         ]
       }
     ]
