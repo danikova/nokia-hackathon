@@ -121,11 +121,13 @@
 }
 
 * {
+  --scrollbar-width: 20px;
   --fake-scrollbar-width: 4px;
 }
 
 ::-webkit-scrollbar {
-  width: 20px;
+  width: var(--scrollbar-width);
+  background: inherit;
 }
 
 ::-webkit-scrollbar-track {

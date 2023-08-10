@@ -10,6 +10,8 @@ import { snackbarWrapper, usePocketBase } from '@/app/_lib/clientPocketbase';
 import { Workspace, useUserWorkspace } from '../settings/page';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 
+import './style.css';
+
 const refetchTimeout = 30_000;
 
 type RunStatistic = {
@@ -29,8 +31,8 @@ function useRunStatistics() {
   const [runStatistics, setRunStatistics] = useState<RunStatistic[]>([]);
 
   const fetchData = useCallback(async () => {
-    const data = await snackbarWrapper(pb.collection('run_statistics').getFullList());
-    setRunStatistics(data as never as RunStatistic[]);
+    const data = await snackbarWrapper(pb.collection('run_statistics').getFullList()) as never as RunStatistic[];
+    setRunStatistics(data);
   }, [pb]);
 
   useEffect(() => {
@@ -46,11 +48,10 @@ export default function App() {
   const rowData = useRunStatistics();
 
   const columnDefs = useMemo<ColDef<RunStatistic>[]>(() => [
-    { headerName: 'id', width: 50 },
     {
       field: 'id', headerName: '', cellRenderer: WorkspaceAvatarRenderer, cellRendererParams: {
         workspace
-      }
+      }, width: 60
     },
     { field: 'number_of_runs' },
     { field: 'number_of_successful_runs' },
@@ -58,7 +59,7 @@ export default function App() {
     { field: 'number_of_something_changed_runs' },
     { field: 'average_execution_time' },
     { field: 'average_output_length' },
-  ], []);
+  ], [workspace]);
 
   const defaultColDef = useMemo<ColDef<RunStatistic>>(() => ({
     sortable: true,
@@ -67,8 +68,8 @@ export default function App() {
   }), [workspace]);
 
   return (
-    <div className='h-[calc(100%-var(--cm-titlebar-h))] w-full box-border'>
-      <div className='ag-theme-alpine h-full w-full'>
+    <div className='-mt-[var(--cm-titlebar-h)] h-full w-full box-border' style={{ '--row-data-count': rowData.length } as React.CSSProperties}>
+      <div className='ag-theme-alpine h-full w-full scoreboard-grid'>
         <AgGridReact
           onGridReady={({ api }) => {
             api?.sizeColumnsToFit();
@@ -92,7 +93,7 @@ function WorkspaceAvatarRenderer(props: WorkspaceAvatarRendererProps) {
   const { workspace } = props;
 
   return (
-    <div className='h-full w-full flex items-center justify-start'>
+    <div className='h-full w-full flex items-center justify-center'>
       <Tooltip delayDuration={50}>
         <TooltipTrigger>
           <WorkspaceAvatar workspaceId={workspaceId} />
