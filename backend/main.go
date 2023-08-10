@@ -23,7 +23,7 @@ func main() {
 	e.OnRecordAfterAuth(app)
 
 	migratecmd.MustRegister(app, app.RootCmd, &migratecmd.Options{
-		Automigrate: true,
+		Automigrate: false,
 	})
 
 	if err := app.Start(); err != nil {
