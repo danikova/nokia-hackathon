@@ -43,7 +43,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
       <body className={nokiaFont.className}>
         <main>
-          <TooltipProvider>
+          <TooltipProvider delayDuration={100}>
             {children}
             <Snackbar />
           </TooltipProvider>

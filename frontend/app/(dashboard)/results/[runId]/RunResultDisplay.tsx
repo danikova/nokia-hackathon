@@ -23,6 +23,10 @@ type RunResultDisplayProps = {
   defaultOpen?: boolean
 }
 
+export function getHumaneRunDuration(execution_time: number) {
+  return humanizeDuration((execution_time || 0) * 1000, { maxDecimalPoints: 3 });
+}
+
 export default function RunResultDisplay({
   runResult, hideOutput = false, hideTaskName = false, className, href, defaultOpen: defaultIsOpen = false
 }: RunResultDisplayProps) {
@@ -57,7 +61,7 @@ export default function RunResultDisplay({
         {
           runResult.is_success && <>
             <span className="text-lg">/</span>
-            <div>{humanizeDuration((runResult.execution_time || 0) * 1000, { maxDecimalPoints: 3 })}</div>
+            <div>{getHumaneRunDuration(runResult.execution_time || 0)}</div>
           </>
         }
       </div>

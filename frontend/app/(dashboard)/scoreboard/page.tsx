@@ -1,29 +1,30 @@
 'use client'
 
+import { ColDef } from 'ag-grid-community';
 import { AgGridReact } from 'ag-grid-react';
-import 'ag-grid-community/styles/ag-grid.css';
-import WorkspaceAvatar from '../settings/WorkspaceAvatar';
-import { ColDef, ICellRendererParams } from 'ag-grid-community';
-import 'ag-grid-community/styles/ag-theme-alpine-no-font.min.css';
+import { useUserWorkspace } from '../settings/page';
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
+import { getHumaneRunDuration } from '../results/[runId]/RunResultDisplay';
+import { TaskStatisticRenderer, WorkspaceAvatarRenderer } from './renderers';
 import { snackbarWrapper, usePocketBase } from '@/app/_lib/clientPocketbase';
-import { Workspace, useUserWorkspace } from '../settings/page';
-import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 
 import './style.css';
+import 'ag-grid-community/styles/ag-grid.css';
+import 'ag-grid-community/styles/ag-theme-alpine.min.css';
 
 const refetchTimeout = 30_000;
 
-type RunStatistic = {
+export type RunStatistic = {
   "id": string,
   "collectionId": string,
   "collectionName": string,
   "number_of_runs": number,
-  "number_of_timeouted_runs": number,
-  "number_of_successful_runs": number,
-  "number_of_something_changed_runs": number,
   "average_execution_time": number,
-  "average_output_length": number
+  "average_output_length": number,
+  "number_of_evaluated_tasks": number,
+  "number_of_successful_tasks": number,
+  "number_of_failure_tasks": number,
+  "number_of_timeouted_tasks": number
 }
 
 function useRunStatistics() {
@@ -49,21 +50,32 @@ export default function App() {
 
   const columnDefs = useMemo<ColDef<RunStatistic>[]>(() => [
     {
-      field: 'id', headerName: '', cellRenderer: WorkspaceAvatarRenderer, cellRendererParams: {
+      field: 'id',
+      maxWidth: 60,
+      headerName: '',
+      cellRenderer: WorkspaceAvatarRenderer,
+      cellRendererParams: {
         workspace
-      }, width: 60
+      },
     },
-    { field: 'number_of_runs' },
-    { field: 'number_of_successful_runs' },
-    { field: 'number_of_timeouted_runs' },
-    { field: 'number_of_something_changed_runs' },
-    { field: 'average_execution_time' },
-    { field: 'average_output_length' },
+    { field: 'number_of_runs', headerName: 'Runs', maxWidth: 80 },
+    {
+      field: 'average_execution_time',
+      headerName: 'Avg. duration',
+      valueGetter: (params) => getHumaneRunDuration(params.data?.average_execution_time || 0)
+    },
+    { field: 'average_output_length', headerName: 'Avg. output length' },
+    {
+      headerName: 'Tasks',
+      valueGetter: ({ data }) => data?.number_of_evaluated_tasks,
+      cellRenderer: TaskStatisticRenderer
+    },
   ], [workspace]);
 
   const defaultColDef = useMemo<ColDef<RunStatistic>>(() => ({
     sortable: true,
     filter: false,
+    flex: 1,
     cellClass: (params) => params.data?.id === workspace?.id ? 'bg-primary/20' : ''
   }), [workspace]);
 
@@ -78,30 +90,9 @@ export default function App() {
           columnDefs={columnDefs}
           defaultColDef={defaultColDef}
           animateRows={true}
+          getRowId={({ data }) => data.id}
         />
       </div>
     </div>
   );
 };
-
-interface WorkspaceAvatarRendererProps extends ICellRendererParams {
-  workspace: Workspace | null
-}
-
-function WorkspaceAvatarRenderer(props: WorkspaceAvatarRendererProps) {
-  const workspaceId = props.valueFormatted ? props.valueFormatted : props.value;
-  const { workspace } = props;
-
-  return (
-    <div className='h-full w-full flex items-center justify-center'>
-      <Tooltip delayDuration={50}>
-        <TooltipTrigger>
-          <WorkspaceAvatar workspaceId={workspaceId} />
-        </TooltipTrigger>
-        <TooltipContent side='right' hidden={workspace?.id !== workspaceId}>
-          This is your workspace
-        </TooltipContent>
-      </Tooltip>
-    </div>
-  );
-}
