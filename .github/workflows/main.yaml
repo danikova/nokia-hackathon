@@ -25,18 +25,8 @@ jobs:
           cd backend
           export CGO_ENABLED=0
           go build -o hackathon-backend
-        
-      - name: Copy to linode
-        uses: burnett01/rsync-deployments@6.0.0
-        with:
-          switches: -avz
-          path: ./backend/hackathon-backend
-          remote_path: /var/www/pocketbase
-          remote_host: ${{ secrets.HOST }}
-          remote_user: ${{ secrets.USER_NAME }}
-          remote_key: ${{ secrets.SSH_PRIVATE_KEY }}
-        
-      - name: Restart server
+
+      - name: Stop server
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.HOST }}
@@ -44,4 +34,24 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: ${{ secrets.PORT }}
           script: |
-            ls -l /var/www/pocketbase
+            systemctl stop pocketbase.service
+        
+      - name: Copy to linode
+        uses: burnett01/rsync-deployments@6.0.0
+        with:
+          switches: -avz
+          path: ./backend/hackathon-backend
+          remote_path: /home/pocketbase/backend/hackathon-backend
+          remote_host: ${{ secrets.HOST }}
+          remote_user: ${{ secrets.USER_NAME }}
+          remote_key: ${{ secrets.SSH_PRIVATE_KEY }}
+        
+      - name: Start server
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USER_NAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: ${{ secrets.PORT }}
+          script: |
+            systemctl start pocketbase.service
