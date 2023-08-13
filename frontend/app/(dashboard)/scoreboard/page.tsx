@@ -5,7 +5,7 @@ import { AgGridReact } from 'ag-grid-react';
 import { useUserWorkspace } from '../settings/page';
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { getHumaneRunDuration } from '../results/[runId]/RunResultDisplay';
-import { TaskStatisticRenderer, WorkspaceAvatarRenderer } from './renderers';
+import { AverageOutputSizeRenderer, TaskStatisticRenderer, WorkspaceAvatarRenderer } from './renderers';
 import { snackbarWrapper, usePocketBase } from '@/app/_lib/clientPocketbase';
 
 import './style.css';
@@ -66,7 +66,11 @@ export default function App() {
       headerName: 'Avg. duration',
       valueGetter: (params) => getHumaneRunDuration(params.data?.average_execution_time || 0)
     },
-    { field: 'average_output_length', headerName: 'Avg. output length' },
+    {
+      field: 'average_output_length',
+      headerName: 'Avg. output length',
+      cellRenderer: AverageOutputSizeRenderer
+    },
     {
       headerName: 'Tasks',
       valueGetter: ({ data }) => data?.number_of_evaluated_tasks,
