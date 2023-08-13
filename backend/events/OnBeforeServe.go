@@ -41,7 +41,13 @@ func OnBeforeServe(app *pocketbase.PocketBase) {
 					return echo.NewHTTPError(http.StatusBadRequest, err)
 				}
 				if len(records) != 0 {
-					return echo.NewHTTPError(http.StatusNotAcceptable, "This run_id ("+reqBody.Meta.RunId+") is already registered")
+					for i := 0; i < len(records); i++ {
+						record := records[i]
+						if record.GetBool("is_success") {
+							return echo.NewHTTPError(http.StatusNotAcceptable, "This run_id ("+reqBody.Meta.RunId+") is already registered")
+						}
+						app.Dao().DeleteRecord(record)
+					}
 				}
 
 				err = utils.CheckRunIdIsValid(&reqBody.Meta)
