@@ -35,7 +35,7 @@ jobs:
           port: ${{ secrets.PORT }}
           script: |
             systemctl stop pocketbase.service
-            systemctl status --no-pager -l pocketbase.service
+            systemctl status --no-pager -l pocketbase.service || true
         
       - name: Copy to linode
         uses: burnett01/rsync-deployments@6.0.0
@@ -56,4 +56,4 @@ jobs:
           port: ${{ secrets.PORT }}
           script: |
             systemctl start pocketbase.service
-            systemctl status --no-pager -l pocketbase.service
+            systemctl status --no-pager -l pocketbase.service || true
