@@ -18,8 +18,12 @@ export type RunResult = {
 
 export type GroupedRunResult = Map<string, RunResult[]>;
 
-export function getGroupedRunResults(runResults: ListResult<RunResult>, groupKey: keyof RunResult, omitEmpty = true) {
-  const groups = new Map<string, RunResult[]>();
+export function getGroupedRunResults<T extends RunResult>(
+  runResults: ListResult<T>,
+  groupKey: keyof T,
+  omitEmpty = true
+) {
+  const groups = new Map<string, T[]>();
   for (const runResult of runResults.items) {
     const groupName = `${runResult[groupKey]}`;
     if (omitEmpty && !groupName) continue;

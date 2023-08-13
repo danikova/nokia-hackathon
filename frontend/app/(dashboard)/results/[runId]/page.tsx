@@ -4,10 +4,15 @@ import RunResultDisplay from "./RunResultDisplay";
 // import BreadCrumbPush from "../../../_components/navigation/BreadCrumbPush";
 import { RunResult, getGroupedKeys, getGroupedRunResults } from '../helpers';
 import { notFound } from "next/navigation";
+import { Workspace } from "../../settings/page";
+
+interface ExpandedRunResult extends RunResult {
+  expand: { workspace: Workspace }
+};
 
 async function getRunResultByGithubRunId(runId: number) {
   const pb = getPB();
-  return await pb.collection('run_results').getList<RunResult>(1, 50, {
+  return await pb.collection('run_results').getList<ExpandedRunResult>(1, 50, {
     filter: `run_id="${runId}"`,
     expand: "workspace"
   });
@@ -31,8 +36,14 @@ export default async function RunDetail({ params }: {
   return <DetailWrapper runId={params.runId}>
     <>
       {getGroupedKeys(groupedRunResults).map((key) => {
-        const firstRunResult = groupedRunResults.get(key)
-        return firstRunResult ? <RunResultDisplay key={key} runResult={firstRunResult[0]} /> : null
+        const firstRunResult = groupedRunResults.get(key)![0];
+        let repo_url = firstRunResult?.expand.workspace.repo_url;
+        repo_url = repo_url?.endsWith('/') ? repo_url : repo_url + '/';
+        return firstRunResult ? <RunResultDisplay
+          key={key}
+          runResult={firstRunResult}
+          href={`${repo_url}/actions/runs/${params.runId}`}
+        /> : null
       })}
     </>
   </DetailWrapper>
