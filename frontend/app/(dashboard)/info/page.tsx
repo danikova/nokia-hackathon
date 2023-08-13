@@ -1,8 +1,10 @@
-import Image from 'next/image';
-import ReactMarkdown from 'react-markdown'
-import { getPB, getUserRole } from '../../_lib/pocketbase';
-import { cn } from '@/lib/utils';
 import Link from 'next/link';
+import Image from 'next/image';
+import { cn } from '@/lib/utils';
+import ReactMarkdown from 'react-markdown'
+import { navBarItems } from '@/app/_constans/navBar';
+import { getPB, getUserRole } from '../../_lib/pocketbase';
+import BreadCrumb from '@/app/_components/navigation/BreadCrumb';
 
 export type InfoCard = {
   "id": string,
@@ -26,6 +28,7 @@ export default async function InfoHome() {
   const role = getUserRole();
 
   return <div className='info-card m-16 max-md:m-8 flex flex-col gap-8'>
+    <BreadCrumb items={[navBarItems[0]]} />
     {infoCards.map((infoCard) => {
       return <div key={infoCard.id}>
         <Section infoCard={infoCard} />

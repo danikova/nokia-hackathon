@@ -11,6 +11,8 @@ import { snackbarWrapper, usePocketBase } from '@/app/_lib/clientPocketbase';
 import './style.css';
 import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-alpine.min.css';
+import { navBarItems } from '@/app/_constans/navBar';
+import BreadCrumb from '@/app/_components/navigation/BreadCrumb';
 
 const refetchTimeout = 30_000;
 
@@ -81,6 +83,7 @@ export default function App() {
 
   return (
     <div className='-mt-[var(--cm-titlebar-h)] h-full w-full box-border' style={{ '--row-data-count': rowData.length } as React.CSSProperties}>
+      <BreadCrumb items={[navBarItems[3]]} />
       <div className='ag-theme-alpine h-full w-full scoreboard-grid'>
         <AgGridReact
           onGridReady={({ api }) => {

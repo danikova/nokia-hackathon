@@ -1,6 +1,8 @@
 import { Workspace } from '../settings/page';
 import { getPB } from '../../_lib/pocketbase';
 import EditorViewModal from './EditorViewModal';
+import { navBarItems } from '@/app/_constans/navBar';
+import BreadCrumb from '@/app/_components/navigation/BreadCrumb';
 
 async function getUserWorkspace() {
   const pb = getPB();
@@ -12,6 +14,9 @@ export default async function CodeHome() {
   const workspace = await getUserWorkspace();
 
   return (
-    <EditorViewModal workspace={workspace} />
+    <>
+      <BreadCrumb items={[navBarItems[1]]} />
+      <EditorViewModal workspace={workspace} />
+    </>
   )
 }

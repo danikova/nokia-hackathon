@@ -1,6 +1,6 @@
 import { ReactElement } from 'react';
 import AppBar from '../_components/AppBar';
-import TitleBar from '../_components/TitleBar';
+import BredCrumbDisplay from '../_components/navigation/BredCrumbDisplay';
 import UserButton from '../_components/UserButton';
 import UserUpdater from '../_components/UserUpdater';
 import SideNavBar from '../_components/navigation/SideNavBar';
@@ -32,7 +32,7 @@ export default async function MainLayout({ children }: { children: ReactElement 
         <div className="md:row-[appbar-end/end] md:col-[sidebar-end/end] max-md:row-[appbar-end/content-end] max-md:col-[start/end] flex flex-col relative">
           <div className='content-with-scrollbar flex-auto h-0 overflow-y-auto overflow-x-hidden [--cm-titlebar-h:4rem] max-md:[--cm-titlebar-h:2rem]'>
             <div className='absolute top-0 left-0 right-0 z-40'>
-              <TitleBar />
+              <BredCrumbDisplay />
             </div>
             <div className='h-[--cm-titlebar-h]' />
             {children}

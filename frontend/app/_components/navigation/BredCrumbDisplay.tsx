@@ -1,11 +1,11 @@
 'use client'
 
+import Link from 'next/link';
 import { useAtom } from 'jotai';
 import { FaChevronRight } from 'react-icons/fa';
-import { globalBreadCrumbAtom } from './navigation/NavBarItem';
-import Link from 'next/link';
+import { globalBreadCrumbAtom } from './BreadCrumb';
 
-export default function TitleBar() {
+export default function BredCrumbDisplay() {
   const [globalBreadCrumb] = useAtom(globalBreadCrumbAtom);
 
   return (

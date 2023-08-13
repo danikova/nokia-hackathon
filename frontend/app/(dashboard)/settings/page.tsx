@@ -4,6 +4,8 @@ import { useEffect, useState } from 'react';
 import WorkspaceForm from './WorkspaceForm';
 import WorkspaceAvatar from './WorkspaceAvatar';
 import { snackbarWrapper, usePocketBase } from '@/app/_lib/clientPocketbase';
+import BreadCrumb from '@/app/_components/navigation/BreadCrumb';
+import { navBarItems } from '@/app/_constans/navBar';
 
 export type Workspace = {
   id: string;
@@ -32,6 +34,7 @@ export default function SettingsHome() {
 
   return (
     <div className="m-16 max-md:m-8 md:max-w-2xl">
+      <BreadCrumb items={[navBarItems[4]]} />
       <div className='flex gap-4'>
         <WorkspaceAvatar workspaceId={workspace?.id || ''} />
         <h2 className='text-2xl pb-8'>

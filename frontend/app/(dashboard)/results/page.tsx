@@ -3,6 +3,8 @@ import { getPB } from '../../_lib/pocketbase';
 import RunResultDisplay from "./[runId]/RunResultDisplay";
 import BarChart, { defaultColors } from '../../_components/BarChart';
 import { RunResult, GroupedRunResult, getGroupedRunResults } from './helpers';
+import { navBarItems } from '@/app/_constans/navBar';
+import BreadCrumb from '@/app/_components/navigation/BreadCrumb';
 
 const perPage = 50;
 const lastN = 5;
@@ -32,6 +34,7 @@ export default async function ResultsHome() {
 
   return (
     <div className='w-full overflow-x-auto'>
+      <BreadCrumb items={[navBarItems[2]]} />
       <div className='m-16 max-md:m-8'>
         <div className='grid gap-x-8 gap-y-2' style={{
           gridTemplateColumns: `repeat(${taskKeys.length},minmax(300px, 1fr))`

@@ -5,6 +5,8 @@ import RunResultDisplay from "./RunResultDisplay";
 import { RunResult, getGroupedKeys, getGroupedRunResults } from '../helpers';
 import { notFound } from "next/navigation";
 import { Workspace } from "../../settings/page";
+import { navBarItems } from "@/app/_constans/navBar";
+import BreadCrumb from "@/app/_components/navigation/BreadCrumb";
 
 interface ExpandedRunResult extends RunResult {
   expand: { workspace: Workspace }
@@ -51,7 +53,7 @@ export default async function RunDetail({ params }: {
 
 function DetailWrapper({ children, runId }: { children: ReactElement | ReactElement[], runId: number }) {
   return <div className="m-16 max-md:m-8 flex flex-col gap-8">
-    {/* <BreadCrumbPush item={{ title: `Details of ${runId}` }} /> */}
+    <BreadCrumb items={[navBarItems[2], { title: `Details of ${runId}` }]} />
     {children}
   </div>
 }
