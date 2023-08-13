@@ -91,6 +91,12 @@ export default function App() {
           defaultColDef={defaultColDef}
           animateRows={true}
           getRowId={({ data }) => data.id}
+          noRowsOverlayComponent={() => {
+            return <div className='flex flex-col items-center justify-center h-full w-full'>
+              <div className='text-2xl font-bold text-gray-500'>No data</div>
+              <div className='text-gray-400'>There is no run statistics available.</div>
+            </div>
+          }}
         />
       </div>
     </div>

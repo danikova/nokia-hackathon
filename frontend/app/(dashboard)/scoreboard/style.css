@@ -2,14 +2,15 @@
   --ag-header-height: 48px;
   --ag-row-height: 42px;
   --magic-height: calc(var(--cm-titlebar-h) + var(--ag-header-height));
+  --ag-header-background-color: hsl(var(--secondary) / 0.5) !important;
+  --ag-foreground-color: hsl(var(--secondary-foreground)) !important;
 }
-
 .scoreboard-grid .ag-root-wrapper {
   @apply border-none;
 }
 
 .scoreboard-grid .ag-header {
-  @apply mt-[var(--cm-titlebar-h)] z-10;
+  @apply mt-[var(--cm-titlebar-h)] z-10 border-b-2 border-secondary;
 }
 
 .scoreboard-grid .ag-body {

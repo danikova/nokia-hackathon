@@ -1,6 +1,6 @@
+import { Workspace } from '../settings/page';
 import { getPB } from '../../_lib/pocketbase';
 import EditorViewModal from './EditorViewModal';
-import { Workspace } from '../settings/WorkspaceForm';
 
 async function getUserWorkspace() {
   const pb = getPB();

@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { getPB } from '../../_lib/pocketbase';
 import RunResultDisplay from "./[runId]/RunResultDisplay";
 import BarChart, { defaultColors } from '../../_components/BarChart';
@@ -26,29 +27,35 @@ export default async function ResultsHome() {
     <h2 className='text-2xl col-span-full pb-8'>
       There are no registered run results {':('}
     </h2>
+    <p>Set your repo in the <Link href='/settings' className='text-primary hover:underline'>/settings</Link> and commit something to the repo to see the result of the runs.</p>
   </div>
 
   return (
     <div className='w-full overflow-x-auto'>
-      <div className='grid gap-x-8 gap-y-2 m-16 max-md:m-8' style={{
-        gridTemplateColumns: `repeat(${taskKeys.length},minmax(300px, 1fr))`
-      }}>
-        <h2 className='text-2xl col-span-full pb-8'>
-          State of the last runs
-        </h2>
-        {taskKeys.map((key) => <div key={key} className='text-lg'>{key}</div>)}
-        {lastCells}
-        <h2 className='text-2xl my-8'>Fastest Solutions <sub className='text-sm max-md:block'>(based on the last {perPage} records)</sub></h2>
-        {fastestCells}
-        <div className='col-start-2' style={{
-          gridRowStart: `${lastN + 3 + 1}`,
-          gridRowEnd: `span ${fastestCells.length + 1}`,
-          gridColumnEnd: `span ${taskKeys.length - 1}`
+      <div className='m-16 max-md:m-8'>
+        <div className='grid gap-x-8 gap-y-2' style={{
+          gridTemplateColumns: `repeat(${taskKeys.length},minmax(300px, 1fr))`
         }}>
-          <ResultCharts runResultsGroupedByTask={runResultsGroupedByTask} fastestSolutions={fastestSolutions} />
+          <h2 className='text-2xl col-span-full pb-8'>
+            State of the last runs
+          </h2>
+          {taskKeys.map((key) => <div key={key} className='text-lg'>{key}</div>)}
+          {lastCells}
+        </div>
+        <div className='grid gap-x-8 gap-y-2' style={{
+          gridTemplateColumns: `repeat(${taskKeys.length},minmax(300px, 1fr))`
+        }}>
+          <h2 className='text-2xl my-8'>Fastest Solutions <sub className='text-sm max-md:block'>(based on the last {perPage} records)</sub></h2>
+          {fastestCells}
+          <div className='col-start-2 row-start-2' style={{
+            gridRowEnd: `span ${fastestCells.length + 1}`,
+            gridColumnEnd: `span ${taskKeys.length - 1}`
+          }}>
+            <ResultCharts runResultsGroupedByTask={runResultsGroupedByTask} fastestSolutions={fastestSolutions} />
+          </div>
         </div>
       </div>
-    </div>
+    </div >
   )
 }
 

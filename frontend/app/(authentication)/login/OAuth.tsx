@@ -7,20 +7,24 @@ import { useRouter } from "next/navigation";
 import { FaGithub, FaGoogle } from 'react-icons/fa6';
 import { snackbarWrapper, usePocketBase } from "../../_lib/clientPocketbase";
 
-
-export function GithubLogIn({ setLoading }: CompProps) {
+function useOAuthOnClick(provider: string, props: CompProps) {
   const pb = usePocketBase();
   const router = useRouter();
 
   const onClick = useCallback(async () => {
-    setLoading(true);
     try {
-      await snackbarWrapper(pb.collection('users').authWithOAuth2({ provider: 'github' }), 'Successful login');
+      await snackbarWrapper(pb.collection('users').authWithOAuth2({ provider }), 'Successful login');
       loginFlow(pb.authStore.exportToCookie({}, process.env.NEXT_PUBLIC_PB_COOKIE_KEY));
       router.push('/info');
     } catch (_) { }
-    setLoading(false);
-  }, [pb, setLoading, router]);
+  }, [pb, router, provider]);
+
+  return onClick;
+}
+
+
+export function GithubLogIn(props: CompProps) {
+  const onClick = useOAuthOnClick('github', props);
 
   return (
     <button
@@ -34,19 +38,8 @@ export function GithubLogIn({ setLoading }: CompProps) {
   );
 }
 
-export function GoogleLogIn({ setLoading }: CompProps) {
-  const pb = usePocketBase();
-  const router = useRouter();
-
-  const onClick = useCallback(async () => {
-    setLoading(true);
-    try {
-      await snackbarWrapper(pb.collection('users').authWithOAuth2({ provider: 'google' }), 'Successful login');
-      loginFlow(pb.authStore.exportToCookie({}, process.env.NEXT_PUBLIC_PB_COOKIE_KEY));
-      router.push('/info');
-    } catch (_) { }
-    setLoading(false);
-  }, [pb, setLoading, router]);
+export function GoogleLogIn(props: CompProps) {
+  const onClick = useOAuthOnClick('google', props);
 
   return (
     <button
