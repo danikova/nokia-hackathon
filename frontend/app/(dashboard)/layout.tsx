@@ -5,6 +5,7 @@ import UserButton from '../_components/UserButton';
 import UserUpdater from '../_components/UserUpdater';
 import SideNavBar from '../_components/navigation/SideNavBar';
 import BottomNavBar from '../_components/navigation/BottomNavBar';
+import CountDownTimer from '../_components/CountDowntimer';
 
 export default async function MainLayout({ children }: { children: ReactElement }) {
   return (
@@ -19,9 +20,12 @@ export default async function MainLayout({ children }: { children: ReactElement 
       >
         <div className="drop-shadow-default col-[start/end] row-[start/appbar-end] z-50">
           <AppBar title={process.env.APP_TITLE as string} subTitle={process.env.APP_SUB_TITLE as string}>
-            <div className="flex flex-auto flex-row-reverse max-md:hidden">
+            <div className="flex flex-auto flex-row-reverse max-md:hidden gap-4">
               <div className="flex items-center justify-center">
                 <UserButton />
+              </div>
+              <div className="flex items-center justify-center">
+                <CountDownTimer className='text-background' />
               </div>
             </div>
           </AppBar>
