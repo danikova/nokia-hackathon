@@ -1,3 +1,6 @@
 [submodule "example_project"]
 	path = example_project
 	url = git@github.com:danikova/example_project.git
+[submodule "nokia-hackathon-deploy"]
+	path = nokia-hackathon-deploy
+	url = https://github.com/danikova/nokia-hackathon-deploy
