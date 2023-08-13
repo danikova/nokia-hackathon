@@ -7,8 +7,9 @@ import (
 
 var PrimaryProjectKey = "primary_project"
 var DisableLoginKey = "disable_login"
+var EventEndDataTime = "event_end_date_time"
 
-var FixGlobalKeys = []string{PrimaryProjectKey, DisableLoginKey}
+var FixGlobalKeys = []string{PrimaryProjectKey, DisableLoginKey, EventEndDataTime}
 var GlobalCollectionName = "globals"
 var GlobalCollectionKeyName = "key"
 
