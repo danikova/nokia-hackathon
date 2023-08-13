@@ -17,6 +17,7 @@ const activeIdAtom = atom<null | string>(null);
 type RunResultDisplayProps = {
   runResult: RunResult;
   hideOutput?: boolean;
+  hideCreated?: boolean;
   hideTaskName?: boolean;
   className?: string,
   href?: string,
@@ -28,7 +29,7 @@ export function getHumaneRunDuration(execution_time: number) {
 }
 
 export default function RunResultDisplay({
-  runResult, hideOutput = false, hideTaskName = false, className, href, defaultOpen: defaultIsOpen = false
+  runResult, hideOutput = false, hideCreated = false, hideTaskName = false, className, href, defaultOpen: defaultIsOpen = false
 }: RunResultDisplayProps) {
   const id = useMemo<string>(() => uuidv4(), []);
   const [activeId, setActiveId] = useAtom(activeIdAtom);
@@ -57,13 +58,9 @@ export default function RunResultDisplay({
         {!hideTaskName && <div className="text-lg">{runResult.task}</div>}
       </div>
       <div className="flex justify-start items-center gap-2">
-        <div>{dayjs(new Date(runResult.created)).fromNow()}</div>
-        {
-          runResult.is_success && <>
-            <span className="text-lg">/</span>
-            <div>{getHumaneRunDuration(runResult.execution_time || 0)}</div>
-          </>
-        }
+        {!hideCreated && <div>{dayjs(new Date(runResult.created)).fromNow()}</div>}
+        {!hideCreated && runResult.is_success && <span className="text-lg">/</span>}
+        {runResult.is_success && <div>{getHumaneRunDuration(runResult.execution_time || 0)}</div>}
       </div>
     </div>
   ), [hideTaskName, runResult])

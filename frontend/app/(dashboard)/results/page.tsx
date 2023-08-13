@@ -113,6 +113,7 @@ function getFastestGridCells(runResultsGroupedByTask: GroupedRunResult) {
       <RunResultDisplay
         key={taskId}
         className='col-start-1'
+        hideCreated={true}
         runResult={fastestSolution}
         href={`/results/${fastestSolution.run_id}`}
       />
@@ -140,7 +141,9 @@ function ResultCharts({ runResultsGroupedByTask, fastestSolutions }: { runResult
         },
         {
           label: 'Fastest execution time',
-          data: fastestSolutions.map(i => i.execution_time || NaN),
+          data: fastestSolutions.map(
+            i => i.returncode === 0 ? i.execution_time : 0
+          ),
           backgroundColor: defaultColors,
         }
       ]}
