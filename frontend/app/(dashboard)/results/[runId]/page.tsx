@@ -6,6 +6,7 @@ import RunResultDisplay from "./RunResultDisplay";
 import { navBarItems } from "@/app/_constans/navBar";
 import BreadCrumb from "@/app/_components/navigation/BreadCrumb";
 import { RunResult, getGroupedKeys, getGroupedRunResults } from '../helpers';
+import { clientSafeObj } from "@/lib/utils";
 
 interface ExpandedRunResult extends RunResult {
   expand: { workspace: Workspace }
@@ -30,7 +31,7 @@ export default async function RunDetail({ params }: {
 
   if (runResults.items && runResults.items[0] && !runResults.items[0].is_success)
     return <DetailWrapper runId={params.runId}>
-      <RunResultDisplay runResult={runResults.items[0]} defaultOpen={true} />
+      <RunResultDisplay runResult={clientSafeObj(runResults.items[0])} defaultOpen={true} />
     </DetailWrapper>
 
   const groupedRunResults = new Map([...getGroupedRunResults(runResults, 'task').entries()].sort());
@@ -42,7 +43,7 @@ export default async function RunDetail({ params }: {
         repo_url = repo_url?.endsWith('/') ? repo_url : repo_url + '/';
         return firstRunResult ? <RunResultDisplay
           key={key}
-          runResult={firstRunResult}
+          runResult={clientSafeObj(firstRunResult)}
           href={`${repo_url}/actions/runs/${params.runId}`}
         /> : null
       })}

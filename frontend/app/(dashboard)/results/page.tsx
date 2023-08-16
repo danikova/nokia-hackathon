@@ -5,6 +5,7 @@ import BarChart, { defaultColors } from '../../_components/BarChart';
 import { RunResult, GroupedRunResult, getGroupedRunResults } from './helpers';
 import { navBarItems } from '@/app/_constans/navBar';
 import BreadCrumb from '@/app/_components/navigation/BreadCrumb';
+import { clientSafeObj } from '@/lib/utils';
 
 const perPage = 50;
 const lastN = 5;
@@ -77,7 +78,7 @@ function getLastNGridCell(runResultsGroupedByRunId: GroupedRunResult, taskKeys: 
           key={`error-${runId}`}
           href={`/results/${firstResult.run_id}`}
           className='col-span-full'
-          runResult={firstResult}
+          runResult={clientSafeObj(firstResult)}
           hideTaskName
         />
       );
@@ -90,7 +91,7 @@ function getLastNGridCell(runResultsGroupedByRunId: GroupedRunResult, taskKeys: 
         <RunResultDisplay
           key={`${taskKey}-${runId}`}
           href={`/results/${runResult.run_id}`}
-          runResult={runResult}
+          runResult={clientSafeObj(runResult)}
           hideOutput
           hideTaskName
         />
@@ -114,7 +115,7 @@ function getFastestGridCells(runResultsGroupedByTask: GroupedRunResult) {
         key={taskId}
         className='col-start-1'
         hideCreated={true}
-        runResult={fastestSolution}
+        runResult={clientSafeObj(fastestSolution)}
         href={`/results/${fastestSolution.run_id}`}
       />
     );

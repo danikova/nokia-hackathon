@@ -1,6 +1,7 @@
 import { getPB } from '@/lib/pocketbase';
-import EditorViewModal from './EditorViewModal';
 import { Workspace } from '@/lib/dataHooks';
+import { clientSafeObj } from '@/lib/utils';
+import EditorViewModal from './EditorViewModal';
 import { navBarItems } from '@/app/_constans/navBar';
 import BreadCrumb from '@/app/_components/navigation/BreadCrumb';
 
@@ -16,7 +17,7 @@ export default async function CodeHome() {
   return (
     <>
       <BreadCrumb items={[navBarItems[1]]} />
-      <EditorViewModal workspace={workspace} />
+      <EditorViewModal workspace={clientSafeObj(workspace)} />
     </>
   )
 }
