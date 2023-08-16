@@ -3,7 +3,7 @@
 import WorkspaceForm from './WorkspaceForm';
 import WorkspaceAvatar from './WorkspaceAvatar';
 import { navBarItems } from '@/app/_constans/navBar';
-import { useUserWorkspace } from '@/app/_lib/dataHooks';
+import { useUserWorkspace } from '@/lib/dataHooks';
 import BreadCrumb from '@/app/_components/navigation/BreadCrumb';
 
 

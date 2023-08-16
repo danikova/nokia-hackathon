@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { getPB } from '../../_lib/pocketbase';
+import { getPB } from '@/lib/pocketbase';
 import RunResultDisplay from "./[runId]/RunResultDisplay";
 import BarChart, { defaultColors } from '../../_components/BarChart';
 import { RunResult, GroupedRunResult, getGroupedRunResults } from './helpers';

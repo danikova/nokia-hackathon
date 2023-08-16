@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getPB } from './app/_lib/pocketbase';
+import { getPB } from '@/lib/pocketbase';
 
 export async function middleware(request: NextRequest) {
   const pb = getPB(request);

@@ -10,7 +10,7 @@ import { LexicalEditor } from 'lexical';
 import { useEffect, useState } from 'react';
 import Editor from "@/components/ui/editor";
 import { Button } from '@/components/ui/button';
-import { snackbarWrapper, usePocketBase } from '@/app/_lib/clientPocketbase';
+import { snackbarWrapper, usePocketBase } from '@/lib/clientPocketbase';
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
 
 

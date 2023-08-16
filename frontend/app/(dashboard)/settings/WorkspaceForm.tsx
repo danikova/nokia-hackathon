@@ -7,10 +7,10 @@ import { RepoState, repoRe } from './consts';
 import { Input } from "@/components/ui/input";
 import { useCallback, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
-import { Workspace } from "@/app/_lib/dataHooks";
+import { Workspace } from "@/lib/dataHooks";
 import ClientForm from '@/components/ui/clientForm';
 import { zodResolver } from "@hookform/resolvers/zod";
-import { snackbarWrapper, usePocketBase } from '@/app/_lib/clientPocketbase';
+import { snackbarWrapper, usePocketBase } from '@/lib/clientPocketbase';
 import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 
 // test github repo with cache

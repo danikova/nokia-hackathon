@@ -5,7 +5,7 @@ import { CompProps } from "./Login";
 import { loginFlow } from "../actions";
 import { useRouter } from "next/navigation";
 import { FaGithub, FaGoogle } from 'react-icons/fa6';
-import { snackbarWrapper, usePocketBase } from "../../_lib/clientPocketbase";
+import { snackbarWrapper, usePocketBase } from "@/lib/clientPocketbase";
 
 function useOAuthOnClick(provider: string, props: CompProps) {
   const pb = usePocketBase();

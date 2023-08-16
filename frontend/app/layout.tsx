@@ -1,9 +1,8 @@
 import localFont from 'next/font/local';
 import Snackbar from './_components/Snackbar';
+import { TooltipProvider } from '@/components/ui/tooltip';
 
 import './globals.css';
-import './index';
-import { TooltipProvider } from '@/components/ui/tooltip';
 
 const nokiaFont = localFont({
   src: [

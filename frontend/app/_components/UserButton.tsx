@@ -6,7 +6,7 @@ import { enqueueSnackbar } from "notistack";
 import { useRouter } from "next/navigation";
 import { minidenticon } from 'minidenticons';
 import { logoutFlow } from "../(authentication)/actions";
-import { usePocketBase } from "../_lib/clientPocketbase";
+import { usePocketBase } from "../../lib/clientPocketbase";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";

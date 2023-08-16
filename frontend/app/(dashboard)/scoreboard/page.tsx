@@ -6,7 +6,7 @@ import { AgGridReact } from 'ag-grid-react';
 import { navBarItems } from '@/app/_constans/navBar';
 import BreadCrumb from '@/app/_components/navigation/BreadCrumb';
 import { getHumaneRunDuration } from '../results/[runId]/RunResultDisplay';
-import { RunStatistic, useRunStatistics, useUserWorkspace } from '@/app/_lib/dataHooks';
+import { RunStatistic, useRunStatistics, useUserWorkspace } from '@/lib/dataHooks';
 import { AverageOutputSizeRenderer, TaskStatisticRenderer, WorkspaceAvatarRenderer } from './renderers';
 
 import './style.css';

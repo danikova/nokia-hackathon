@@ -3,7 +3,7 @@ import Image from 'next/image';
 import { cn } from '@/lib/utils';
 import ReactMarkdown from 'react-markdown'
 import { navBarItems } from '@/app/_constans/navBar';
-import { getPB, getUserRole } from '../../_lib/pocketbase';
+import { getPB, getUserRole } from '@/lib/pocketbase';
 import BreadCrumb from '@/app/_components/navigation/BreadCrumb';
 
 export type InfoCard = {

@@ -1,7 +1,7 @@
 import { ReactElement } from "react";
 import { notFound } from "next/navigation";
-import { getPB } from "@/app/_lib/pocketbase";
-import { Workspace } from "@/app/_lib/dataHooks";
+import { getPB } from "@/lib/pocketbase";
+import { Workspace } from "@/lib/dataHooks";
 import RunResultDisplay from "./RunResultDisplay";
 import { navBarItems } from "@/app/_constans/navBar";
 import BreadCrumb from "@/app/_components/navigation/BreadCrumb";

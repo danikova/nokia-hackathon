@@ -1,6 +1,6 @@
 'use client'
 
-import { useOutsideClickObserver } from "@/app/_lib/helperHooks";
+import { useOutsideClickObserver } from "@/lib/helperHooks";
 import { Form } from "@/components/ui/form";
 import { ReactElement, useCallback, useRef, useState } from "react";
 import FocusLock from 'react-focus-lock';

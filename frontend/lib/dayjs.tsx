@@ -1,15 +1,10 @@
 'use client';
 
-import dayjs from 'dayjs';
+import dayjs from "dayjs";
+import { useMemo } from "react";
+
 import duration from 'dayjs/plugin/duration';
 import relativeTime from 'dayjs/plugin/relativeTime';
-
-import hljs from 'highlight.js/lib/core';
-import yaml from 'highlight.js/lib/languages/yaml';
-
-import 'highlight.js/styles/agate.css';
-
-hljs.registerLanguage('yaml', yaml);
 
 var thresholds = [
   { l: 's', r: 1 },
@@ -31,3 +26,11 @@ dayjs.extend(relativeTime, {
   thresholds,
   rounding,
 });
+
+export default function FromNow({ date }: { date: Date | string }) {
+  const _date = useMemo(() => new Date(date), [date]);
+
+  return <>
+    {dayjs(_date).fromNow()}
+  </>;
+}

@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect } from "react";
-import { usePocketBase } from "../_lib/clientPocketbase";
+import { usePocketBase } from "../../lib/clientPocketbase";
 
 export default function UserUpdater() {
   const pb = usePocketBase();

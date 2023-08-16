@@ -1,8 +1,8 @@
 'use client'
 
-import dayjs from "dayjs";
+import FromNow from "@/lib/dayjs";
 import { cn } from "@/lib/utils";
-import { useGlobals } from "../_lib/dataHooks";
+import { useGlobals } from "@/lib/dataHooks";
 import { useEffect, useMemo, useState } from "react";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 
@@ -44,7 +44,7 @@ export default function CountDownTimer(props: any) {
       </TooltipTrigger>
       <TooltipContent>
         <div className="text-sm">
-          <div className="font-bold">Event ends {dayjs(endDate).fromNow()}</div>
+          <div className="font-bold">Event ends <FromNow date={endDate} /></div>
           <div>({endDate.toLocaleDateString()} {endDate.toLocaleTimeString()})</div>
         </div>
       </TooltipContent>

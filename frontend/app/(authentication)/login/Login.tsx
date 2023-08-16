@@ -3,7 +3,7 @@
 import Spinner from '../../_components/Spinner';
 import { PasswordLogin } from './PasswordLogin';
 import { GithubLogIn, GoogleLogIn } from './OAuth';
-import { useAuthMethods } from '@/app/_lib/dataHooks';
+import { useAuthMethods } from '@/lib/dataHooks';
 import { Dispatch, SetStateAction, useMemo, useState } from 'react';
 
 export type CompProps = {

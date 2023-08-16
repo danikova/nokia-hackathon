@@ -1,6 +1,6 @@
-import { getPB } from '../../_lib/pocketbase';
+import { getPB } from '@/lib/pocketbase';
 import EditorViewModal from './EditorViewModal';
-import { Workspace } from '@/app/_lib/dataHooks';
+import { Workspace } from '@/lib/dataHooks';
 import { navBarItems } from '@/app/_constans/navBar';
 import BreadCrumb from '@/app/_components/navigation/BreadCrumb';
 

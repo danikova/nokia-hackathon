@@ -1,4 +1,4 @@
-import { getPB, getUserRole } from "@/app/_lib/pocketbase";
+import { getPB, getUserRole } from "@/lib/pocketbase";
 import { InfoCard } from "../page";
 import InfoCardEditor from "./InfoCardEditor";
 

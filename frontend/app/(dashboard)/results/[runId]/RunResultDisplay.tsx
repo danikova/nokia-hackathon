@@ -1,16 +1,16 @@
 'use client'
 
-import dayjs from "dayjs";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { v4 as uuidv4 } from 'uuid';
 import { atom, useAtom } from "jotai";
 import { RunResult } from '../helpers';
 import Code from "@/app/_components/Code";
+import FromNow from "@/app/_components/dayjs";
+import { Button } from "@/components/ui/button";
 import humanizeDuration from "humanize-duration";
 import { useEffect, useMemo, useState } from "react";
 import { FaCircle, FaCircleXmark } from 'react-icons/fa6';
-import { Button } from "@/components/ui/button";
 
 const activeIdAtom = atom<null | string>(null);
 
@@ -58,7 +58,9 @@ export default function RunResultDisplay({
         {!hideTaskName && <div className="text-lg">{runResult.task}</div>}
       </div>
       <div className="flex justify-start items-center gap-2">
-        {!hideCreated && <div>{dayjs(new Date(runResult.created)).fromNow()}</div>}
+        {!hideCreated && <div>
+          <FromNow date={runResult.created} />
+        </div>}
         {!hideCreated && runResult.is_success && <span className="text-lg">/</span>}
         {runResult.is_success && <div>{getHumaneRunDuration(runResult.execution_time || 0)}</div>}
       </div>
