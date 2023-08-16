@@ -2,11 +2,11 @@
 
 import Link from "next/link";
 import { cn } from "@/lib/utils";
+import FromNow from "@/lib/dayjs";
 import { v4 as uuidv4 } from 'uuid';
 import { atom, useAtom } from "jotai";
 import { RunResult } from '../helpers';
 import Code from "@/app/_components/Code";
-import FromNow from "@/app/_components/dayjs";
 import { Button } from "@/components/ui/button";
 import humanizeDuration from "humanize-duration";
 import { useEffect, useMemo, useState } from "react";
