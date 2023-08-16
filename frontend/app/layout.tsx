@@ -4,6 +4,9 @@ import { TooltipProvider } from '@/components/ui/tooltip';
 
 import './globals.css';
 
+import 'ag-grid-community/styles/ag-grid.css';
+import 'ag-grid-community/styles/ag-theme-alpine.min.css';
+
 const nokiaFont = localFont({
   src: [
     {

@@ -10,8 +10,6 @@ import { RunStatistic, useRunStatistics, useUserWorkspace } from '@/lib/dataHook
 import { AverageOutputSizeRenderer, TaskStatisticRenderer, WorkspaceAvatarRenderer } from './renderers';
 
 import './style.css';
-import 'ag-grid-community/styles/ag-grid.css';
-import 'ag-grid-community/styles/ag-theme-alpine.min.css';
 
 export default function App() {
   const workspace = useUserWorkspace();
