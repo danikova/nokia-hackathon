@@ -1,12 +1,11 @@
 import { ReactElement } from "react";
-import { getPB } from "@/app/_lib/pocketbase";
-import RunResultDisplay from "./RunResultDisplay";
-// import BreadCrumbPush from "../../../_components/navigation/BreadCrumbPush";
-import { RunResult, getGroupedKeys, getGroupedRunResults } from '../helpers';
 import { notFound } from "next/navigation";
-import { Workspace } from "../../settings/page";
+import { getPB } from "@/app/_lib/pocketbase";
+import { Workspace } from "@/app/_lib/dataHooks";
+import RunResultDisplay from "./RunResultDisplay";
 import { navBarItems } from "@/app/_constans/navBar";
 import BreadCrumb from "@/app/_components/navigation/BreadCrumb";
+import { RunResult, getGroupedKeys, getGroupedRunResults } from '../helpers';
 
 interface ExpandedRunResult extends RunResult {
   expand: { workspace: Workspace }

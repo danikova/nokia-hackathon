@@ -2,8 +2,8 @@
 
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { Workspace } from '../settings/page';
 import { Button } from '@/components/ui/button';
+import { Workspace } from '@/app/_lib/dataHooks';
 import { SyntheticEvent, useCallback, useMemo } from 'react';
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 

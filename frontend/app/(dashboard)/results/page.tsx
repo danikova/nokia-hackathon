@@ -142,7 +142,7 @@ function ResultCharts({ runResultsGroupedByTask, fastestSolutions }: { runResult
         {
           label: 'Fastest execution time',
           data: fastestSolutions.map(
-            i => i.returncode === 0 ? i.execution_time : 0
+            i => i.returncode === 0 ? i.execution_time || 0 : 0
           ),
           backgroundColor: defaultColors,
         }

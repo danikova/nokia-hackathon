@@ -3,35 +3,12 @@
 import Spinner from '../../_components/Spinner';
 import { PasswordLogin } from './PasswordLogin';
 import { GithubLogIn, GoogleLogIn } from './OAuth';
-import { snackbarWrapper, usePocketBase } from "../../_lib/clientPocketbase"
-import { Dispatch, SetStateAction, useEffect, useMemo, useState } from 'react';
+import { useAuthMethods } from '@/app/_lib/dataHooks';
+import { Dispatch, SetStateAction, useMemo, useState } from 'react';
 
 export type CompProps = {
   setLoading: Dispatch<SetStateAction<boolean>>;
 };
-
-type AuthMethods = {
-  usernamePassword?: boolean
-  emailPassword?: boolean
-  authProviders?: {
-    name: string;
-  }[]
-}
-
-function useAuthMethods() {
-  const pb = usePocketBase();
-  const [authMethods, setAuthMethods] = useState<AuthMethods>({});
-
-  useEffect(() => {
-    const _ = async () => {
-      const result = await snackbarWrapper(pb.collection('users').listAuthMethods());
-      setAuthMethods(result);
-    }
-    _();
-  }, [pb, setAuthMethods]);
-
-  return authMethods;
-}
 
 export default function Login() {
   const [loading, setLoading] = useState(false);

@@ -5,13 +5,13 @@ import { testGithubRepo } from './action';
 import { useForm } from 'react-hook-form';
 import { RepoState, repoRe } from './consts';
 import { Input } from "@/components/ui/input";
+import { useCallback, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
+import { Workspace } from "@/app/_lib/dataHooks";
 import ClientForm from '@/components/ui/clientForm';
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useCallback, useEffect, useState } from 'react';
 import { snackbarWrapper, usePocketBase } from '@/app/_lib/clientPocketbase';
 import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { Workspace } from "./page";
 
 // test github repo with cache
 const repoCache = new Map<string, RepoState>();

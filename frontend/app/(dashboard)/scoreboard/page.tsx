@@ -1,50 +1,17 @@
 'use client'
 
+import React, { useMemo } from 'react';
 import { ColDef } from 'ag-grid-community';
 import { AgGridReact } from 'ag-grid-react';
-import { useUserWorkspace } from '../settings/page';
-import React, { useState, useEffect, useMemo, useCallback } from 'react';
+import { navBarItems } from '@/app/_constans/navBar';
+import BreadCrumb from '@/app/_components/navigation/BreadCrumb';
 import { getHumaneRunDuration } from '../results/[runId]/RunResultDisplay';
+import { RunStatistic, useRunStatistics, useUserWorkspace } from '@/app/_lib/dataHooks';
 import { AverageOutputSizeRenderer, TaskStatisticRenderer, WorkspaceAvatarRenderer } from './renderers';
-import { snackbarWrapper, usePocketBase } from '@/app/_lib/clientPocketbase';
 
 import './style.css';
 import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-alpine.min.css';
-import { navBarItems } from '@/app/_constans/navBar';
-import BreadCrumb from '@/app/_components/navigation/BreadCrumb';
-
-const refetchTimeout = 30_000;
-
-export type RunStatistic = {
-  "id": string,
-  "collectionId": string,
-  "collectionName": string,
-  "number_of_runs": number,
-  "average_execution_time": number,
-  "average_output_length": number,
-  "number_of_evaluated_tasks": number,
-  "number_of_successful_tasks": number,
-  "number_of_failure_tasks": number,
-  "number_of_timeouted_tasks": number
-}
-
-function useRunStatistics() {
-  const pb = usePocketBase();
-  const [runStatistics, setRunStatistics] = useState<RunStatistic[]>([]);
-
-  const fetchData = useCallback(async () => {
-    const data = await snackbarWrapper(pb.collection('run_statistics').getFullList()) as never as RunStatistic[];
-    setRunStatistics(data);
-  }, [pb]);
-
-  useEffect(() => {
-    fetchData();
-    const timeoutId = setInterval(fetchData, refetchTimeout);
-    return () => clearInterval(timeoutId);
-  }, [fetchData]);
-  return runStatistics;
-}
 
 export default function App() {
   const workspace = useUserWorkspace();

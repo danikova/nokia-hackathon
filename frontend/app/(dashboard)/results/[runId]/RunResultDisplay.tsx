@@ -63,7 +63,7 @@ export default function RunResultDisplay({
         {runResult.is_success && <div>{getHumaneRunDuration(runResult.execution_time || 0)}</div>}
       </div>
     </div>
-  ), [hideTaskName, runResult])
+  ), [hideTaskName, runResult, hideCreated]);
 
   return <div className={cn("flex flex-col gap-2 bg-[rgba(0,0,0,0.02)] rounded-md min-w-min p-2", className)}>
     {href ? <Link href={href}>{header}</Link> : header}

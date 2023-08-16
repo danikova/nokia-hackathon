@@ -1,27 +1,11 @@
 'use client'
 
+import dayjs from "dayjs";
 import { cn } from "@/lib/utils";
-import { usePocketBase } from "../_lib/clientPocketbase";
+import { useGlobals } from "../_lib/dataHooks";
 import { useEffect, useMemo, useState } from "react";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
-import dayjs from "dayjs";
 
-function useGlobals() {
-  const pb = usePocketBase();
-  const [globals, setGlobals] = useState<Record<string, string>>({});
-
-  useEffect(() => {
-    pb.collection('globals').getFullList().then((data) => {
-      const _globals: any = {};
-      for (const item of data) {
-        _globals[item.key] = item.value;
-      }
-      setGlobals(_globals);
-    });
-  }, [pb]);
-
-  return globals;
-}
 
 function useCountdownTime(endDate: Date) {
   const [distance, setDeltaTime] = useState(
