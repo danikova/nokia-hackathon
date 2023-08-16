@@ -44,7 +44,7 @@ export default function EditorViewModal({ workspace }: { workspace: Workspace | 
         </div>
         <DialogFooter>
           <Button onClick={onCancel} variant='secondary'>
-            Cancel
+            Go back
           </Button>
           <Button disabled={!isRepoUrlSet}>
             {workspace?.repo_url && <Link href={`https://vscode.dev/${workspace?.repo_url}`}>
