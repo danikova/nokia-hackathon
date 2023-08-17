@@ -9,7 +9,8 @@ import (
 	"os/exec"
 	"strings"
 
-	"github.com/pocketbase/pocketbase/models"
+	"github.com/labstack/echo/v5"
+	"github.com/pocketbase/pocketbase"
 )
 
 var git_folder = "pb_git_sandbox"
@@ -47,11 +48,16 @@ func runCmd(cmd, dir string) bool {
 // echo $?
 // 		o - ok | 1 - not ok
 
-func CheckGithubFolderContent(m *types.GithubMetaType, primaryProject *models.Record) error {
+func CheckGithubFolderContent(m *types.GithubMetaType, app *pocketbase.PocketBase) error {
 	if _, err := os.ReadDir(git_folder); err != nil {
 		if err := os.Mkdir(git_folder, os.ModePerm); err != nil {
 			return err
 		}
+	}
+
+	primaryProject, err := GetGlobalValueByKey(app, PrimaryProjectKey)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, "primary_project not found, please contact with an admin")
 	}
 
 	primaryProjectUrl := primaryProject.GetString("value")

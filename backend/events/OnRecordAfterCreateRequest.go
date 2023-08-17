@@ -17,22 +17,37 @@ func OnRecordAfterCreateRequest(app *pocketbase.PocketBase) {
 	})
 }
 
-var WorkspaceCollectionName = "workspaces"
+var WorkspacesCollectionName = "workspaces"
+var WorkspaceEventsCollectionName = "workspace_events"
 var UserFieldKey = "user"
+var WorkspaceFieldKey = "workspace"
 
 func CreateWorkspaceForUser(app *pocketbase.PocketBase, userId *string) error {
-	collection, err := app.Dao().FindCollectionByNameOrId(WorkspaceCollectionName)
+	workspaces, err := app.Dao().FindCollectionByNameOrId(WorkspacesCollectionName)
 	if err != nil {
 		return err
 	}
 
-	record := models.NewRecord(collection)
-	record.Set(UserFieldKey, userId)
-
-	if err := app.Dao().SaveRecord(record); err != nil {
+	workspace_events, err := app.Dao().FindCollectionByNameOrId(WorkspaceEventsCollectionName)
+	if err != nil {
 		return err
 	}
 
-	log.Println("new workspace", record.Id, "generated for user", userId)
+	workspaceRecord := models.NewRecord(workspaces)
+	workspaceRecord.Set(UserFieldKey, userId)
+
+	if err := app.Dao().SaveRecord(workspaceRecord); err != nil {
+		return err
+	}
+
+	workspaceEventRecord := models.NewRecord(workspace_events)
+	workspaceEventRecord.Set(WorkspaceFieldKey, workspaceRecord.Id)
+
+	if err := app.Dao().SaveRecord(workspaceEventRecord); err != nil {
+		return err
+	}
+
+	log.Println("new workspace", workspaceRecord.Id, "generated for user", userId)
+	log.Println("new workspace event", workspaceEventRecord.Id, "generated for workspace", workspaceRecord)
 	return nil
 }
