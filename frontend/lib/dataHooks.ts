@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { snackbarWrapper, usePocketBase } from './clientPocketbase';
 
 export type AuthMethods = {
@@ -95,4 +95,41 @@ export function useGlobals() {
   }, [pb]);
 
   return globals;
+}
+
+export type WorkspaceEvents = {
+  id: string;
+  collectionId: string;
+  collectionName: string;
+  created: string;
+  updated: string;
+  workspace: string;
+  new_run_started: string;
+};
+
+export function useWorkspaceEvenets() {
+  const pb = usePocketBase();
+  const [events, setEvents] = useState<WorkspaceEvents | undefined>();
+
+  useEffect(() => {
+    pb.collection('workspace_events').subscribe('*', (data) => {
+      setEvents((data.record as never as WorkspaceEvents) || undefined);
+    });
+  }, [pb]);
+
+  useEffect(() => {
+    pb.collection('workspace_events')
+      .getFullList()
+      .then((data) => {
+        setEvents(data.length !== 0 ? (data[0] as never as WorkspaceEvents) : undefined);
+      });
+  }, [pb]);
+
+  return events;
+}
+
+export function useIsWorkspaceBusy() {
+  const events = useWorkspaceEvenets();
+  const isLoading = useMemo(() => !!events && !!events.new_run_started, [events]);
+  return isLoading;
 }

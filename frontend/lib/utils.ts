@@ -5,9 +5,9 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-export function clientSafeObj(obj: any) {
+export function clientSafeObj<T>(obj: any) {
   try {
-    return JSON.parse(JSON.stringify(obj));
+    return JSON.parse(JSON.stringify(obj)) as T;
   } catch {}
-  return {};
+  return {} as T;
 }

@@ -1,4 +1,5 @@
-import { ListResult } from 'pocketbase';
+export const perPage = 50;
+export const lastN = 5;
 
 export type RunResult = {
   id: string;
@@ -18,13 +19,9 @@ export type RunResult = {
 
 export type GroupedRunResult = Map<string, RunResult[]>;
 
-export function getGroupedRunResults<T extends RunResult>(
-  runResults: ListResult<T>,
-  groupKey: keyof T,
-  omitEmpty = true
-) {
+export function getGroupedRunResults<T extends RunResult>(runResults: T[], groupKey: keyof T, omitEmpty = true) {
   const groups = new Map<string, T[]>();
-  for (const runResult of runResults.items) {
+  for (const runResult of runResults) {
     const groupName = `${runResult[groupKey]}`;
     if (omitEmpty && !groupName) continue;
     const runResults = groups.get(groupName);
