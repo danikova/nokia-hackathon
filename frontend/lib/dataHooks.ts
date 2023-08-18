@@ -119,9 +119,7 @@ export function useWorkspaceEvenets() {
 
   useEffect(() => {
     pb.collection('workspace_events')
-      .getFullList({
-        $autoCancel: false,
-      })
+      .getFullList()
       .then((data) => {
         setEvents(data.length !== 0 ? (data[0] as never as WorkspaceEvents) : undefined);
       });
