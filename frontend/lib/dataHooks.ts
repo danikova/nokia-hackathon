@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { snackbarWrapper, usePocketBase } from './clientPocketbase';
 
 export type AuthMethods = {
@@ -37,10 +37,27 @@ export type RunStatistic = {
   number_of_timeouted_tasks: number;
 };
 
-const refetchTimeout = 30_000;
+export function useRunStatisticsRealtime(onCreate: Function) {
+  const pb = usePocketBase();
+
+  useEffect(() => {
+    let unsub: any;
+    async function sub() {
+      unsub = await pb.realtime.subscribe('run_statistics/*', (msg: { action: string }) => {
+        if (msg.action === 'create') onCreate();
+      });
+    }
+
+    sub();
+    return () => {
+      unsub && unsub();
+    };
+  }, [pb, onCreate]);
+}
 
 export function useRunStatistics() {
   const pb = usePocketBase();
+  const timeoutId = useRef<NodeJS.Timeout>();
   const [runStatistics, setRunStatistics] = useState<RunStatistic[]>([]);
 
   const fetchData = useCallback(async () => {
@@ -48,11 +65,19 @@ export function useRunStatistics() {
     setRunStatistics(data);
   }, [pb]);
 
+  const onCreate = useCallback(() => {
+    clearTimeout(timeoutId.current!);
+    timeoutId.current = setTimeout(() => {
+      fetchData();
+    }, Math.random() * 2000);
+  }, [fetchData]);
+
   useEffect(() => {
     fetchData();
-    const timeoutId = setInterval(fetchData, refetchTimeout);
-    return () => clearInterval(timeoutId);
   }, [fetchData]);
+
+  useRunStatisticsRealtime(onCreate);
+
   return runStatistics;
 }
 

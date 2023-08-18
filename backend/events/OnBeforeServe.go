@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"os"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/labstack/echo/v5"
@@ -129,6 +130,11 @@ func addGithubBotStarted(app *pocketbase.PocketBase, e *core.ServeEvent) {
 	})
 }
 
+type recordData struct {
+	Action string         `json:"action"`
+	Record *models.Record `json:"record"`
+}
+
 func addGithubBotFinished(app *pocketbase.PocketBase, e *core.ServeEvent) {
 	e.Router.AddRoute(echo.Route{
 		Method: http.MethodPost,
@@ -141,25 +147,27 @@ func addGithubBotFinished(app *pocketbase.PocketBase, e *core.ServeEvent) {
 				return echo.NewHTTPError(http.StatusBadRequest, err)
 			}
 
-			records, err := app.Dao().FindRecordsByExpr(runResultsCollectionName,
-				dbx.HashExp{"run_id": reqBody.Meta.RunId},
-			)
-			if err != nil {
-				return echo.NewHTTPError(http.StatusBadRequest, err)
-			}
-			if len(records) != 0 {
-				for i := 0; i < len(records); i++ {
-					record := records[i]
-					if record.GetBool("is_success") {
-						return echo.NewHTTPError(http.StatusNotAcceptable, "This run_id ("+reqBody.Meta.RunId+") is already registered")
-					}
-					app.Dao().DeleteRecord(record)
+			if strings.ToLower(os.Getenv("DEV")) != "true" {
+				records, err := app.Dao().FindRecordsByExpr(runResultsCollectionName,
+					dbx.HashExp{"run_id": reqBody.Meta.RunId},
+				)
+				if err != nil {
+					return echo.NewHTTPError(http.StatusBadRequest, err)
 				}
-			}
+				if len(records) != 0 {
+					for i := 0; i < len(records); i++ {
+						record := records[i]
+						if record.GetBool("is_success") {
+							return echo.NewHTTPError(http.StatusNotAcceptable, "This run_id ("+reqBody.Meta.RunId+") is already registered")
+						}
+						app.Dao().DeleteRecord(record)
+					}
+				}
 
-			err = utils.CheckRunIdIsValid(&reqBody.Meta)
-			if err != nil {
-				return echo.NewHTTPError(http.StatusBadRequest, err)
+				err = utils.CheckRunIdIsValid(&reqBody.Meta)
+				if err != nil {
+					return echo.NewHTTPError(http.StatusBadRequest, err)
+				}
 			}
 
 			workspace, err := GetWorkspaceByMeta(app, &reqBody.Meta)
@@ -180,6 +188,13 @@ func addGithubBotFinished(app *pocketbase.PocketBase, e *core.ServeEvent) {
 				record.Set("is_success", false)
 				record.Set("output", err)
 				app.Dao().SaveRecord(record)
+
+				data := &recordData{
+					Action: "create",
+					Record: nil,
+				}
+
+				utils.BroadcastAny(app, "run_statistics/*", data)
 				return echo.NewHTTPError(http.StatusBadRequest, err)
 			}
 
@@ -200,9 +215,7 @@ func addGithubBotFinished(app *pocketbase.PocketBase, e *core.ServeEvent) {
 					"execution_time": data.Execution_time,
 				})
 
-				if err := form.Submit(); err != nil {
-					return echo.NewHTTPError(http.StatusBadRequest, err)
-				}
+				form.Submit()
 
 				counter += 1
 			}
@@ -216,6 +229,12 @@ func addGithubBotFinished(app *pocketbase.PocketBase, e *core.ServeEvent) {
 				Message: strconv.Itoa(counter) + " new record(s) generated",
 			}
 
+			data := &recordData{
+				Action: "create",
+				Record: nil,
+			}
+
+			utils.BroadcastAny(app, "run_statistics/*", data)
 			return c.JSON(http.StatusCreated, resBody)
 		},
 		Middlewares: []echo.MiddlewareFunc{
