@@ -14,10 +14,10 @@ interface ExpandedRunResult extends RunResult {
 
 async function getRunResultByGithubRunId(runId: number) {
   const pb = getPB();
-  return await pb.collection('run_results').getList<ExpandedRunResult>(1, 50, {
+  return (await pb.collection('run_results').getList<ExpandedRunResult>(1, 50, {
     filter: `run_id="${runId}"`,
     expand: "workspace"
-  });
+  })).items || [];
 }
 
 export default async function RunDetail({ params }: {
@@ -25,13 +25,13 @@ export default async function RunDetail({ params }: {
 }) {
   const runResults = await getRunResultByGithubRunId(params.runId);
 
-  if (runResults.items.length === 0) {
+  if (runResults.length === 0) {
     notFound();
   }
 
-  if (runResults.items && runResults.items[0] && !runResults.items[0].is_success)
+  if (runResults && runResults[0] && !runResults[0].is_success)
     return <DetailWrapper runId={params.runId}>
-      <RunResultDisplay runResult={clientSafeObj(runResults.items[0])} defaultOpen={true} />
+      <RunResultDisplay runResult={clientSafeObj(runResults[0])} defaultOpen={true} />
     </DetailWrapper>
 
   const groupedRunResults = new Map([...getGroupedRunResults(runResults, 'task').entries()].sort());

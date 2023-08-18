@@ -109,7 +109,7 @@ export type WorkspaceEvents = {
 
 export function useWorkspaceEvenets() {
   const pb = usePocketBase();
-  const [events, setEvents] = useState<WorkspaceEvents | undefined>();
+  const [events, setEvents] = useState<WorkspaceEvents>();
 
   useEffect(() => {
     pb.collection('workspace_events').subscribe('*', (data) => {
@@ -119,7 +119,9 @@ export function useWorkspaceEvenets() {
 
   useEffect(() => {
     pb.collection('workspace_events')
-      .getFullList()
+      .getFullList({
+        $autoCancel: false,
+      })
       .then((data) => {
         setEvents(data.length !== 0 ? (data[0] as never as WorkspaceEvents) : undefined);
       });
