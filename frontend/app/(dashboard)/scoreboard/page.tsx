@@ -2,14 +2,12 @@
 
 import React, { useMemo } from 'react';
 import { ColDef } from 'ag-grid-community';
-import { AgGridReact } from 'ag-grid-react';
 import { navBarItems } from '@/app/_constans/navBar';
+import { FullPageAgGridReact } from '../../../components/ui/table';
 import BreadCrumb from '@/app/_components/navigation/BreadCrumb';
 import { getHumaneRunDuration } from '../results/[runId]/RunResultDisplay';
 import { RunStatistic, useRunStatistics, useUserWorkspace } from '@/lib/dataHooks';
-import { AverageOutputSizeRenderer, TaskStatisticRenderer, WorkspaceAvatarRenderer } from './renderers';
-
-import './style.css';
+import { AverageOutputSizeRenderer, TaskStatisticRenderer, WorkspaceAvatarRenderer } from '../../../components/ui/table/renderers';
 
 export default function App() {
   const workspace = useUserWorkspace();
@@ -51,26 +49,25 @@ export default function App() {
   }), [workspace]);
 
   return (
-    <div className='-mt-[var(--cm-titlebar-h)] h-full w-full box-border' style={{ '--row-data-count': rowData.length } as React.CSSProperties}>
+    <>
       <BreadCrumb items={[navBarItems[3]]} />
-      <div className='ag-theme-alpine h-full w-full scoreboard-grid'>
-        <AgGridReact
-          onGridReady={({ api }) => {
-            api?.sizeColumnsToFit();
-          }}
-          rowData={rowData}
-          columnDefs={columnDefs}
-          defaultColDef={defaultColDef}
-          animateRows={true}
-          getRowId={({ data }) => data.id}
-          noRowsOverlayComponent={() => {
-            return <div className='flex flex-col items-center justify-center h-full w-full'>
-              <div className='text-2xl font-bold text-gray-500'>No data</div>
-              <div className='text-gray-400'>There is no run statistics available.</div>
-            </div>
-          }}
-        />
-      </div>
-    </div>
+      <FullPageAgGridReact
+        onGridReady={({ api }) => {
+          api?.sizeColumnsToFit();
+        }}
+        animateRows={true}
+        rowData={rowData}
+        columnDefs={columnDefs}
+        defaultColDef={defaultColDef}
+        getRowId={({ data }) => data.id}
+        noRowsOverlayComponent={() => {
+          return <div className='flex flex-col items-center justify-center h-full w-full'>
+            <div className='text-2xl font-bold text-gray-500'>No data</div>
+            <div className='text-gray-400'>There is no run statistics available.</div>
+          </div>
+        }}
+      />
+    </>
   );
 };
+

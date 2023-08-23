@@ -12,5 +12,5 @@ export function getPB(req?: NextRequest) {
 
 export function getUserRole() {
   const pb = getPB();
-  return pb.authStore.model?.role;
+  return pb.authStore.model?.role as string;
 }

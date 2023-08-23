@@ -2,7 +2,7 @@
 import React from 'react';
 import 'ag-grid-community/styles/ag-grid.css';
 import { ICellRendererParams } from 'ag-grid-community';
-import WorkspaceAvatar from '../settings/WorkspaceAvatar';
+import WorkspaceAvatar from '../../../app/(dashboard)/settings/WorkspaceAvatar';
 import { RunStatistic, Workspace } from '@/lib/dataHooks';
 import 'ag-grid-community/styles/ag-theme-alpine-no-font.min.css';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';

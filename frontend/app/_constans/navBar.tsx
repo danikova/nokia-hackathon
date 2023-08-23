@@ -1,5 +1,5 @@
 import { ReactElement } from 'react';
-import { FaCodeBranch, FaCircleInfo, FaListUl, FaWrench, FaListOl } from 'react-icons/fa6';
+import { FaCodeBranch, FaCircleInfo, FaListUl, FaWrench, FaListOl, FaRankingStar } from 'react-icons/fa6';
 
 export type NavBarItem = {
   icon: ReactElement;
@@ -33,4 +33,12 @@ export const navBarItems: readonly NavBarItem[] = [
     title: 'Settings',
     rootPath: '/settings',
   },
+] as const;
+
+export const staffNavBarItems: readonly NavBarItem[] = [
+  {
+    icon: <FaRankingStar className="h-6 w-6" />,
+    title: 'Ranking',
+    rootPath: '/ranking',
+  }
 ] as const;
