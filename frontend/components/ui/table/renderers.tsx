@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useMemo } from 'react';
 import 'ag-grid-community/styles/ag-grid.css';
 import { ICellRendererParams } from 'ag-grid-community';
 import WorkspaceAvatar from '../../../app/(dashboard)/settings/WorkspaceAvatar';
@@ -30,12 +30,14 @@ export function WorkspaceAvatarRenderer(props: WorkspaceAvatarRendererProps) {
 }
 
 function useKformatter(charCount: any) {
-  try {
-    const charCountNumber: number = parseInt(charCount);
-    return kFormatter(charCountNumber) + ' chars';
-  } catch {
-    return charCount + ' chars';
-  }
+  return useMemo(() => {
+    try {
+      const charCountNumber: number = parseInt(charCount);
+      return kFormatter(charCountNumber) + ' chars';
+    } catch {
+      return charCount + ' chars';
+    }
+  }, [charCount]);
 }
 
 function kFormatter(num: number) {
@@ -100,6 +102,22 @@ export function TaskStatisticRenderer({ data }: ICellRendererParams<RunStatistic
           Number of tasks that were the system noticed something changed in the .github folder
         </TooltipContent>
       </Tooltip>
+    </div>
+  );
+}
+
+interface PointsRendererProps extends ICellRendererParams {
+
+}
+
+export function PointsRenderer(props: PointsRendererProps) {
+  const { value } = props;
+
+  debugger;
+
+  return (
+    <div>
+      asd
     </div>
   );
 }
