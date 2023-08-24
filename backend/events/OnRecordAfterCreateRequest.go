@@ -19,6 +19,8 @@ func OnRecordAfterCreateRequest(app *pocketbase.PocketBase) {
 
 var WorkspacesCollectionName = "workspaces"
 var WorkspaceEventsCollectionName = "workspace_events"
+var WorkspaceRankingsCollectionName = "workspace_rankings"
+
 var UserFieldKey = "user"
 var WorkspaceFieldKey = "workspace"
 
@@ -33,19 +35,22 @@ func CreateWorkspaceForUser(app *pocketbase.PocketBase, userId *string) error {
 		return err
 	}
 
-	workspaceRecord := models.NewRecord(workspaces)
-	workspaceRecord.Set(UserFieldKey, userId)
-
-	if err := app.Dao().SaveRecord(workspaceRecord); err != nil {
+	workspace_rankings, err := app.Dao().FindCollectionByNameOrId(WorkspaceRankingsCollectionName)
+	if err != nil {
 		return err
 	}
+
+	workspaceRecord := models.NewRecord(workspaces)
+	workspaceRecord.Set(UserFieldKey, userId)
+	app.Dao().SaveRecord(workspaceRecord)
 
 	workspaceEventRecord := models.NewRecord(workspace_events)
 	workspaceEventRecord.Set(WorkspaceFieldKey, workspaceRecord.Id)
+	app.Dao().SaveRecord(workspaceEventRecord)
 
-	if err := app.Dao().SaveRecord(workspaceEventRecord); err != nil {
-		return err
-	}
+	workspaceRankingRecord := models.NewRecord(workspace_rankings)
+	workspaceRankingRecord.Set(WorkspaceFieldKey, workspaceRecord.Id)
+	app.Dao().SaveRecord(workspaceRankingRecord)
 
 	log.Println("new workspace", workspaceRecord.Id, "generated for user", userId)
 	log.Println("new workspace event", workspaceEventRecord.Id, "generated for workspace", workspaceRecord)

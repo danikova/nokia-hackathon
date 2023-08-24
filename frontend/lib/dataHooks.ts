@@ -158,3 +158,18 @@ export function useIsWorkspaceBusy() {
   const isLoading = useMemo(() => !!events && !!events.new_run_started, [events]);
   return isLoading;
 }
+
+export function useWorkspaceRankings() {
+  const pb = usePocketBase();
+  const [rankings, setRankings] = useState<any>();
+
+  useEffect(() => {
+    pb.collection('workspace_rankings')
+      .getFullList({ expand: 'workspace, rankings' })
+      .then((data) => {
+        setRankings(data);
+      });
+  }, [pb]);
+
+  return rankings;
+}
