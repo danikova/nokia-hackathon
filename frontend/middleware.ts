@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getPB } from '@/lib/pocketbase';
 
+const staffRoutes = ['/scoreboard'];
+
 export async function middleware(request: NextRequest) {
   const pb = getPB(request);
 
@@ -16,6 +18,12 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(url);
   }
 
+  if (staffRoutes.includes(request.nextUrl.pathname) && pb.authStore.model?.role !== 'staff') {
+    const url = request.nextUrl.clone();
+    url.pathname = '/info';
+    return NextResponse.redirect(url);
+  }
+
   const response = NextResponse.next();
   const cookieStr = pb.authStore.exportToCookie();
   response.headers.append('set-cookie', cookieStr.replace('pb_auth', process.env.NEXT_PUBLIC_PB_COOKIE_KEY as string));
@@ -23,5 +31,13 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/info/:path*', '/code/:path*', '/results/:path*', '/settings/:path*'],
+  matcher: [
+    '/info/:path*',
+    '/code/:path*',
+    '/results/:path*',
+    '/scoreboard/:path*',
+    '/settings/:path*',
+
+    '/ranking/:path*',
+  ],
 };
