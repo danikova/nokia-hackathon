@@ -1,8 +1,9 @@
 'use client';
 
-import PocketBase, { ClientResponseError } from 'pocketbase';
+import PocketBase, { Admin, ClientResponseError, Record } from 'pocketbase';
 import { atom, useAtom } from 'jotai';
 import { enqueueSnackbar } from 'notistack';
+import { useEffect, useState } from 'react';
 
 const pocketbaseAtom = atom(() => {
   return new PocketBase(process.env.NEXT_PUBLIC_PB_HOST);
@@ -26,4 +27,17 @@ export async function snackbarWrapper<T extends Object>(pbPromise: T, successMes
     }
     throw error;
   }
+}
+
+export function useUserModel() {
+  const pb = usePocketBase();
+  const [model, setModel] = useState<Record | Admin | null>(null);
+
+  useEffect(() => {
+    pb.authStore.onChange((_, model) => {
+      setModel(model);
+    });
+  }, [pb]);
+
+  return model;
 }
