@@ -6,6 +6,7 @@ import (
 	"hackathon-backend/utils"
 	"net/http"
 	"os"
+	"sort"
 	"strconv"
 	"strings"
 	"time"
@@ -199,7 +200,15 @@ func addGithubBotFinished(app *pocketbase.PocketBase, e *core.ServeEvent) {
 			}
 
 			counter := 0
+			unknownTasks := []string{}
+			registeredTasks := utils.GetRegisteredTasks(app)
 			for task, data := range reqBody.Tasks {
+				if utils.ContainsWithLambda(registeredTasks, func(value utils.Task) bool {
+					return value.Name == task
+				}) == false {
+					unknownTasks = append(unknownTasks, task)
+					continue
+				}
 
 				item := models.NewRecord(runResultsCollection)
 				form := forms.NewRecordUpsert(app, item)
@@ -224,9 +233,15 @@ func addGithubBotFinished(app *pocketbase.PocketBase, e *core.ServeEvent) {
 			workspace_event.Set("new_run_started", nil)
 			app.Dao().SaveRecord(workspace_event)
 
+			retMsg := strconv.Itoa(counter) + " new record(s) generated"
+			if len(unknownTasks) != 0 {
+				sort.Strings(unknownTasks)
+				retMsg = retMsg + ", Unknown tasks: " + strings.Join(unknownTasks, ", ")
+			}
+
 			resBody := &types.GithubResponseBody{
 				Code:    201,
-				Message: strconv.Itoa(counter) + " new record(s) generated",
+				Message: retMsg,
 			}
 
 			data := &recordData{
