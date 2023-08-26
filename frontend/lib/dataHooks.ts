@@ -159,17 +159,49 @@ export function useIsWorkspaceBusy() {
   return isLoading;
 }
 
+export type Ranking = {
+  user: string;
+  workspace: string;
+  points: any;
+  comment: string;
+};
+
+export type WorkspaceRanking = {
+  id: string;
+  workspace: string;
+};
+
 export function useWorkspaceRankings() {
   const pb = usePocketBase();
-  const [rankings, setRankings] = useState<any>();
+  const [rankings, setRankings] = useState<WorkspaceRanking[]>();
 
   useEffect(() => {
     pb.collection('workspace_rankings')
       .getFullList({ expand: 'workspace, rankings' })
       .then((data) => {
-        setRankings(data);
+        setRankings(data as never as WorkspaceRanking[]);
       });
   }, [pb]);
 
   return rankings;
+}
+
+export type RunTask = {
+  task_name: string;
+  etalon_result: string;
+};
+
+export function useRunTasks() {
+  const pb = usePocketBase();
+  const [runTasks, setRunTasks] = useState<RunTask[]>();
+
+  useEffect(() => {
+    pb.collection('run_tasks')
+      .getFullList({ sort: 'task_name' })
+      .then((data) => {
+        setRunTasks(data as never as RunTask[]);
+      });
+  }, [pb]);
+
+  return runTasks;
 }

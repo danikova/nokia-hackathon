@@ -1,11 +1,13 @@
 
-import React, { useMemo } from 'react';
+import React, { ReactElement, ReactNode, useMemo } from 'react';
 import 'ag-grid-community/styles/ag-grid.css';
 import { ICellRendererParams } from 'ag-grid-community';
 import WorkspaceAvatar from '../../../app/(dashboard)/settings/WorkspaceAvatar';
 import { RunStatistic, Workspace } from '@/lib/dataHooks';
 import 'ag-grid-community/styles/ag-theme-alpine-no-font.min.css';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
+import { Button } from '../button';
+import { Dialog, DialogContent, DialogTrigger } from '../dialog';
 
 interface WorkspaceAvatarRendererProps extends ICellRendererParams {
   workspace: Workspace | null
@@ -113,11 +115,32 @@ interface PointsRendererProps extends ICellRendererParams {
 export function PointsRenderer(props: PointsRendererProps) {
   const { value } = props;
 
-  debugger;
-
   return (
     <div>
-      asd
+      {value}
+    </div>
+  );
+}
+
+interface CommentRendererProps extends ICellRendererParams {
+  dialogComponent: () => ReactElement;
+  dialogProps: any;
+}
+
+export function CommentRenderer(props: CommentRendererProps) {
+  const {
+    dialogComponent: DC,
+    dialogProps
+  } = props;
+
+  return (
+    <div className='flex justify-end'>
+      <Dialog>
+        <DialogTrigger className='hidden-ag-cell-feature cursor-pointer'>
+          Create new review
+        </DialogTrigger>
+        <DC data={props.data} {...dialogProps} />
+      </Dialog>
     </div>
   );
 }
