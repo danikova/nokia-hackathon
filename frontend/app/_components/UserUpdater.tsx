@@ -1,18 +1,27 @@
 'use client';
 
+import { useAtom } from "jotai";
 import { useEffect } from "react";
-import { usePocketBase } from "../../lib/clientPocketbase";
+import { usePocketBase, userModelAtom } from "../../lib/clientPocketbase";
 
 export default function UserUpdater() {
   const pb = usePocketBase();
+  const [_, setModel] = useAtom(userModelAtom);
+
+  useEffect(() => {
+    setModel(pb.authStore.model);
+  }, [setModel, pb]);
 
   useEffect(() => {
     const cancelKey = "authrefresh"
     pb.collection('users').authRefresh({ $cancelKey: cancelKey }).catch(() => { })
+    pb.authStore.onChange((_, model) => {
+      setModel(model);
+    });
     return () => {
       pb.cancelRequest(cancelKey);
     }
-  }, [pb]);
+  }, [setModel, pb]);
 
   return null;
 }
