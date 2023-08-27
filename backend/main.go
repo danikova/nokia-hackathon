@@ -21,6 +21,7 @@ func main() {
 	e.OnAfterBootstrap(app)
 	e.OnRecordBeforeAuth(app)
 	e.OnRecordAfterAuth(app)
+	e.OnRecordsListRequest(app)
 
 	migratecmd.MustRegister(app, app.RootCmd, &migratecmd.Options{
 		Automigrate: false,
