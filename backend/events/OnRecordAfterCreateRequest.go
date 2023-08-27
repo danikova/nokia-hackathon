@@ -23,6 +23,7 @@ var WorkspaceRankingsCollectionName = "workspace_rankings"
 
 var UserFieldKey = "user"
 var WorkspaceFieldKey = "workspace"
+var RankingsFieldKey = "rankings"
 
 func CreateWorkspaceForUser(app *pocketbase.PocketBase, userId *string) error {
 	workspaces, err := app.Dao().FindCollectionByNameOrId(WorkspacesCollectionName)

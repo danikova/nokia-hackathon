@@ -9,7 +9,9 @@ export default function UserUpdater() {
   const [_, setModel] = useAtom(userModelAtom);
 
   useEffect(() => {
-    setModel(pb.authStore.model);
+    try {
+      setModel(pb?.authStore?.model || null);
+    } catch { }
   }, [setModel, pb]);
 
   useEffect(() => {
