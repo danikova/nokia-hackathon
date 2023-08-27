@@ -162,13 +162,17 @@ export function useIsWorkspaceBusy() {
 export type Ranking = {
   user: string;
   workspace: string;
-  points: any;
+  points: { [k: string]: number };
   comment: string;
 };
 
 export type WorkspaceRanking = {
   id: string;
   workspace: string;
+  expand: {
+    workspace: Workspace;
+    rankings: Ranking[];
+  };
 };
 
 export function useWorkspaceRankings() {

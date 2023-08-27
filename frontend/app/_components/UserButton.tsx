@@ -1,7 +1,6 @@
 'use client';
 
 import { BiLogOut } from 'react-icons/bi';
-import { Admin, Record } from "pocketbase";
 import { enqueueSnackbar } from "notistack";
 import { useRouter } from "next/navigation";
 import { minidenticon } from 'minidenticons';
