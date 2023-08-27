@@ -6,6 +6,9 @@ import { useGlobals } from "@/lib/dataHooks";
 import { useEffect, useMemo, useState } from "react";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 
+function isValidDate(d: Date): boolean {
+  return d instanceof Date && !isNaN(d.getTime());
+}
 
 function useCountdownTime(endDate: Date) {
   const [distance, setDeltaTime] = useState(
@@ -30,24 +33,32 @@ function useCountdownTime(endDate: Date) {
 export default function CountDownTimer(props: any) {
   const globals = useGlobals();
   const endDate = useMemo(() => new Date(globals['event_end_date_time']), [globals]);
+  const isValidEndDate = useMemo(() => isValidDate(endDate), [endDate]);
+  const isEnded = useMemo(() => endDate.getTime() < new Date().getTime(), [endDate]);
   const { days, hours, minutes, seconds } = useCountdownTime(endDate);
 
   return (
     <Tooltip>
       <TooltipTrigger>
         <span className={cn("countdown font-mono text-2xl opacity-40 hover:opacity-90 cursor-default", props.className)}>
-          <span style={{ "--value": days || 0 } as React.CSSProperties}></span>:
-          <span style={{ "--value": hours || 0 } as React.CSSProperties}></span>:
-          <span style={{ "--value": minutes || 0 } as React.CSSProperties}></span>:
-          <span style={{ "--value": seconds || 0 } as React.CSSProperties}></span>
+          <span style={{ "--value": !isEnded ? (days || 0) : 0 } as React.CSSProperties}></span>:
+          <span style={{ "--value": !isEnded ? (hours || 0) : 0 } as React.CSSProperties}></span>:
+          <span style={{ "--value": !isEnded ? (minutes || 0) : 0 } as React.CSSProperties}></span>:
+          <span style={{ "--value": !isEnded ? (seconds || 0) : 0 } as React.CSSProperties}></span>
         </span>
       </TooltipTrigger>
-      {endDate && <TooltipContent>
+      <TooltipContent hidden={!isValidEndDate}>
         <div className="text-sm">
-          <div className="font-bold">Event ends <FromNow date={endDate} /></div>
-          <div>({endDate.toLocaleDateString()} {endDate.toLocaleTimeString()})</div>
+          {
+            isEnded
+              ? <div className="font-bold">Event has ended</div>
+              : <>
+                <div className="font-bold">Event ends <FromNow date={endDate} /></div>
+                <div>({endDate.toLocaleDateString()} {endDate.toLocaleTimeString()})</div>
+              </>
+          }
         </div>
-      </TooltipContent>}
+      </TooltipContent>
     </Tooltip>
   );
 }
