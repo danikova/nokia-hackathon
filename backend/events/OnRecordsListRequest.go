@@ -25,31 +25,30 @@ func expandWorkspaceRankingsCollectionListRequest(app *pocketbase.PocketBase) {
 		for _, record := range e.Records {
 			workspaceId := record.GetString("workspace")
 			if workspaceId != "" {
+
 				rankings, err := app.Dao().FindRecordsByExpr(RankingsCollectionName,
 					dbx.HashExp{WorkspaceFieldKey: workspaceId},
 				)
+
+				rankingIds := utils.Map(rankings, func(ranking *models.Record) string {
+					return ranking.Id
+				})
 				if err != nil {
 					return err
 				}
+
+				expandMap := map[string]any{}
 				if utils.Contains(expandList, WorkspaceFieldKey) {
 					workspace, err := app.Dao().FindRecordById(WorkspacesCollectionName, workspaceId)
 					if err != nil {
 						return err
 					}
-					record.SetExpand(map[string]any{
-						WorkspaceFieldKey: workspace,
-					})
+					expandMap[WorkspaceFieldKey] = workspace
 				}
 				if utils.Contains(expandList, RankingsFieldKey) {
-					record.SetExpand(map[string]any{
-						RankingsFieldKey: rankings,
-					})
+					expandMap[RankingsFieldKey] = rankings
 				}
-
-				rankingIds := utils.Map(rankings, func(ranking *models.Record) string {
-					return ranking.Id
-				})
-
+				record.SetExpand(expandMap)
 				record.Set(RankingsFieldKey, rankingIds)
 			}
 		}
