@@ -6,7 +6,7 @@ import { CSSProperties, ReactElement } from "react";
 import { ControllerRenderProps } from "react-hook-form";
 import { FaCogs, FaWrench, FaCrown } from 'react-icons/fa';
 import { FormField, FormLabel } from "@/components/ui/form";
-import { getRangeKeysFromTask, rangeSteps } from "./CreateReviewDialog";
+import { getRangeKeysFromTask, rangeSteps } from "./ReviewDialog";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 
 export function TaskFormfield({ task, form }: { task: RunTask; form: any; }) {

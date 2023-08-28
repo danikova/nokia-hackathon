@@ -1,8 +1,11 @@
+import { useMemo } from 'react';
+import { useAtomValue } from 'jotai';
 import { ColDef } from 'ag-grid-community';
-import { WorkspaceRanking, useRunTasks } from '@/lib/dataHooks';
-import { MutableRefObject, useEffect, useMemo } from 'react';
-import CreateReviewDialog, { CreateReviewDialogProps } from './CreateReviewDialog';
-import { CommentRenderer, PointsRenderer, WorkspaceAvatarRenderer } from '@/components/ui/table/renderers';
+import { globalRankingAtom } from './page';
+import { CommentRenderer, PointsRenderer } from './renderers';
+import ReviewDialog, { ReviewDialogProps } from './ReviewDialog';
+import { WorkspaceAvatarRenderer } from '../scoreboard/renderers';
+import { RunTask, WorkspaceRanking, useRunTasks } from '@/lib/dataHooks';
 
 function getColumnDefs(dynamicColumns?: ColDef[]): ColDef[] {
   return [
@@ -23,47 +26,46 @@ function getColumnDefs(dynamicColumns?: ColDef[]): ColDef[] {
   ] as ColDef<WorkspaceRanking>[];
 }
 
-export function useColumnDefs(gridRef: MutableRefObject<any>, useGlobalRankings: boolean) {
+function getMyRankingColumnDef(runTasks: RunTask[]): ColDef[] {
+  const runTasksCd =
+    runTasks?.map((runTask) => ({
+      sortable: false,
+      field: 'rankings',
+      headerName: runTask.task_name,
+      flex: 1,
+      valueGetter: ({ data }: any) => data?.points,
+      cellRenderer: PointsRenderer,
+      cellRendererParams: {
+        runTask: runTask,
+      },
+    })) || [];
+  return getColumnDefs([
+    ...runTasksCd,
+    {
+      field: 'comments',
+      headerName: 'Comments',
+      minWidth: 300,
+      cellRenderer: CommentRenderer,
+      cellRendererParams: {
+        dialogComponent: ReviewDialog,
+        dialogProps: {
+          runTasks,
+        } as Partial<ReviewDialogProps>,
+      },
+    },
+  ]);
+}
+
+export function useColumnDefs() {
+  const globalRankings = useAtomValue(globalRankingAtom);
   const runTasks = useRunTasks();
 
   const columnDefs = useMemo<ColDef<WorkspaceRanking>[]>(() => {
-    const runTasksCd =
-      runTasks?.map((runTask) => ({
-        sortable: false,
-        field: 'rankings',
-        headerName: runTask.task_name,
-        flex: 1,
-        valueGetter: ({ data }: any) => data?.points,
-        cellRenderer: PointsRenderer,
-        cellRendererParams: {
-          taskName: runTask.task_name,
-        },
-      })) || [];
-    return getColumnDefs([
-      ...runTasksCd,
-      !useGlobalRankings
-        ? {
-            field: 'comments',
-            headerName: 'Comments',
-            minWidth: 300,
-            cellRenderer: CommentRenderer,
-            cellRendererParams: {
-              dialogComponent: CreateReviewDialog,
-              dialogProps: {
-                runTasks,
-              } as Partial<CreateReviewDialogProps>,
-            },
-          }
-        : {
-            field: 'comments',
-          },
-    ]);
-  }, [runTasks, useGlobalRankings]);
-
-  useEffect(() => {
-    gridRef.current?.api?.setColumnDefs(columnDefs);
-    gridRef.current?.api?.sizeColumnsToFit();
-  }, [columnDefs, gridRef]);
+    if (!globalRankings) {
+      return getMyRankingColumnDef(runTasks);
+    }
+    return getColumnDefs();
+  }, [runTasks, globalRankings]);
 
   return columnDefs;
 }

@@ -7,7 +7,7 @@ import { FullPageAgGridReact } from '../../../components/ui/table';
 import BreadCrumb from '@/app/_components/navigation/BreadCrumb';
 import { getHumaneRunDuration } from '../results/[runId]/RunResultDisplay';
 import { RunStatistic, useRunStatistics, useUserWorkspace } from '@/lib/dataHooks';
-import { AverageOutputSizeRenderer, TaskStatisticRenderer, WorkspaceAvatarRenderer } from '../../../components/ui/table/renderers';
+import { AverageOutputSizeRenderer, TaskStatisticRenderer, WorkspaceAvatarRenderer } from './renderers';
 
 export default function App() {
   const workspace = useUserWorkspace();

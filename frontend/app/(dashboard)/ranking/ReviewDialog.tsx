@@ -7,7 +7,7 @@ import ClientForm from "@/components/ui/clientForm";
 import { Textarea } from "@/components/ui/textarea";
 import { snackbarWrapper, usePocketBase, useUserModel } from "@/lib/clientPocketbase";
 import WorkspaceAvatar from "../settings/WorkspaceAvatar";
-import { RunTask, WorkspaceRanking } from "@/lib/dataHooks";
+import { Ranking, RunTask, WorkspaceRanking } from "@/lib/dataHooks";
 import { ReactElement, useCallback, useEffect, useMemo } from "react";
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
@@ -23,35 +23,46 @@ export function getRangeKeysFromTask(task: RunTask) {
   ];
 }
 
-export type CreateReviewDialogProps = {
+export type ReviewDialogProps = {
   data: WorkspaceRanking;
   runTasks?: RunTask[];
+  ranking?: Ranking;
 };
 
-export default function CreateReviewDialog(props: CreateReviewDialogProps) {
+export default function ReviewDialog(props: ReviewDialogProps) {
   const pb = usePocketBase();
   const form = useForm();
   const {
     data: {
       expand: { workspace }
     },
-    runTasks
+    runTasks,
+    ranking
   } = props;
   const user = useUserModel();
   const formId = useMemo(() => `create-form-for-${workspace.id}`, [workspace]);
 
   useEffect(() => {
     const defaultValue = Math.ceil(rangeSteps / 2);
+
     for (const runTask of runTasks ?? []) {
       for (const key of getRangeKeysFromTask(runTask)) {
-        form.setValue(key, defaultValue);
+        if (ranking?.points[key]) {
+          form.setValue(key, ranking.points[key]);
+        } else {
+          form.setValue(key, defaultValue);
+        }
       }
     }
-  }, [runTasks, form]);
+  }, [runTasks, form, ranking]);
 
   useEffect(() => {
-    form.setValue('comments', '');
-  }, [form]);
+    if (ranking?.comments) {
+      form.setValue('comments', ranking.comments);
+    } else {
+      form.setValue('comments', '');
+    }
+  }, [form, ranking]);
 
   const onSubmit = useCallback(async (data: any) => {
     const { comments, ...points } = data;
@@ -63,9 +74,19 @@ export default function CreateReviewDialog(props: CreateReviewDialogProps) {
       comments
     };
     try {
-      await snackbarWrapper(pb.collection('rankings').create(reqData), 'Review created');
+      if (ranking) {
+        await snackbarWrapper(pb.collection('rankings').update(ranking.id, reqData), 'Review updated');
+      } else {
+        await snackbarWrapper(pb.collection('rankings').create(reqData), 'Review created');
+      }
     } catch { }
-  }, [workspace, user, pb]);
+  }, [workspace, user, pb, ranking]);
+
+  const onDelete = useCallback(async () => {
+    try {
+      await snackbarWrapper(pb.collection('rankings').delete(ranking?.id as string), 'Review deleted');
+    } catch { }
+  }, [pb, ranking]);
 
   const onKeyDown = useCallback((e: React.KeyboardEvent<HTMLFormElement>) => {
     if (!e.shiftKey && e.key === 'Enter') {
@@ -85,7 +106,7 @@ export default function CreateReviewDialog(props: CreateReviewDialogProps) {
     <DialogContent>
       <DialogHeader>
         <DialogTitle>
-          Add Review
+          {!ranking ? 'Add' : 'Update'} Review
         </DialogTitle>
         <div className="text-sm text-muted-foreground">
           <p className="flex items-center gap-2">
@@ -120,9 +141,10 @@ export default function CreateReviewDialog(props: CreateReviewDialogProps) {
           )}
         />
       </ClientForm>
-      <p className="text-xs">You can navigate with <span className="font-bold">tab</span>, and save with <span className="font-bold">enter</span> or close with <span className="font-bold">esc</span></p>
+      <p className="text-xs">You can navigate with <span className="font-bold">tab</span>, and {!ranking ? 'save' : 'update'} with <span className="font-bold">enter</span> or close with <span className="font-bold">esc</span></p>
       <DialogFooter>
-        <Button type="submit" form={formId}>Save</Button>
+        {ranking && <Button variant='destructive' onClick={onDelete} >Delete</Button>}
+        <Button type="submit" form={formId}>{!ranking ? 'Save' : 'Update'}</Button>
       </DialogFooter>
     </DialogContent>
   );

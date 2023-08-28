@@ -45,7 +45,11 @@ export function WorkspaceExtraDetails({ workspace }: { workspace: Workspace; }) 
           <p
             className='text-primary hover:underline cursor-pointer'
             onClick={() => {
-              windowRef.current = window.open(url, 'MsgWindow', "width=1200,height=800")
+              windowRef.current = window.open(
+                url,
+                'MsgWindow',
+                "width=1200,height=800,toolbar=no,menubar=no,resizable=yes"
+              )
             }}
           >
             Open editor

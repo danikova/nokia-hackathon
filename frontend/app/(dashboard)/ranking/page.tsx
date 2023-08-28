@@ -1,21 +1,32 @@
 'use client'
 
-import { useRef, useState } from "react";
-import { FullPageAgGridReact } from "@/components/ui/table";
-import { staffNavBarItems } from "@/app/_constans/navBar"
-import BreadCrumb, { BreadCrumbChildren } from "@/app/_components/navigation/BreadCrumb"
-import { useWorkspaceRankings } from "@/lib/dataHooks";
-import { Switch } from "@/components/ui/switch";
-import { Label } from "@/components/ui/label";
+import { atom, useAtom } from "jotai";
+import { useRowData } from "./rowData";
+import { useEffect, useRef } from "react";
 import { useColumnDefs } from "./columnDefs";
+import { Label } from "@/components/ui/label";
+import { Switch } from "@/components/ui/switch";
+import { staffNavBarItems } from "@/app/_constans/navBar";
+import { FullPageAgGridReact } from "@/components/ui/table";
+import BreadCrumb, { BreadCrumbChildren } from "@/app/_components/navigation/BreadCrumb";
 
-
+export const globalRankingAtom = atom(false);
 
 export default function RankingPage() {
+  const [globalRankings, setGlobalRankings] = useAtom(globalRankingAtom);
   const gridRef = useRef<any>();
-  const rowData = useWorkspaceRankings();
-  const [globalRankings, setGlobalRankings] = useState(false);
-  const columnDefs = useColumnDefs(gridRef, globalRankings);
+
+  const rowData = useRowData();
+  const columnDefs = useColumnDefs();
+
+  useEffect(() => {
+    gridRef.current?.api?.setRowData(rowData);
+  }, [rowData]);
+
+  useEffect(() => {
+    gridRef.current?.api?.setColumnDefs(columnDefs);
+    gridRef.current?.api?.sizeColumnsToFit();
+  }, [columnDefs]);
 
   return (
     <>
@@ -28,13 +39,14 @@ export default function RankingPage() {
         </div>
       </BreadCrumbChildren>
       <FullPageAgGridReact
+        key={globalRankings ? 'global' : 'local'}
         gridRef={gridRef}
         onGridReady={({ api }) => {
           api?.sizeColumnsToFit();
         }}
-        animateRows={true}
         rowData={rowData}
         columnDefs={columnDefs}
+        animateRows={true}
         getRowId={({ data }) => data.id}
         noRowsOverlayComponent={() => {
           return <div className='flex flex-col items-center justify-center h-full w-full'>

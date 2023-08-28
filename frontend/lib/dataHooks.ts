@@ -172,10 +172,11 @@ export function useIsWorkspaceBusy() {
 }
 
 export type Ranking = {
+  id: string;
   user: string;
   workspace: string;
   points: { [k: string]: number };
-  comment: string;
+  comments: string;
 };
 
 export type WorkspaceRanking = {
@@ -189,7 +190,7 @@ export type WorkspaceRanking = {
 
 export function useWorkspaceRankings() {
   const [rankings, setRankings] = useState<Record[]>([]);
-  const params = useMemo(() => ({ expand: 'workspace, rankings' }), []);
+  const params = useMemo(() => ({ expand: 'workspace, rankings', sort: 'created' }), []);
   usePbGetFullList('workspace_rankings', setRankings, params);
   return rankings as never as WorkspaceRanking[];
 }
