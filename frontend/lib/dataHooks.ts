@@ -1,5 +1,33 @@
+import { v4 as uuidv4 } from 'uuid';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { snackbarWrapper, usePocketBase } from './clientPocketbase';
+import { Record, RecordFullListQueryParams } from 'pocketbase';
+
+function getFirstElementFromList<T>(data: T[]): T | null {
+  return data.length !== 0 ? data[0] : null;
+}
+
+function usePbGetFullList(
+  collectionIdOrName: string,
+  onSuccess: (data: Record[]) => void,
+  queryParams?: RecordFullListQueryParams
+) {
+  const pb = usePocketBase();
+  const cancelKey = useMemo(() => uuidv4(), []);
+  const fetch = useCallback(async () => {
+    const result = await snackbarWrapper(pb.collection(collectionIdOrName).getFullList(queryParams));
+    onSuccess(result);
+  }, [pb, collectionIdOrName, queryParams, onSuccess]);
+
+  useEffect(() => {
+    fetch();
+    return () => {
+      pb.cancelRequest(cancelKey);
+    };
+  }, [pb, fetch, cancelKey]);
+
+  return { refetch: fetch, cancelKey };
+}
 
 export type AuthMethods = {
   usernamePassword?: boolean;
@@ -55,30 +83,21 @@ export function useRunStatisticsRealtime(onCreate: Function) {
   }, [pb, onCreate]);
 }
 
-export function useRunStatistics() {
-  const pb = usePocketBase();
+export function useRunStatistics(): RunStatistic[] {
   const timeoutId = useRef<NodeJS.Timeout>();
-  const [runStatistics, setRunStatistics] = useState<RunStatistic[]>([]);
-
-  const fetchData = useCallback(async () => {
-    const data = (await snackbarWrapper(pb.collection('run_statistics').getFullList())) as never as RunStatistic[];
-    setRunStatistics(data);
-  }, [pb]);
+  const [runStatistics, setRunStatistics] = useState<Record[]>([]);
+  const { refetch } = usePbGetFullList('run_statistics', setRunStatistics);
 
   const onCreate = useCallback(() => {
     clearTimeout(timeoutId.current!);
     timeoutId.current = setTimeout(() => {
-      fetchData();
+      refetch();
     }, Math.random() * 2000);
-  }, [fetchData]);
-
-  useEffect(() => {
-    fetchData();
-  }, [fetchData]);
+  }, [refetch]);
 
   useRunStatisticsRealtime(onCreate);
 
-  return runStatistics;
+  return runStatistics as never as RunStatistic[];
 }
 
 export type Workspace = {
@@ -89,36 +108,30 @@ export type Workspace = {
 };
 
 export function useUserWorkspace() {
-  const pb = usePocketBase();
-  const [workspace, setWorkspace] = useState<Workspace | null>(null);
-
-  useEffect(() => {
-    const _ = async () => {
-      const records = await snackbarWrapper(pb.collection('workspaces').getFullList());
-      setWorkspace(records.length !== 0 ? (records[0] as never as Workspace) : null);
-    };
-    _();
-  }, [pb]);
-
-  return workspace;
+  const [workspace, _setWorkspace] = useState<Record | null>(null);
+  const setWorkspace = useCallback(
+    (data: Record[]) => {
+      _setWorkspace(getFirstElementFromList(data));
+    },
+    [_setWorkspace]
+  );
+  usePbGetFullList('workspaces', setWorkspace);
+  return workspace ? (workspace as never as Workspace) : null;
 }
 
 export function useGlobals() {
-  const pb = usePocketBase();
-  const [globals, setGlobals] = useState<Record<string, string>>({});
-
-  useEffect(() => {
-    pb.collection('globals')
-      .getFullList()
-      .then((data) => {
-        const _globals: any = {};
-        for (const item of data) {
-          _globals[item.key] = item.value;
-        }
-        setGlobals(_globals);
-      });
-  }, [pb]);
-
+  const [globals, _setGlobals] = useState<{ [k: string]: string }>({});
+  const setGlobals = useCallback(
+    (data: Record[]) => {
+      const _globals: any = {};
+      for (const item of data) {
+        _globals[item.key] = item.value;
+      }
+      _setGlobals(_globals);
+    },
+    [_setGlobals]
+  );
+  usePbGetFullList('globals', setGlobals);
   return globals;
 }
 
@@ -134,23 +147,22 @@ export type WorkspaceEvents = {
 
 export function useWorkspaceEvenets() {
   const pb = usePocketBase();
-  const [events, setEvents] = useState<WorkspaceEvents>();
+  const [events, _setEvents] = useState<Record | null>(null);
+  const setEvents = useCallback(
+    (data: Record[]) => {
+      _setEvents(getFirstElementFromList(data));
+    },
+    [_setEvents]
+  );
+  usePbGetFullList('workspace_events', setEvents);
 
   useEffect(() => {
     pb.collection('workspace_events').subscribe('*', (data) => {
-      setEvents((data.record as never as WorkspaceEvents) || undefined);
+      _setEvents(data.record);
     });
-  }, [pb]);
+  }, [pb, _setEvents]);
 
-  useEffect(() => {
-    pb.collection('workspace_events')
-      .getFullList()
-      .then((data) => {
-        setEvents(data.length !== 0 ? (data[0] as never as WorkspaceEvents) : undefined);
-      });
-  }, [pb]);
-
-  return events;
+  return events ? (events as never as WorkspaceEvents) : null;
 }
 
 export function useIsWorkspaceBusy() {
@@ -176,18 +188,10 @@ export type WorkspaceRanking = {
 };
 
 export function useWorkspaceRankings() {
-  const pb = usePocketBase();
-  const [rankings, setRankings] = useState<WorkspaceRanking[]>();
-
-  useEffect(() => {
-    pb.collection('workspace_rankings')
-      .getFullList({ expand: 'workspace, rankings' })
-      .then((data) => {
-        setRankings(data as never as WorkspaceRanking[]);
-      });
-  }, [pb]);
-
-  return rankings;
+  const [rankings, setRankings] = useState<Record[]>([]);
+  const params = useMemo(() => ({ expand: 'workspace, rankings' }), []);
+  usePbGetFullList('workspace_rankings', setRankings, params);
+  return rankings as never as WorkspaceRanking[];
 }
 
 export type RunTask = {
@@ -196,16 +200,7 @@ export type RunTask = {
 };
 
 export function useRunTasks() {
-  const pb = usePocketBase();
-  const [runTasks, setRunTasks] = useState<RunTask[]>();
-
-  useEffect(() => {
-    pb.collection('run_tasks')
-      .getFullList({ sort: 'task_name' })
-      .then((data) => {
-        setRunTasks(data as never as RunTask[]);
-      });
-  }, [pb]);
-
-  return runTasks;
+  const [runTasks, setRunTasks] = useState<Record[]>([]);
+  usePbGetFullList('run_tasks', setRunTasks);
+  return runTasks as never as RunTask[];
 }
