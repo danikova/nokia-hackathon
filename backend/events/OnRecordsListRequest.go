@@ -10,8 +10,6 @@ import (
 	"github.com/pocketbase/pocketbase/models"
 )
 
-var RankingsCollectionName = "rankings"
-
 func OnRecordsListRequest(app *pocketbase.PocketBase) {
 	expandWorkspaceRankingsCollectionListRequest(app)
 }

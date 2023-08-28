@@ -2,29 +2,34 @@ package events
 
 import (
 	"hackathon-backend/utils"
+	"reflect"
 
 	"github.com/pocketbase/pocketbase"
 	"github.com/pocketbase/pocketbase/core"
+	"github.com/pocketbase/pocketbase/models"
 )
 
-func enforceReadonlyFieldsByUser(app *pocketbase.PocketBase, e *core.RecordUpdateEvent, editableFields []string) {
-	originalRecord, err := app.Dao().FindRecordById(e.Record.Collection().Name, e.Record.Id, nil)
+func enforceReadonlyFieldsByUser(app *pocketbase.PocketBase, record *models.Record, editableFields []string) {
+	originalRecord, err := app.Dao().FindRecordById(record.Collection().Name, record.Id, nil)
 	if err != nil {
 		return
 	}
 
-	for _, field := range e.Record.Collection().Schema.Fields() {
+	for _, field := range record.Collection().Schema.Fields() {
 		fieldKey := field.Name
-		if !utils.Contains(editableFields, fieldKey) && e.Record.Get(fieldKey) != originalRecord.Get(fieldKey) {
-			e.Record.Set(fieldKey, originalRecord.Get(fieldKey))
+		if !utils.Contains(editableFields, fieldKey) && !reflect.DeepEqual(record.Get(fieldKey), originalRecord.Get(fieldKey)) {
+			record.Set(fieldKey, originalRecord.Get(fieldKey))
 		}
 	}
 }
 
 func OnRecordBeforeUpdateRequest(app *pocketbase.PocketBase) {
 	app.OnRecordBeforeUpdateRequest().Add(func(e *core.RecordUpdateEvent) error {
-		if e.Record.Collection().Name == "workspaces" {
-			enforceReadonlyFieldsByUser(app, e, []string{"repo_url"})
+		if e.Record.Collection().Name == WorkspacesCollectionName {
+			enforceReadonlyFieldsByUser(app, e.Record, []string{"repo_url"})
+		}
+		if e.Record.Collection().Name == RankingsCollectionName {
+			enforceReadonlyFieldsByUser(app, e.Record, []string{"points", "comments"})
 		}
 		return nil
 	})
