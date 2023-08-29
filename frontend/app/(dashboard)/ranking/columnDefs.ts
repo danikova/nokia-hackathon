@@ -1,10 +1,11 @@
 import { useMemo } from 'react';
-import { useAtomValue } from 'jotai';
 import { ColDef } from 'ag-grid-community';
-import { globalRankingAtom } from './page';
+import { atom, useAtomValue } from 'jotai';
 import { PointsRenderer } from './renderers';
 import { WorkspaceAvatarRenderer } from '../scoreboard/renderers';
 import { Ranking, RunTask, WorkspaceRanking, runTasksAtom } from '@/lib/dataHooks';
+
+export const globalRankingAtom = atom(false);
 
 export function rankingValueGetterFactory(valueFn: (data: Ranking) => number, avg = true) {
   return ({ data }: { data: WorkspaceRanking }) => {

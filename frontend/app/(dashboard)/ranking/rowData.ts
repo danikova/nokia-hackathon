@@ -1,6 +1,6 @@
 import { useAtomValue } from 'jotai';
-import { globalRankingAtom } from './page';
 import { useEffect, useState } from 'react';
+import { globalRankingAtom } from './columnDefs';
 import { useUserModel } from '@/lib/clientPocketbase';
 import { WorkspaceRanking, useWorkspaceRankings } from '@/lib/dataHooks';
 
