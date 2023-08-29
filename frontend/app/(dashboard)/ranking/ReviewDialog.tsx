@@ -1,18 +1,19 @@
 'use client'
 
+import { useAtomValue } from "jotai";
 import { useForm } from "react-hook-form";
 import { TaskFormfield } from "./TaskFormfield";
 import { Button } from "@/components/ui/button";
 import ClientForm from "@/components/ui/clientForm";
 import { Textarea } from "@/components/ui/textarea";
-import { snackbarWrapper, usePocketBase, useUserModel } from "@/lib/clientPocketbase";
 import WorkspaceAvatar from "../settings/WorkspaceAvatar";
-import { Ranking, RunTask, WorkspaceRanking, runTasksAtom } from "@/lib/dataHooks";
 import { ReactElement, useCallback, useEffect, useMemo } from "react";
+import { WorkspaceDetails, WorkspaceExtraDetails } from "../code/WorkspaceDetails";
+import { Ranking, RunTask, WorkspaceRanking, runTasksAtom } from "@/lib/dataHooks";
+import { snackbarWrapper, usePocketBase, useUserModel } from "@/lib/clientPocketbase";
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { WorkspaceDetails, WorkspaceExtraDetails } from "../code/WorkspaceDetails";
-import { useAtomValue } from "jotai";
+import { AlertDialog, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 
 export const rangeSteps = 7;
 
@@ -143,7 +144,26 @@ export default function ReviewDialog(props: ReviewDialogProps) {
       </ClientForm>
       <p className="text-xs">You can navigate with <span className="font-bold">tab</span>, and {!ranking ? 'save' : 'update'} with <span className="font-bold">enter</span> or close with <span className="font-bold">esc</span></p>
       <DialogFooter>
-        {ranking && <Button variant='destructive' onClick={onDelete} >Delete</Button>}
+        {ranking &&
+          <AlertDialog>
+            <AlertDialogTrigger asChild={true}>
+              <Button variant='destructive' >Delete</Button>
+            </AlertDialogTrigger>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                <AlertDialogDescription>
+                  This action cannot be undone.
+                  This will permanently delete the review for this workspace.
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                <Button variant='destructive' onClick={onDelete}>Delete</Button>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
+        }
         <Button type="submit" form={formId}>{!ranking ? 'Save' : 'Update'}</Button>
       </DialogFooter>
     </DialogContent>
