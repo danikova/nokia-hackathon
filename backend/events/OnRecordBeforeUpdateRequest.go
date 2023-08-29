@@ -30,6 +30,7 @@ func OnRecordBeforeUpdateRequest(app *pocketbase.PocketBase) {
 		}
 		if e.Record.Collection().Name == RankingsCollectionName {
 			enforceReadonlyFieldsByUser(app, e.Record, []string{"points", "comments"})
+			SummarizePointsOnRanking(app, e.Record)
 		}
 		return nil
 	})

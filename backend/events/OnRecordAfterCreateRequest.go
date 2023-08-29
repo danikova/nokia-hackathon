@@ -1,8 +1,6 @@
 package events
 
 import (
-	"encoding/json"
-	"hackathon-backend/utils"
 	"log"
 
 	"github.com/pocketbase/pocketbase"
@@ -25,43 +23,8 @@ func OnRecordAfterCreateRequest(app *pocketbase.PocketBase) {
 		if e.Record.Collection().Name == UsersCollectionName {
 			CreateWorkspaceForUser(app, &e.Record.Id)
 		}
-		if e.Record.Collection().Name == RankingsCollectionName {
-			SummarizePointsOnRanking(app, e.Record)
-		}
 		return nil
 	})
-}
-
-func getKeysFromTask(task *utils.Task) []string {
-	return []string{
-		task.Name + "-implementation",
-		task.Name + "-functionality",
-		task.Name + "-prettiness",
-	}
-}
-
-func SummarizePointsOnRanking(app *pocketbase.PocketBase, record *models.Record) {
-	tasks := utils.GetRegisteredTasks(app)
-	points := map[string]int16{}
-	pointsSum := map[string]float64{}
-	record.UnmarshalJSONField("points", &points)
-
-	finalSum := 0.0
-	for _, task := range tasks {
-		rangeKeys := getKeysFromTask(&task)
-		for _, rangeKey := range rangeKeys {
-			pointsSum[task.Name] += float64(points[rangeKey])
-		}
-		pointsSum[task.Name] /= float64(len(rangeKeys))
-		finalSum += pointsSum[task.Name]
-	}
-	finalSum /= float64(len(tasks))
-
-	pointsSumStr, _ := json.Marshal(pointsSum)
-	record.Set("points_sum", pointsSumStr)
-	record.Set("sum", finalSum)
-
-	app.Dao().SaveRecord(record)
 }
 
 func CreateWorkspaceForUser(app *pocketbase.PocketBase, userId *string) error {
