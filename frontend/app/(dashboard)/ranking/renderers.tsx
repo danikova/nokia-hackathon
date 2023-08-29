@@ -36,11 +36,15 @@ interface PointsRendererProps extends ICellRendererParams<WorkspaceRanking> {
 export function PointsRenderer({ data, runTask }: PointsRendererProps) {
   const sum = useMemo(() => {
     let sum = 0;
+    let validCount = 0;
     const list = data?.expand.rankings || [];
     for (const ranking of list) {
-      sum += ranking.points_sum[runTask.task_name];
+      try {
+        sum += ranking.points_sum[runTask.task_name];
+        validCount += 1;
+      } catch { }
     }
-    return sum / list.length;
+    return sum / validCount;
   }, [data, runTask]);
 
   return <NumberRenderer num={sum} />;
@@ -162,6 +166,7 @@ export function CommentsRenderer({ data }: CommentsRendererProps) {
       <DropdownMenuContent align='start'>
         {
           comments.map((comment, i) => {
+            if (!comment.comments) return null;
             return <DropdownMenuItem key={i} className='overflow-auto'>
               <Tooltip>
                 <TooltipTrigger>

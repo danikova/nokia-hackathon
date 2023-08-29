@@ -30,6 +30,21 @@ function usePbGetFullList(
   return { refetch: fetch, cancelKey };
 }
 
+function usePbRealtime(topic: string, onMessage: (msg: any) => void) {
+  const pb = usePocketBase();
+
+  useEffect(() => {
+    let unsub: any;
+    async function sub() {
+      unsub = await pb.realtime.subscribe(topic, onMessage);
+    }
+    sub();
+    return () => {
+      unsub && unsub();
+    };
+  }, [pb, onMessage, topic]);
+}
+
 export type AuthMethods = {
   usernamePassword?: boolean;
   emailPassword?: boolean;
@@ -66,37 +81,24 @@ export type RunStatistic = {
   number_of_timeouted_tasks: number;
 };
 
-export function useRunStatisticsRealtime(onCreate: Function) {
-  const pb = usePocketBase();
-
-  useEffect(() => {
-    let unsub: any;
-    async function sub() {
-      unsub = await pb.realtime.subscribe('run_statistics/*', (msg: { action: string }) => {
-        if (msg.action === 'create') onCreate();
-      });
-    }
-
-    sub();
-    return () => {
-      unsub && unsub();
-    };
-  }, [pb, onCreate]);
-}
-
 export function useRunStatistics(): RunStatistic[] {
   const timeoutId = useRef<NodeJS.Timeout>();
   const [runStatistics, setRunStatistics] = useState<Record[]>([]);
   const { refetch } = usePbGetFullList('run_statistics', setRunStatistics);
 
-  const onCreate = useCallback(() => {
-    clearTimeout(timeoutId.current!);
-    timeoutId.current = setTimeout(() => {
-      refetch();
-    }, Math.random() * 2000);
-  }, [refetch]);
+  const onMessage = useCallback(
+    (msg: { action: string }) => {
+      if (msg.action === 'create') {
+        clearTimeout(timeoutId.current!);
+        timeoutId.current = setTimeout(() => {
+          refetch();
+        }, Math.random() * 2000);
+      }
+    },
+    [refetch]
+  );
 
-  useRunStatisticsRealtime(onCreate);
+  usePbRealtime('run_statistics/*', onMessage);
 
   return runStatistics as never as RunStatistic[];
 }
@@ -192,10 +194,60 @@ export type WorkspaceRanking = {
 };
 
 export function useWorkspaceRankings() {
-  const [rankings, setRankings] = useState<Record[]>([]);
-  const params = useMemo(() => ({ expand: 'workspace, rankings', sort: 'created' }), []);
-  usePbGetFullList('workspace_rankings', setRankings, params);
-  return rankings as never as WorkspaceRanking[];
+  const [workspaceRankings, setWorkspaceRankings] = useState<Record[]>([]);
+
+  const onRankingsFirstFetch = useCallback(
+    (data: Record[]) => {
+      const rankingMapping = new Map<string, Record>();
+      for (const ranking of data) {
+        rankingMapping.set(ranking.id, ranking);
+      }
+      setWorkspaceRankings((old) => {
+        return old.map((record) => {
+          const rankingIds = record.rankings as string[];
+          const rankings = rankingIds
+            .map((id) => rankingMapping.get(id))
+            .filter((item) => item !== undefined) as Record[];
+          record.expand = {
+            ...record.expand,
+            rankings,
+          };
+          return record;
+        });
+      });
+    },
+    [setWorkspaceRankings]
+  );
+
+  const onRankingRealtime = useCallback(
+    (msg: { action: string; record: Record }) => {
+      setWorkspaceRankings((old) => {
+        const newWorkspaceRankings = [...old];
+        const workspaceRankingId = newWorkspaceRankings.findIndex((item) => item.workspace === msg.record.workspace);
+        if (workspaceRankingId !== -1) {
+          const rankingId = newWorkspaceRankings[workspaceRankingId].expand.rankings.findIndex(
+            (item: Record) => item.id === msg.record.id
+          );
+          if (msg.action === 'create') {
+            newWorkspaceRankings[workspaceRankingId].expand.rankings.push(msg.record);
+          } else if (msg.action === 'update' && rankingId !== -1) {
+            //@ts-ignore
+            newWorkspaceRankings[workspaceRankingId].expand.rankings[rankingId] = msg.record;
+          } else if (msg.action === 'delete' && rankingId !== -1) {
+            newWorkspaceRankings[workspaceRankingId].expand.rankings.splice(rankingId, 1);
+          }
+        }
+        return newWorkspaceRankings;
+      });
+    },
+    [setWorkspaceRankings]
+  );
+
+  const params = useMemo(() => ({ expand: 'workspace', sort: 'created' }), []);
+  usePbGetFullList('workspace_rankings', setWorkspaceRankings, params);
+  usePbGetFullList('rankings', onRankingsFirstFetch, params);
+  usePbRealtime('rankings/*', onRankingRealtime);
+  return workspaceRankings as never as WorkspaceRanking[];
 }
 
 export type RunTask = {
