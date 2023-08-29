@@ -18,8 +18,7 @@ export function useColumnTypes() {
         valueGetter: rankingValueGetterFactory((data) => data.sum),
       },
       singleCommentColumn: {
-        flex: 2,
-        minWidth: 300,
+        flex: 1,
         headerName: 'Comment',
         cellRenderer: CommentRenderer,
         valueGetter: rankingValueGetterFactory((data) => (!!data.comments ? 1 : 0), false),
@@ -31,8 +30,7 @@ export function useColumnTypes() {
         valueGetter: rankingValueGetterFactory(() => 1, false),
       },
       multipleCommentsColumn: {
-        flex: 2,
-        minWidth: 300,
+        flex: 1,
         headerName: 'Comments',
         cellRenderer: CommentsRenderer,
         valueGetter: rankingValueGetterFactory((data) => (!!data.comments ? 1 : 0), false),
