@@ -7,11 +7,12 @@ import ClientForm from "@/components/ui/clientForm";
 import { Textarea } from "@/components/ui/textarea";
 import { snackbarWrapper, usePocketBase, useUserModel } from "@/lib/clientPocketbase";
 import WorkspaceAvatar from "../settings/WorkspaceAvatar";
-import { Ranking, RunTask, WorkspaceRanking } from "@/lib/dataHooks";
+import { Ranking, RunTask, WorkspaceRanking, runTasksAtom } from "@/lib/dataHooks";
 import { ReactElement, useCallback, useEffect, useMemo } from "react";
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { WorkspaceDetails, WorkspaceExtraDetails } from "../code/WorkspaceDetails";
+import { useAtomValue } from "jotai";
 
 export const rangeSteps = 7;
 
@@ -25,7 +26,6 @@ export function getRangeKeysFromTask(task: RunTask) {
 
 export type ReviewDialogProps = {
   data: WorkspaceRanking;
-  runTasks?: RunTask[];
   ranking?: Ranking;
 };
 
@@ -36,9 +36,9 @@ export default function ReviewDialog(props: ReviewDialogProps) {
     data: {
       expand: { workspace }
     },
-    runTasks,
     ranking
   } = props;
+  const runTasks = useAtomValue(runTasksAtom);
   const user = useUserModel();
   const formId = useMemo(() => `create-form-for-${workspace.id}`, [workspace]);
 

@@ -2,6 +2,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { snackbarWrapper, usePocketBase } from './clientPocketbase';
 import { Record, RecordFullListQueryParams } from 'pocketbase';
+import { atom, useAtom } from 'jotai';
 
 function getFirstElementFromList<T>(data: T[]): T | null {
   return data.length !== 0 ? data[0] : null;
@@ -176,6 +177,8 @@ export type Ranking = {
   user: string;
   workspace: string;
   points: { [k: string]: number };
+  points_sum: { [k: string]: number };
+  sum: number;
   comments: string;
 };
 
@@ -200,8 +203,18 @@ export type RunTask = {
   etalon_result: string;
 };
 
+export const runTasksAtom = atom<RunTask[]>([]);
+
 export function useRunTasks() {
+  const [_, setRunTasksAtom] = useAtom(runTasksAtom);
   const [runTasks, setRunTasks] = useState<Record[]>([]);
-  usePbGetFullList('run_tasks', setRunTasks);
+  const setValue = useCallback(
+    (data: Record[]) => {
+      setRunTasksAtom(data as never as RunTask[]);
+      setRunTasks(data);
+    },
+    [setRunTasksAtom, setRunTasks]
+  );
+  usePbGetFullList('run_tasks', setValue);
   return runTasks as never as RunTask[];
 }

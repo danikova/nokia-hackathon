@@ -5,6 +5,7 @@ import { useRowData } from "./rowData";
 import { useEffect, useRef } from "react";
 import { useColumnDefs } from "./columnDefs";
 import { Label } from "@/components/ui/label";
+import { useRunTasks } from "@/lib/dataHooks";
 import { Switch } from "@/components/ui/switch";
 import { staffNavBarItems } from "@/app/_constans/navBar";
 import { FullPageAgGridReact } from "@/components/ui/table";
@@ -13,6 +14,8 @@ import BreadCrumb, { BreadCrumbChildren } from "@/app/_components/navigation/Bre
 export const globalRankingAtom = atom(false);
 
 export default function RankingPage() {
+  useRunTasks();
+
   const [globalRankings, setGlobalRankings] = useAtom(globalRankingAtom);
   const gridRef = useRef<any>();
 

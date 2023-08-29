@@ -2,10 +2,10 @@ import { useMemo } from 'react';
 import { useAtomValue } from 'jotai';
 import { ColDef } from 'ag-grid-community';
 import { globalRankingAtom } from './page';
-import { CommentRenderer, PointsRenderer } from './renderers';
+import { CommentRenderer, PointsRenderer, TotalRenderer } from './renderers';
 import ReviewDialog, { ReviewDialogProps } from './ReviewDialog';
 import { WorkspaceAvatarRenderer } from '../scoreboard/renderers';
-import { RunTask, WorkspaceRanking, useRunTasks } from '@/lib/dataHooks';
+import { RunTask, WorkspaceRanking, runTasksAtom } from '@/lib/dataHooks';
 
 function getColumnDefs(dynamicColumns?: ColDef[]): ColDef[] {
   return [
@@ -26,8 +26,8 @@ function getColumnDefs(dynamicColumns?: ColDef[]): ColDef[] {
   ] as ColDef<WorkspaceRanking>[];
 }
 
-function getMyRankingColumnDef(runTasks: RunTask[]): ColDef[] {
-  const runTasksCd =
+function getTaskColumns(runTasks: RunTask[]) {
+  return (
     runTasks?.map((runTask) => ({
       sortable: false,
       field: 'rankings',
@@ -38,33 +38,40 @@ function getMyRankingColumnDef(runTasks: RunTask[]): ColDef[] {
       cellRendererParams: {
         runTask: runTask,
       },
-    })) || [];
+    })) || []
+  );
+}
+
+function getMyRankingColumnDef(runTasks: RunTask[]): ColDef[] {
   return getColumnDefs([
-    ...runTasksCd,
+    ...getTaskColumns(runTasks),
+    {
+      field: 'sum',
+      headerName: 'Total',
+      cellRenderer: TotalRenderer,
+    },
     {
       field: 'comments',
       headerName: 'Comments',
       minWidth: 300,
       cellRenderer: CommentRenderer,
-      cellRendererParams: {
-        dialogComponent: ReviewDialog,
-        dialogProps: {
-          runTasks,
-        } as Partial<ReviewDialogProps>,
-      },
     },
   ]);
 }
 
+function getGlobalRankingColumnDef(runTasks: RunTask[]): ColDef[] {
+  return getColumnDefs([...getTaskColumns(runTasks)]);
+}
+
 export function useColumnDefs() {
   const globalRankings = useAtomValue(globalRankingAtom);
-  const runTasks = useRunTasks();
+  const runTasks = useAtomValue(runTasksAtom);
 
   const columnDefs = useMemo<ColDef<WorkspaceRanking>[]>(() => {
     if (!globalRankings) {
       return getMyRankingColumnDef(runTasks);
     }
-    return getColumnDefs();
+    return getGlobalRankingColumnDef(runTasks);
   }, [runTasks, globalRankings]);
 
   return columnDefs;
