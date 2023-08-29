@@ -1,8 +1,8 @@
 import { v4 as uuidv4 } from 'uuid';
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { snackbarWrapper, usePocketBase } from './clientPocketbase';
-import { Record, RecordFullListQueryParams } from 'pocketbase';
 import { atom, useAtom } from 'jotai';
+import { Record, RecordFullListQueryParams } from 'pocketbase';
+import { snackbarWrapper, usePocketBase } from './clientPocketbase';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 function getFirstElementFromList<T>(data: T[]): T | null {
   return data.length !== 0 ? data[0] : null;

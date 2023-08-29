@@ -1,12 +1,13 @@
 'use client';
 
+import { useMemo } from 'react';
 import { cn } from '@/lib/utils';
-import ReviewDialog from './ReviewDialog';
-import { useMemo, useState } from 'react';
 import { FaComment } from 'react-icons/fa6';
+import { Button } from '@/components/ui/button';
+import { Dialog } from '@/components/ui/dialog';
+import { useReviewDialog } from './ReviewDialog';
+import { WorkspaceRanking } from '@/lib/dataHooks';
 import { ICellRendererParams } from 'ag-grid-community';
-import { RunTask, WorkspaceRanking } from '@/lib/dataHooks';
-import { Dialog, DialogTrigger } from '@/components/ui/dialog';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 
@@ -27,32 +28,20 @@ function NumberRenderer({ num, className, hideDecimal = false }: { num: number, 
   );
 }
 
-interface PointsRendererProps extends ICellRendererParams<WorkspaceRanking> {
-  runTask: RunTask;
+export function PointsRenderer({ value }: ICellRendererParams<WorkspaceRanking>) {
+  return <NumberRenderer num={value} />;
 }
 
-export function PointsRenderer({ data, runTask }: PointsRendererProps) {
-  const sum = useMemo(() => {
-    let sum = 0;
-    let validCount = 0;
-    const list = data?.expand.rankings || [];
-    for (const ranking of list) {
-      try {
-        sum += ranking.points_sum[runTask.task_name];
-        validCount += 1;
-      } catch { }
-    }
-    return sum / validCount;
-  }, [data, runTask]);
-
-  return <NumberRenderer num={sum} />;
+export function TotalRenderer({ value }: ICellRendererParams<WorkspaceRanking>) {
+  return <NumberRenderer className='scale-[1.15] origin-left' num={value} />;
 }
 
-interface CommentRendererProps extends ICellRendererParams<WorkspaceRanking> { }
+export function ReviewCountRenderer({ value }: ICellRendererParams<WorkspaceRanking>) {
+  return <NumberRenderer className='scale-[1.15] origin-left' hideDecimal num={value} />;
+}
 
-export function CommentRenderer({ data }: CommentRendererProps) {
-  const [addOpen, setAddOpen] = useState(false);
-  const [updateOpen, setUpdateOpen] = useState(false);
+export function CommentRenderer({ data }: ICellRendererParams<WorkspaceRanking>) {
+  const { openDialog } = useReviewDialog()
 
   const rankingLength = useMemo(() => {
     return data?.expand.rankings?.length;
@@ -67,7 +56,7 @@ export function CommentRenderer({ data }: CommentRendererProps) {
           <Dialog open={false}>
             <Tooltip>
               <TooltipTrigger>
-                <DialogTrigger disabled className="hidden-ag-cell-feature cursor-pointer line-through">Create new review</DialogTrigger>
+                <Button variant='secondary' className="hidden-ag-cell-feature cursor-pointer line-through">Create new review</Button>
               </TooltipTrigger>
               <TooltipContent side="left">
                 <div className="max-w-md whitespace-break-spaces">This workspace doesn{"'"}t have a linked repository.</div>
@@ -79,10 +68,12 @@ export function CommentRenderer({ data }: CommentRendererProps) {
     else
       return (
         <div className="flex justify-end">
-          <Dialog open={addOpen} onOpenChange={setAddOpen}>
-            <DialogTrigger className="hidden-ag-cell-feature cursor-pointer">Create new review</DialogTrigger>
-            <ReviewDialog data={data} />
-          </Dialog>
+          <Button
+            variant='secondary'
+            className='hidden-ag-cell-feature'
+            onClick={() => openDialog({ data })}>
+            Create new review
+          </Button>
         </div>
       );
 
@@ -104,44 +95,18 @@ export function CommentRenderer({ data }: CommentRendererProps) {
             </Tooltip>
           )}
           <div className="placeholder" />
-          <Dialog open={updateOpen} onOpenChange={setUpdateOpen}>
-            <DialogTrigger className="hidden-ag-cell-feature cursor-pointer">Update review</DialogTrigger>
-            <ReviewDialog data={data} ranking={ranking} />
-          </Dialog>
+          <Button
+            variant='secondary'
+            className='hidden-ag-cell-feature'
+            onClick={() => openDialog({ data, ranking })}>
+            Update review
+          </Button>
         </div>
       );
     });
 }
 
-interface TotalRendererProps extends ICellRendererParams<WorkspaceRanking> { }
-
-export function TotalRenderer({ data }: TotalRendererProps) {
-  const sum = useMemo(() => {
-    let sum = 0;
-    const list = data?.expand.rankings || [];
-    for (const ranking of list) {
-      sum += ranking.sum;
-    }
-    return sum / list.length;
-  }, [data]);
-
-  return <NumberRenderer className='scale-[1.15] origin-left' num={sum} />;
-}
-
-interface ReviewCountRendererProps extends ICellRendererParams<WorkspaceRanking> { }
-
-export function ReviewCountRenderer({ data }: ReviewCountRendererProps) {
-  const len = useMemo(() => {
-    const list = data?.expand.rankings || [];
-    return list.length
-  }, [data]);
-
-  return <NumberRenderer className='scale-[1.15] origin-left' hideDecimal num={len} />;
-}
-
-interface CommentsRendererProps extends ICellRendererParams<WorkspaceRanking> { }
-
-export function CommentsRenderer({ data }: CommentsRendererProps) {
+export function CommentsRenderer({ data }: ICellRendererParams<WorkspaceRanking>) {
 
   const comments = useMemo(() => {
     const list = data?.expand.rankings || [];

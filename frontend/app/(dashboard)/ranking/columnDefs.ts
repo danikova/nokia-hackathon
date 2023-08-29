@@ -2,12 +2,26 @@ import { useMemo } from 'react';
 import { useAtomValue } from 'jotai';
 import { ColDef } from 'ag-grid-community';
 import { globalRankingAtom } from './page';
-import { CommentRenderer, CommentsRenderer, PointsRenderer, ReviewCountRenderer, TotalRenderer } from './renderers';
-import ReviewDialog, { ReviewDialogProps } from './ReviewDialog';
+import { PointsRenderer } from './renderers';
 import { WorkspaceAvatarRenderer } from '../scoreboard/renderers';
-import { RunTask, WorkspaceRanking, runTasksAtom } from '@/lib/dataHooks';
+import { Ranking, RunTask, WorkspaceRanking, runTasksAtom } from '@/lib/dataHooks';
 
-function getColumnDefs(dynamicColumns?: ColDef[]): ColDef[] {
+export function rankingValueGetterFactory(valueFn: (data: Ranking) => number, avg = true) {
+  return ({ data }: { data: WorkspaceRanking }) => {
+    let sum = 0;
+    let validCount = 0;
+    const list = data?.expand.rankings || [];
+    for (const ranking of list) {
+      try {
+        sum += valueFn(ranking);
+        validCount += 1;
+      } catch {}
+    }
+    return avg ? sum / validCount : sum;
+  };
+}
+
+function getDefaultColumnDefs(dynamicColumns?: ColDef[]): ColDef[] {
   return [
     {
       field: 'workspace',
@@ -29,54 +43,38 @@ function getColumnDefs(dynamicColumns?: ColDef[]): ColDef[] {
 function getTaskColumns(runTasks: RunTask[]) {
   return (
     runTasks?.map((runTask) => ({
-      sortable: false,
-      field: 'rankings',
-      headerName: runTask.task_name,
-      valueGetter: ({ data }: any) => data?.points,
-      cellRenderer: PointsRenderer,
       flex: 1,
-      cellRendererParams: {
-        runTask: runTask,
-      },
+      cellRenderer: PointsRenderer,
+      headerName: runTask.task_name,
+      valueGetter: rankingValueGetterFactory((data) => data.points_sum[runTask.task_name]),
     })) || []
   );
 }
 
 function getMyRankingColumnDef(runTasks: RunTask[]): ColDef[] {
-  return getColumnDefs([
+  return getDefaultColumnDefs([
+    {
+      type: 'totalColumn',
+    },
     ...getTaskColumns(runTasks),
     {
-      headerName: 'Total',
-      flex: 1,
-      cellRenderer: TotalRenderer,
-    },
-    {
-      headerName: 'Comment',
-      minWidth: 300,
-      flex: 2,
-      cellRenderer: CommentRenderer,
+      type: 'singleCommentColumn',
     },
   ]);
 }
 
 function getGlobalRankingColumnDef(runTasks: RunTask[]): ColDef[] {
-  return getColumnDefs([
+  return getDefaultColumnDefs([
+    {
+      type: 'totalColumn',
+      initialSort: 'desc',
+    },
     ...getTaskColumns(runTasks),
     {
-      headerName: 'Total',
-      flex: 1,
-      cellRenderer: TotalRenderer,
+      type: 'reviewCountColumn',
     },
     {
-      headerName: 'Review Count',
-      flex: 1,
-      cellRenderer: ReviewCountRenderer,
-    },
-    {
-      headerName: 'Comments',
-      minWidth: 300,
-      flex: 2,
-      cellRenderer: CommentsRenderer,
+      type: 'multipleCommentsColumn',
     },
   ]);
 }

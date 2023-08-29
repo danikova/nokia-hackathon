@@ -2,11 +2,14 @@
 
 import { atom, useAtom } from "jotai";
 import { useRowData } from "./rowData";
-import { useEffect, useRef } from "react";
+import ReviewDialog from "./ReviewDialog";
+import { ColDef } from "ag-grid-community";
 import { useColumnDefs } from "./columnDefs";
 import { Label } from "@/components/ui/label";
 import { useRunTasks } from "@/lib/dataHooks";
+import { useColumnTypes } from "./columnTypes";
 import { Switch } from "@/components/ui/switch";
+import { useEffect, useMemo, useRef } from "react";
 import { staffNavBarItems } from "@/app/_constans/navBar";
 import { FullPageAgGridReact } from "@/components/ui/table";
 import BreadCrumb, { BreadCrumbChildren } from "@/app/_components/navigation/BreadCrumb";
@@ -21,6 +24,13 @@ export default function RankingPage() {
 
   const rowData = useRowData();
   const columnDefs = useColumnDefs();
+
+  const columnTypes = useColumnTypes();
+  const defaultColDef = useMemo<ColDef>(() => ({
+    sortable: true,
+    filter: false,
+    flex: 1,
+  }), []);
 
   useEffect(() => {
     gridRef.current?.api?.setRowData(rowData);
@@ -41,11 +51,14 @@ export default function RankingPage() {
           <Label>Global rankings</Label>
         </div>
       </BreadCrumbChildren>
+      <ReviewDialog />
       <FullPageAgGridReact
-        // key={globalRankings ? 'global' : 'local'}
+        columnTypes={columnTypes}
+        key={globalRankings ? 'global' : 'local'}
         gridRef={gridRef}
         rowData={rowData}
         columnDefs={columnDefs}
+        defaultColDef={defaultColDef}
         animateRows={true}
         // getRowId={({ data }) => data.id}
         noRowsOverlayComponent={() => {
