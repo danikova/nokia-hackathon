@@ -12,7 +12,6 @@ export function useColumnTypes() {
     () => ({
       totalColumn: {
         flex: 1,
-        maxWidth: 120,
         headerName: 'Total',
         cellRenderer: TotalRenderer,
         valueGetter: rankingValueGetterFactory((data) => data.sum),
