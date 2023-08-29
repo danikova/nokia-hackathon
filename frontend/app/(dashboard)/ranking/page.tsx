@@ -24,12 +24,12 @@ export default function RankingPage() {
 
   useEffect(() => {
     gridRef.current?.api?.setRowData(rowData);
-  }, [rowData]);
+  }, [rowData, gridRef]);
 
   useEffect(() => {
     gridRef.current?.api?.setColumnDefs(columnDefs);
     gridRef.current?.api?.sizeColumnsToFit();
-  }, [columnDefs]);
+  }, [columnDefs, gridRef]);
 
   return (
     <>
@@ -42,15 +42,12 @@ export default function RankingPage() {
         </div>
       </BreadCrumbChildren>
       <FullPageAgGridReact
-        key={globalRankings ? 'global' : 'local'}
+        // key={globalRankings ? 'global' : 'local'}
         gridRef={gridRef}
-        onGridReady={({ api }) => {
-          api?.sizeColumnsToFit();
-        }}
         rowData={rowData}
         columnDefs={columnDefs}
         animateRows={true}
-        getRowId={({ data }) => data.id}
+        // getRowId={({ data }) => data.id}
         noRowsOverlayComponent={() => {
           return <div className='flex flex-col items-center justify-center h-full w-full'>
             <div className='text-2xl font-bold text-gray-500'>No data</div>

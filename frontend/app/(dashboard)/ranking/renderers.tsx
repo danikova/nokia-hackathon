@@ -9,15 +9,22 @@ import { Dialog, DialogTrigger } from '@/components/ui/dialog';
 import { ReactElement } from 'react-markdown/lib/react-markdown';
 import { Ranking, RunTask, WorkspaceRanking } from '@/lib/dataHooks';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 
-function NumberRenderer({ sum, className }: { sum: number, className?: string }) {
-  const [wholeNumber, decimal] = useMemo(() => sum.toFixed(2).split('.') as [string, string], [sum]);
+function NumberRenderer({ num, className, hideDecimal = false }: { num: number, className?: string, hideDecimal?: boolean }) {
+  const [wholeNumber, decimal] = useMemo(() => num.toFixed(2).split('.') as [string, string], [num]);
 
-  if (isNaN(sum)) return <span className="opacity-50">-</span>;
+  if (isNaN(num)) return <span className="opacity-50">-</span>;
   return (
     <div className={cn(className)}>
-      <span className="font-bold text-base">{wholeNumber}</span>.
-      <span className={cn(decimal === '00' && 'text-xs opacity-50')}>{decimal}</span>
+      <span className="font-bold text-base">{wholeNumber}</span>
+      {
+        !hideDecimal && <>
+          .
+          <span className={cn(decimal === '00' && 'text-xs opacity-50')}>{decimal}</span>
+        </>
+      }
     </div>
   );
 }
@@ -36,7 +43,7 @@ export function PointsRenderer({ data, runTask }: PointsRendererProps) {
     return sum / list.length;
   }, [data, runTask]);
 
-  return <NumberRenderer sum={sum} />;
+  return <NumberRenderer num={sum} />;
 }
 
 interface CommentRendererProps extends ICellRendererParams<WorkspaceRanking> { }
@@ -89,7 +96,7 @@ export function CommentRenderer({ data }: CommentRendererProps) {
                   <FaComment className="h-6 w-6" />
                 </div>
               </TooltipTrigger>
-              <TooltipContent side="right">
+              <TooltipContent side="left">
                 <div dangerouslySetInnerHTML={{ __html: comments }} className="max-w-md whitespace-break-spaces" />
               </TooltipContent>
             </Tooltip>
@@ -116,5 +123,58 @@ export function TotalRenderer({ data }: TotalRendererProps) {
     return sum / list.length;
   }, [data]);
 
-  return <NumberRenderer className='scale-[1.15] origin-left' sum={sum} />;
+  return <NumberRenderer className='scale-[1.15] origin-left' num={sum} />;
+}
+
+interface ReviewCountRendererProps extends ICellRendererParams<WorkspaceRanking> { }
+
+export function ReviewCountRenderer({ data }: ReviewCountRendererProps) {
+  const len = useMemo(() => {
+    const list = data?.expand.rankings || [];
+    return list.length
+  }, [data]);
+
+  return <NumberRenderer className='scale-[1.15] origin-left' hideDecimal num={len} />;
+}
+
+interface CommentsRendererProps extends ICellRendererParams<WorkspaceRanking> { }
+
+export function CommentsRenderer({ data }: CommentsRendererProps) {
+
+  const comments = useMemo(() => {
+    const list = data?.expand.rankings || [];
+    const comments = list.map((ranking) => ({
+      comments: ranking.comments,
+      user: ranking.user
+    }));
+    return comments;
+  }, [data]);
+
+  if (comments.length === 0) return null;
+
+  return <>
+    <DropdownMenu>
+      <DropdownMenuTrigger>
+        <div className="h-[var(--ag-row-height)] flex items-center">
+          <FaComment className="h-6 w-6" />
+        </div>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align='start'>
+        {
+          comments.map((comment, i) => {
+            return <DropdownMenuItem key={i} className='overflow-auto'>
+              <Tooltip>
+                <TooltipTrigger>
+                  comments from {comment.user}
+                </TooltipTrigger>
+                <TooltipContent side="left">
+                  <div dangerouslySetInnerHTML={{ __html: comment.comments }} className="max-w-md whitespace-break-spaces" />
+                </TooltipContent>
+              </Tooltip>
+            </DropdownMenuItem>
+          })
+        }
+      </DropdownMenuContent>
+    </DropdownMenu>
+  </>
 }
