@@ -8,8 +8,9 @@ import { Dialog } from '@/components/ui/dialog';
 import { useReviewDialog } from './ReviewDialog';
 import { WorkspaceRanking } from '@/lib/dataHooks';
 import { ICellRendererParams } from 'ag-grid-community';
+import { UserAvatar } from '@/app/_components/UserButton';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 
 function NumberRenderer({ num, className, hideDecimal = false }: { num: number, className?: string, hideDecimal?: boolean }) {
   const [wholeNumber, decimal] = useMemo(() => num.toFixed(2).split('.') as [string, string], [num]);
@@ -112,7 +113,7 @@ export function CommentsRenderer({ data }: ICellRendererParams<WorkspaceRanking>
     const list = data?.expand.rankings || [];
     const comments = list.map((ranking) => ({
       comments: ranking.comments,
-      user: ranking.user
+      user: ranking.expand.user
     }));
     return comments;
   }, [data]);
@@ -120,29 +121,31 @@ export function CommentsRenderer({ data }: ICellRendererParams<WorkspaceRanking>
   if (comments.length === 0) return null;
 
   return <>
-    <DropdownMenu>
-      <DropdownMenuTrigger>
+    <Popover>
+      <PopoverTrigger>
         <div className="h-[var(--ag-row-height)] flex items-center">
           <FaComment className="h-6 w-6" />
         </div>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent align='start'>
-        {
-          comments.map((comment, i) => {
-            if (!comment.comments) return null;
-            return <DropdownMenuItem key={i} className='overflow-auto'>
-              <Tooltip>
-                <TooltipTrigger>
-                  comments from {comment.user}
-                </TooltipTrigger>
-                <TooltipContent side="left">
-                  <div dangerouslySetInnerHTML={{ __html: comment.comments }} className="max-w-md whitespace-break-spaces" />
-                </TooltipContent>
-              </Tooltip>
-            </DropdownMenuItem>
-          })
-        }
-      </DropdownMenuContent>
-    </DropdownMenu>
+      </PopoverTrigger>
+      <PopoverContent className='w-10 m-0 p-0 rounded-full box-content'>
+        <ul className='w-10 p-1 flex flex-col items-center gap-1'>
+          {
+            comments.map((comment, i) => {
+              if (!comment.comments) return null;
+              return <li key={i} className='h-8 w-8'>
+                <Tooltip>
+                  <TooltipTrigger>
+                    <UserAvatar user={comment.user} />
+                  </TooltipTrigger>
+                  <TooltipContent side="left">
+                    <div dangerouslySetInnerHTML={{ __html: comment.comments }} className="max-w-md whitespace-break-spaces" />
+                  </TooltipContent>
+                </Tooltip>
+              </li>
+            })
+          }
+        </ul>
+      </PopoverContent>
+    </Popover>
   </>
 }

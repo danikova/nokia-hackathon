@@ -4,9 +4,10 @@ import { BiLogOut } from 'react-icons/bi';
 import { enqueueSnackbar } from "notistack";
 import { useRouter } from "next/navigation";
 import { minidenticon } from 'minidenticons';
+import { useCallback, useMemo } from "react";
+import { User, useUserModel } from '@/lib/dataHooks';
 import { logoutFlow } from "../(authentication)/actions";
-import { usePocketBase, useUserModel } from "../../lib/clientPocketbase";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { usePocketBase } from "../../lib/clientPocketbase";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 
@@ -15,24 +16,6 @@ export default function UserButton() {
   const pb = usePocketBase();
   const model = useUserModel();
   const name = useMemo(() => model?.name || model?.username, [model]);
-  const fallback = useMemo(() => {
-    if (!name) return null;
-    const parts = name.split(' ');
-    if (parts.length === 1) {
-      return name[0].toUpperCase();
-    } else {
-      return parts[0][0].toUpperCase() + parts[1][0].toUpperCase();
-    }
-  }, [name]);
-  const avatarURI = useMemo(
-    () => {
-      if (model?.avatarUrl)
-        return model?.avatarUrl;
-      else
-        return 'data:image/svg+xml;utf8,' + encodeURIComponent(minidenticon(name, 100, 50))
-    },
-    [name, model]
-  );
 
   const logout = useCallback(() => {
     pb.authStore.clear();
@@ -44,10 +27,7 @@ export default function UserButton() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger className='h-8 w-8 rounded-full'>
-        <Avatar className='bg-background'>
-          <AvatarImage src={avatarURI} alt={name} />
-          <AvatarFallback>{fallback}</AvatarFallback>
-        </Avatar>
+        {model && <UserAvatar user={model} />}
       </DropdownMenuTrigger>
       <DropdownMenuContent className='mx-4'>
         <DropdownMenuLabel>
@@ -64,4 +44,34 @@ export default function UserButton() {
       </DropdownMenuContent>
     </DropdownMenu>
   )
+}
+
+export function UserAvatar({ user }: { user: User }) {
+  const name = useMemo(() => user?.name || user?.username, [user]);
+  const fallback = useMemo(() => {
+    if (!name) return null;
+    const parts = name.split(' ');
+    if (parts.length === 1) {
+      return name[0].toUpperCase();
+    } else {
+      return parts[0][0].toUpperCase() + parts[1][0].toUpperCase();
+    }
+  }, [name]);
+
+  const avatarURI = useMemo(
+    () => {
+      if (user?.avatarUrl)
+        return user?.avatarUrl;
+      else
+        return 'data:image/svg+xml;utf8,' + encodeURIComponent(minidenticon(name, 100, 50))
+    },
+    [name, user]
+  );
+
+  return (
+    <Avatar className='bg-background'>
+      <AvatarImage src={avatarURI} alt={name} />
+      <AvatarFallback>{fallback}</AvatarFallback>
+    </Avatar>
+  );
 }

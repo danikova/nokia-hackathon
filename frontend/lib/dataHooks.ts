@@ -1,8 +1,8 @@
 import { v4 as uuidv4 } from 'uuid';
 import { atom, useAtom } from 'jotai';
 import { Record, RecordFullListQueryParams } from 'pocketbase';
-import { snackbarWrapper, usePocketBase } from './clientPocketbase';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { snackbarWrapper, usePocketBase, userModelAtom } from './clientPocketbase';
 
 function getFirstElementFromList<T>(data: T[]): T | null {
   return data.length !== 0 ? data[0] : null;
@@ -182,6 +182,9 @@ export type Ranking = {
   points_sum: { [k: string]: number };
   sum: number;
   comments: string;
+  expand: {
+    user: User;
+  };
 };
 
 export type WorkspaceRanking = {
@@ -194,10 +197,12 @@ export type WorkspaceRanking = {
 };
 
 export function useWorkspaceRankings() {
+  const pb = usePocketBase();
   const [workspaceRankings, setWorkspaceRankings] = useState<Record[]>([]);
 
   const onRankingsFirstFetch = useCallback(
     (data: Record[]) => {
+      debugger;
       const rankingMapping = new Map<string, Record>();
       for (const ranking of data) {
         rankingMapping.set(ranking.id, ranking);
@@ -220,7 +225,10 @@ export function useWorkspaceRankings() {
   );
 
   const onRankingRealtime = useCallback(
-    (msg: { action: string; record: Record }) => {
+    async (msg: { action: string; record: Ranking }) => {
+      const user = (await pb.collection('users').getOne(msg.record.user)) as never as User;
+      msg.record.expand = { user };
+
       setWorkspaceRankings((old) => {
         const newWorkspaceRankings = [...old];
         const workspaceRankingId = newWorkspaceRankings.findIndex((item) => item.workspace === msg.record.workspace);
@@ -240,12 +248,13 @@ export function useWorkspaceRankings() {
         return newWorkspaceRankings;
       });
     },
-    [setWorkspaceRankings]
+    [setWorkspaceRankings, pb]
   );
 
-  const params = useMemo(() => ({ expand: 'workspace', sort: 'created' }), []);
-  usePbGetFullList('workspace_rankings', setWorkspaceRankings, params);
-  usePbGetFullList('rankings', onRankingsFirstFetch, params);
+  const wrParams = useMemo(() => ({ expand: 'workspace', sort: 'created' }), []);
+  const rParams = useMemo(() => ({ expand: 'user' }), []);
+  usePbGetFullList('workspace_rankings', setWorkspaceRankings, wrParams);
+  usePbGetFullList('rankings', onRankingsFirstFetch, rParams);
   usePbRealtime('rankings/*', onRankingRealtime);
   return workspaceRankings as never as WorkspaceRanking[];
 }
@@ -269,4 +278,18 @@ export function useRunTasks() {
   );
   usePbGetFullList('run_tasks', setValue);
   return runTasks as never as RunTask[];
+}
+
+export type User = {
+  id: string;
+  username: string;
+  email: string;
+  name: string;
+  role?: string;
+  avatarUrl?: string;
+};
+
+export function useUserModel() {
+  const [model] = useAtom(userModelAtom);
+  return model as User | null;
 }

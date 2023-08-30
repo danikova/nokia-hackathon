@@ -1,12 +1,11 @@
 import { useAtomValue } from 'jotai';
 import { useEffect, useState } from 'react';
 import { globalRankingAtom } from './columnDefs';
-import { useUserModel } from '@/lib/clientPocketbase';
-import { WorkspaceRanking, useWorkspaceRankings } from '@/lib/dataHooks';
+import { WorkspaceRanking, useUserModel, useWorkspaceRankings } from '@/lib/dataHooks';
 
 export function useRowData() {
-  const globalRankings = useAtomValue(globalRankingAtom);
   const user = useUserModel();
+  const globalRankings = useAtomValue(globalRankingAtom);
   const rowData = useWorkspaceRankings();
   const [finalRowData, setFinalRowData] = useState<WorkspaceRanking[]>(rowData);
 

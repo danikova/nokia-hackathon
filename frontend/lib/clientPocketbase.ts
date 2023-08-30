@@ -28,8 +28,3 @@ export async function snackbarWrapper<T extends Object>(pbPromise: T, successMes
     throw error;
   }
 }
-
-export function useUserModel() {
-  const [model] = useAtom(userModelAtom);
-  return model;
-}
