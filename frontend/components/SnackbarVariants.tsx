@@ -1,8 +1,8 @@
 'use client'
 
-import { SnackbarContent, CustomContentProps, closeSnackbar } from 'notistack'
-import { FaXmark } from 'react-icons/fa6';
 import React from 'react'
+import { FaXmark } from 'react-icons/fa6';
+import { SnackbarContent, CustomContentProps, closeSnackbar } from 'notistack'
 
 export const defaultSB = React.forwardRef<HTMLDivElement, CustomContentProps>(function ReportComplete(props, ref) {
   const {

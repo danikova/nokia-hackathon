@@ -9,7 +9,7 @@ import { Dialog } from '@/components/ui/dialog';
 import { useReviewDialog } from './ReviewDialog';
 import { WorkspaceRanking } from '@/lib/dataHooks';
 import { ICellRendererParams } from 'ag-grid-community';
-import { UserAvatar } from '@/app/_components/UserButton';
+import { UserAvatar } from '@/app/../components/UserButton';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 

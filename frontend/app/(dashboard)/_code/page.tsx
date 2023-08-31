@@ -1,9 +1,9 @@
 import { getPB } from '@/lib/pocketbase';
+import { navBarItems } from '@/lib/navBar';
 import { Workspace } from '@/lib/dataHooks';
 import { clientSafeObj } from '@/lib/utils';
 import EditorViewModal from './EditorViewModal';
-import { navBarItems } from '@/app/_constans/navBar';
-import BreadCrumb from '@/app/_components/navigation/BreadCrumb';
+import BreadCrumb from '@/components/navigation/BreadCrumb';
 
 async function getUserWorkspace() {
   const pb = getPB();

@@ -6,7 +6,7 @@ import FromNow from "@/lib/dayjs";
 import { v4 as uuidv4 } from 'uuid';
 import { atom, useAtom } from "jotai";
 import { RunResult } from '../helpers';
-import Code from "@/app/_components/Code";
+import Code from "@/app/../components/Code";
 import { Button } from "@/components/ui/button";
 import humanizeDuration from "humanize-duration";
 import { useEffect, useMemo, useState } from "react";

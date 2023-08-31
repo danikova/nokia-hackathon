@@ -6,9 +6,9 @@ import { enqueueSnackbar } from "notistack";
 import { useRouter } from "next/navigation";
 import { minidenticon } from 'minidenticons';
 import { useCallback, useMemo } from "react";
+import { usePocketBase } from "lib/clientPocketbase";
 import { User, useUserModel } from '@/lib/dataHooks';
-import { logoutFlow } from "../(authentication)/actions";
-import { usePocketBase } from "../../lib/clientPocketbase";
+import { logoutFlow } from "app/(authentication)/actions";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 

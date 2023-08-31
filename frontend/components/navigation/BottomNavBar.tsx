@@ -1,6 +1,6 @@
 import NavBarItem from './NavBarItem';
-import UserButton from '../UserButton';
-import { navBarItems } from '@/app/_constans/navBar';
+import { navBarItems } from '@/lib/navBar';
+import UserButton from '../../components/UserButton';
 
 export default function BottomNavBar() {
   return (

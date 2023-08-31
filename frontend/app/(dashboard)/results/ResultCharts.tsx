@@ -1,5 +1,5 @@
 import { RunResult, GroupedRunResult } from './helpers';
-import BarChart, { defaultColors } from '../../_components/BarChart';
+import BarChart, { defaultColors } from '../../../components/BarChart';
 
 export function ResultCharts({ runResultsGroupedByTask, fastestSolutions }: { runResultsGroupedByTask: GroupedRunResult; fastestSolutions: RunResult[]; }) {
   const averageData = [];

@@ -8,12 +8,12 @@ import { AgGridReact } from "ag-grid-react";
 import { Label } from "@/components/ui/label";
 import { useColumnTypes } from "./columnTypes";
 import { Switch } from "@/components/ui/switch";
-import { staffNavBarItems } from "@/app/_constans/navBar";
+import { staffNavBarItems } from "@/lib/navBar";
 import { FullPageAgGridReact } from "@/components/ui/table";
 import { WorkspaceRanking, useRunTasks } from "@/lib/dataHooks";
 import { globalRankingAtom, useColumnDefs } from "./columnDefs";
 import { useCallback, useEffect, useMemo, useRef } from "react";
-import BreadCrumb, { BreadCrumbChildren } from "@/app/_components/navigation/BreadCrumb";
+import BreadCrumb, { BreadCrumbChildren } from "@/components/navigation/BreadCrumb";
 
 export default function RankingPage() {
   useRunTasks();

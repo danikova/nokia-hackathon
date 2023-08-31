@@ -2,9 +2,9 @@
 
 import React, { useMemo } from 'react';
 import { ColDef } from 'ag-grid-community';
-import { navBarItems } from '@/app/_constans/navBar';
+import { navBarItems } from '@/lib/navBar';
+import BreadCrumb from '@/components/navigation/BreadCrumb';
 import { FullPageAgGridReact } from '../../../components/ui/table';
-import BreadCrumb from '@/app/_components/navigation/BreadCrumb';
 import { getHumaneRunDuration } from '../results/[runId]/RunResultDisplay';
 import { RunStatistic, useRunStatistics, useUserWorkspace } from '@/lib/dataHooks';
 import { AverageOutputSizeRenderer, TaskStatisticRenderer, WorkspaceAvatarRenderer } from './renderers';

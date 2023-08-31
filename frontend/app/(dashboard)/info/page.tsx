@@ -2,9 +2,9 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { cn } from '@/lib/utils';
 import ReactMarkdown from 'react-markdown'
-import { navBarItems } from '@/app/_constans/navBar';
+import { navBarItems } from '@/lib/navBar';
 import { getPB, getUserRole } from '@/lib/pocketbase';
-import BreadCrumb from '@/app/_components/navigation/BreadCrumb';
+import BreadCrumb from '@/components/navigation/BreadCrumb';
 
 export type InfoCard = {
   "id": string,

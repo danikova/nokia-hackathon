@@ -2,7 +2,7 @@
 
 import { useAtom } from "jotai";
 import { useEffect } from "react";
-import { usePocketBase, userModelAtom } from "../../lib/clientPocketbase";
+import { usePocketBase, userModelAtom } from "lib/clientPocketbase";
 
 export default function UserUpdater() {
   const pb = usePocketBase();

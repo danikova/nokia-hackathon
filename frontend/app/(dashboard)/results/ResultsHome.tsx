@@ -2,10 +2,10 @@ import Details from './Details';
 import FirstSteps from './FirstSteps';
 import { TaskLabels } from './TaskLabels';
 import { ResultCharts } from './ResultCharts';
-import { navBarItems } from '@/app/_constans/navBar';
+import { navBarItems } from '@/lib/navBar';
 import { getLastNGridCell } from './getLastNGridCell';
 import { getFastestGridCells } from './getFastestGridCells';
-import BreadCrumb from '@/app/_components/navigation/BreadCrumb';
+import BreadCrumb from '@/components/navigation/BreadCrumb';
 import { RunResult, getGroupedRunResults, perPage } from './helpers';
 
 export default function ResultsHome({ runResults }: { runResults: RunResult[] }) {

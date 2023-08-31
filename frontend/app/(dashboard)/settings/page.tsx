@@ -2,9 +2,9 @@
 
 import WorkspaceForm from './WorkspaceForm';
 import WorkspaceAvatar from './WorkspaceAvatar';
-import { navBarItems } from '@/app/_constans/navBar';
+import { navBarItems } from '@/lib/navBar';
 import { useUserWorkspace } from '@/lib/dataHooks';
-import BreadCrumb from '@/app/_components/navigation/BreadCrumb';
+import BreadCrumb from '@/components/navigation/BreadCrumb';
 
 
 export default function SettingsHome() {

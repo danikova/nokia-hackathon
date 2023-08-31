@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 import { atom, useAtom } from "jotai";
-import { BreadCrumbItem } from "@/app/_constans/breadCrumb";
+import { BreadCrumbItem } from "./breadCrumb";
 import { ReactElement } from "react-markdown/lib/react-markdown";
 
 export const globalBreadCrumbAtom = atom<BreadCrumbItem[]>([]);

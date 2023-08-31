@@ -1,6 +1,6 @@
 'use client'
 
-import Spinner from "@/app/_components/Spinner";
+import Spinner from "@/app/../components/Spinner";
 import { useIsWorkspaceBusy } from "@/lib/dataHooks";
 
 export function TaskLabels({ taskKeys }: { taskKeys: string[] }) {

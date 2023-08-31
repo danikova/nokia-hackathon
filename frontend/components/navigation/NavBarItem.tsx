@@ -3,8 +3,8 @@
 import Link from 'next/link';
 import { useMemo } from 'react';
 import { cn } from '@/lib/utils';
+import { NavBarItem } from '@/lib/navBar';
 import { usePathname } from 'next/navigation';
-import { NavBarItem } from '@/app/_constans/navBar';
 
 export default function NavBarItem({ item }: { item: NavBarItem }) {
   const pathname = usePathname();

@@ -1,11 +1,11 @@
 import { ReactElement } from 'react';
-import AppBar from '../_components/AppBar';
-import BredCrumbDisplay from '../_components/navigation/BredCrumbDisplay';
-import UserButton from '../_components/UserButton';
-import UserUpdater from '../_components/UserUpdater';
-import SideNavBar from '../_components/navigation/SideNavBar';
-import BottomNavBar from '../_components/navigation/BottomNavBar';
-import CountDownTimer from '../_components/CountDowntimer';
+import AppBar from '../../components/AppBar';
+import UserButton from '../../components/UserButton';
+import UserUpdater from '../../components/UserUpdater';
+import CountDownTimer from '../../components/CountDowntimer';
+import SideNavBar from '../../components/navigation/SideNavBar';
+import BottomNavBar from '../../components/navigation/BottomNavBar';
+import BredCrumbDisplay from '../../components/navigation/BredCrumbDisplay';
 
 export default async function MainLayout({ children }: { children: ReactElement }) {
   return (

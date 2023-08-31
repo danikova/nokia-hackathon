@@ -1,9 +1,9 @@
 'use client';
 
-import Spinner from '../../_components/Spinner';
 import { PasswordLogin } from './PasswordLogin';
-import { GithubLogIn, GoogleLogIn } from './OAuth';
 import { useAuthMethods } from '@/lib/dataHooks';
+import Spinner from '../../../components/Spinner';
+import { GithubLogIn, GoogleLogIn } from './OAuth';
 import { Dispatch, SetStateAction, useMemo, useState } from 'react';
 
 export type CompProps = {

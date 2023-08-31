@@ -1,8 +1,8 @@
 import { cn } from '@/lib/utils';
 import NavBarItemC from './NavBarItem';
 import { getUserRole } from '@/lib/pocketbase';
+import { NavBarItem, navBarItems, staffNavBarItems } from '@/lib/navBar';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
-import { NavBarItem, navBarItems, staffNavBarItems } from '@/app/_constans/navBar';
 
 export default function SideNavBar() {
   const role = getUserRole();

@@ -1,11 +1,11 @@
 'use client'
 
 import Link from "next/link";
-import Details from "./Details";
-import { navBarItems } from "@/app/_constans/navBar";
-import BreadCrumb from "@/app/_components/navigation/BreadCrumb";
-import { useGlobals, useIsWorkspaceBusy } from "@/lib/dataHooks";
 import Image from "next/image";
+import Details from "./Details";
+import { navBarItems } from "@/lib/navBar";
+import BreadCrumb from "@/components/navigation/BreadCrumb";
+import { useGlobals, useIsWorkspaceBusy } from "@/lib/dataHooks";
 
 export default function FirstSteps() {
   const globals = useGlobals()

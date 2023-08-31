@@ -1,5 +1,5 @@
 import localFont from 'next/font/local';
-import Snackbar from './_components/Snackbar';
+import Snackbar from './../components/Snackbar';
 import { TooltipProvider } from '@/components/ui/tooltip';
 
 import './globals.css';
