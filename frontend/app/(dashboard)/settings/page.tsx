@@ -12,7 +12,7 @@ export default function SettingsHome() {
 
   return (
     <div className="m-16 max-md:m-8 md:max-w-2xl">
-      <BreadCrumb items={[navBarItems[4]]} />
+      <BreadCrumb items={[navBarItems[3]]} />
       <div className='flex gap-4'>
         <WorkspaceAvatar workspaceId={workspace?.id || ''} />
         <h2 className='text-2xl pb-8'>

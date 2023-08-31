@@ -13,14 +13,14 @@ export const navBarItems: readonly NavBarItem[] = [
     title: 'Info',
     rootPath: '/info',
   },
+  // {
+  //   icon: <FaCodeBranch className="h-6 w-6" />,
+  //   title: 'Code',
+  //   rootPath: '/code',
+  // },
   {
     icon: <FaCodeBranch className="h-6 w-6" />,
-    title: 'Code',
-    rootPath: '/code',
-  },
-  {
-    icon: <FaListUl className="h-6 w-6" />,
-    title: 'Results',
+    title: 'Workspace results',
     rootPath: '/results',
   },
   {

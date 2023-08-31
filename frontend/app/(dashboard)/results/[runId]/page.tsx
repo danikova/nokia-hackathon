@@ -53,7 +53,7 @@ export default async function RunDetail({ params }: {
 
 function DetailWrapper({ children, runId }: { children: ReactElement | ReactElement[], runId: number }) {
   return <div className="m-16 max-md:m-8 flex flex-col gap-8">
-    <BreadCrumb items={[navBarItems[2], { title: `Details of ${runId}` }]} />
+    <BreadCrumb items={[navBarItems[1], { title: `Details of ${runId}` }]} />
     {children}
   </div>
 }

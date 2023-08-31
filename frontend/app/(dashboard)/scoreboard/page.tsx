@@ -51,7 +51,7 @@ export default function App() {
 
   return (
     <>
-      <BreadCrumb items={[navBarItems[3]]} />
+      <BreadCrumb items={[navBarItems[2]]} />
       <FullPageAgGridReact
         onGridReady={({ api }) => {
           api?.sizeColumnsToFit();
