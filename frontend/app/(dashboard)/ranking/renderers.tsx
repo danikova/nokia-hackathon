@@ -128,14 +128,14 @@ export function CommentsRenderer({ data }: ICellRendererParams<WorkspaceRanking>
         </div>
       </PopoverTrigger>
       <PopoverContent className='w-10 m-0 p-0 rounded-full box-content'>
-        <ul className='w-10 p-1 flex flex-col items-center gap-1'>
+        <ul className='w-10 p-1 flex flex-col items-center gap-2'>
           {
             comments.map((comment, i) => {
               if (!comment.comments) return null;
               return <li key={i} className='h-8 w-8'>
                 <Tooltip>
                   <TooltipTrigger>
-                    <UserAvatar user={comment.user} />
+                    <UserAvatar user={comment.user} className='ring-1 ring-offset-1 ring-primary/25' />
                   </TooltipTrigger>
                   <TooltipContent side="left">
                     <div dangerouslySetInnerHTML={{ __html: comment.comments }} className="max-w-md whitespace-break-spaces" />

@@ -10,6 +10,7 @@ import { logoutFlow } from "../(authentication)/actions";
 import { usePocketBase } from "../../lib/clientPocketbase";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { cn } from '@/lib/utils';
 
 export default function UserButton() {
   const router = useRouter();
@@ -46,7 +47,7 @@ export default function UserButton() {
   )
 }
 
-export function UserAvatar({ user }: { user: User }) {
+export function UserAvatar({ user, className }: { user: User, className?: string }) {
   const name = useMemo(() => user?.name || user?.username, [user]);
   const fallback = useMemo(() => {
     if (!name) return null;
@@ -69,7 +70,7 @@ export function UserAvatar({ user }: { user: User }) {
   );
 
   return (
-    <Avatar className='bg-background'>
+    <Avatar className={cn('bg-background', className)}>
       <AvatarImage src={avatarURI} alt={name} />
       <AvatarFallback>{fallback}</AvatarFallback>
     </Avatar>
