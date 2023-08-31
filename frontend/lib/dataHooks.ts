@@ -198,15 +198,17 @@ export type WorkspaceRanking = {
 
 export function useWorkspaceRankings() {
   const pb = usePocketBase();
+  const userMapping = useRef<Map<string, User>>(new Map());
   const [workspaceRankings, setWorkspaceRankings] = useState<Record[]>([]);
 
   const onRankingsFirstFetch = useCallback(
     (data: Record[]) => {
-      debugger;
       const rankingMapping = new Map<string, Record>();
       for (const ranking of data) {
         rankingMapping.set(ranking.id, ranking);
+        userMapping.current.set(ranking.user as string, ranking.expand.user as never as User);
       }
+
       setWorkspaceRankings((old) => {
         return old.map((record) => {
           const rankingIds = record.rankings as string[];
@@ -226,7 +228,12 @@ export function useWorkspaceRankings() {
 
   const onRankingRealtime = useCallback(
     async (msg: { action: string; record: Ranking }) => {
-      const user = (await pb.collection('users').getOne(msg.record.user)) as never as User;
+      debugger;
+      let user = userMapping.current.get(msg.record.user);
+      if (!user) {
+        user = (await pb.collection('users').getOne(msg.record.user)) as never as User;
+        userMapping.current.set(msg.record.user, user);
+      }
       msg.record.expand = { user };
 
       setWorkspaceRankings((old) => {
