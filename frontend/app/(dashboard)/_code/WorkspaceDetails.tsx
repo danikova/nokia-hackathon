@@ -30,7 +30,7 @@ export function WorkspaceDetails({ workspace, shortVersion = false }: { workspac
           <Link href={actionsUrl} className='text-primary hover:underline'>{!shortVersion ? actionsUrl : 'Actions url'}</Link>
         </p>
       </>}
-      {!isRepoUrlSet && <MissingRepoUrl />}
+      {/* {!isRepoUrlSet && <MissingRepoUrl />} */}
     </>
   );
 }

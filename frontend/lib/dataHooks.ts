@@ -135,7 +135,8 @@ export function useGlobals() {
     },
     [_setGlobals]
   );
-  usePbGetFullList('globals', setGlobals);
+  const params = useMemo(() => ({ $autoCancel: false }), []);
+  usePbGetFullList('globals', setGlobals, params);
   return globals;
 }
 
@@ -158,7 +159,8 @@ export function useWorkspaceEvenets() {
     },
     [_setEvents]
   );
-  usePbGetFullList('workspace_events', setEvents);
+  const params = useMemo(() => ({ $autoCancel: false }), []);
+  usePbGetFullList('workspace_events', setEvents, params);
 
   useEffect(() => {
     pb.collection('workspace_events').subscribe('*', (data) => {

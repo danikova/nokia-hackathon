@@ -1,12 +1,12 @@
-import Link from 'next/link';
-import { RunResult, getGroupedRunResults, perPage } from './helpers';
-import { navBarItems } from '@/app/_constans/navBar';
-import BreadCrumb from '@/app/_components/navigation/BreadCrumb';
-import { ResultCharts } from './ResultCharts';
-import { getFastestGridCells } from './getFastestGridCells';
-import { getLastNGridCell } from './getLastNGridCell';
-import { TaskLabels } from './TaskLabels';
 import Details from './Details';
+import FirstSteps from './FirstSteps';
+import { TaskLabels } from './TaskLabels';
+import { ResultCharts } from './ResultCharts';
+import { navBarItems } from '@/app/_constans/navBar';
+import { getLastNGridCell } from './getLastNGridCell';
+import { getFastestGridCells } from './getFastestGridCells';
+import BreadCrumb from '@/app/_components/navigation/BreadCrumb';
+import { RunResult, getGroupedRunResults, perPage } from './helpers';
 
 export default function ResultsHome({ runResults }: { runResults: RunResult[] }) {
   const runResultsGroupedByRunId = getGroupedRunResults(runResults, 'run_id');
@@ -16,12 +16,8 @@ export default function ResultsHome({ runResults }: { runResults: RunResult[] })
   const lastCells = getLastNGridCell(runResultsGroupedByRunId, taskKeys);
   const { fastestCells, fastestSolutions } = getFastestGridCells(runResultsGroupedByTask);
 
-  if (runResultsGroupedByRunId.size === 0) return <div className='m-16 max-md:m-8'>
-    <h2 className='text-2xl col-span-full pb-8'>
-      There are no registered run results {':('}
-    </h2>
-    <p>Set your repo in the <Link href='/settings' className='text-primary hover:underline'>/settings</Link> and commit something to the repo to see the result of the runs.</p>
-  </div>
+  if (runResultsGroupedByRunId.size === 0)
+    return <FirstSteps />
 
   return (
     <div className='w-full overflow-x-auto'>
