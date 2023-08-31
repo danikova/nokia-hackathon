@@ -3,10 +3,10 @@ import { useEffect, useState } from 'react';
 import { globalRankingAtom } from './columnDefs';
 import { WorkspaceRanking, useUserModel, useWorkspaceRankings } from '@/lib/dataHooks';
 
-export function useRowData() {
+export function useRowData(onChange?: (data: WorkspaceRanking) => void) {
   const user = useUserModel();
   const globalRankings = useAtomValue(globalRankingAtom);
-  const rowData = useWorkspaceRankings();
+  const rowData = useWorkspaceRankings(onChange);
   const [finalRowData, setFinalRowData] = useState<WorkspaceRanking[]>(rowData);
 
   useEffect(() => {

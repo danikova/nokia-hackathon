@@ -196,7 +196,7 @@ export type WorkspaceRanking = {
   };
 };
 
-export function useWorkspaceRankings() {
+export function useWorkspaceRankings(onChange?: (data: WorkspaceRanking) => void) {
   const pb = usePocketBase();
   const userMapping = useRef<Map<string, User>>(new Map());
   const [workspaceRankings, setWorkspaceRankings] = useState<Record[]>([]);
@@ -228,7 +228,6 @@ export function useWorkspaceRankings() {
 
   const onRankingRealtime = useCallback(
     async (msg: { action: string; record: Ranking }) => {
-      debugger;
       let user = userMapping.current.get(msg.record.user);
       if (!user) {
         user = (await pb.collection('users').getOne(msg.record.user)) as never as User;
@@ -251,11 +250,12 @@ export function useWorkspaceRankings() {
           } else if (msg.action === 'delete' && rankingId !== -1) {
             newWorkspaceRankings[workspaceRankingId].expand.rankings.splice(rankingId, 1);
           }
+          onChange && onChange(newWorkspaceRankings[workspaceRankingId] as never as WorkspaceRanking);
         }
         return newWorkspaceRankings;
       });
     },
-    [setWorkspaceRankings, pb]
+    [setWorkspaceRankings, pb, onChange]
   );
 
   const wrParams = useMemo(() => ({ expand: 'workspace', sort: 'created' }), []);

@@ -4,23 +4,30 @@ import { useAtom } from "jotai";
 import { useRowData } from "./rowData";
 import ReviewDialog from "./ReviewDialog";
 import { ColDef } from "ag-grid-community";
-import { globalRankingAtom, useColumnDefs } from "./columnDefs";
+import { AgGridReact } from "ag-grid-react";
 import { Label } from "@/components/ui/label";
-import { WorkspaceRanking, useRunTasks } from "@/lib/dataHooks";
 import { useColumnTypes } from "./columnTypes";
 import { Switch } from "@/components/ui/switch";
-import { useEffect, useMemo, useRef } from "react";
 import { staffNavBarItems } from "@/app/_constans/navBar";
 import { FullPageAgGridReact } from "@/components/ui/table";
+import { WorkspaceRanking, useRunTasks } from "@/lib/dataHooks";
+import { globalRankingAtom, useColumnDefs } from "./columnDefs";
+import { useCallback, useEffect, useMemo, useRef } from "react";
 import BreadCrumb, { BreadCrumbChildren } from "@/app/_components/navigation/BreadCrumb";
 
 export default function RankingPage() {
   useRunTasks();
 
   const [globalRankings, setGlobalRankings] = useAtom(globalRankingAtom);
-  const gridRef = useRef<any>();
+  const gridRef = useRef<AgGridReact<WorkspaceRanking>>();
 
-  const rowData = useRowData();
+  const redrawRowOnChange = useCallback((data: WorkspaceRanking) => {
+    const row = gridRef.current?.api?.getRowNode(data.id)
+    if (row)
+      gridRef.current?.api?.redrawRows({ rowNodes: [row] });
+  }, [gridRef]);
+
+  const rowData = useRowData(redrawRowOnChange);
   const columnDefs = useColumnDefs();
 
   const columnTypes = useColumnTypes();
@@ -59,7 +66,7 @@ export default function RankingPage() {
         columnDefs={columnDefs}
         defaultColDef={defaultColDef}
         animateRows={true}
-        // getRowId={({ data }) => data.id}
+        getRowId={({ data }) => data.id}
         noRowsOverlayComponent={() => {
           return <div className='flex flex-col items-center justify-center h-full w-full'>
             <div className='text-2xl font-bold text-gray-500'>No data</div>

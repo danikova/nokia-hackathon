@@ -28,7 +28,7 @@ export function useColumnTypes() {
       multipleCommentsColumn: {
         headerName: 'Comments',
         cellRenderer: CommentsRenderer,
-        valueGetter: rankingValueGetterFactory((data) => (!!data.comments ? 1 : 0), false),
+        valueGetter: rankingValueGetterFactory((data) => (data.comments && data.comments !== '' ? 1 : 0), false),
       },
     }),
     []
