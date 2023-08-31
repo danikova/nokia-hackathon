@@ -25,7 +25,7 @@ export const navBarItems: readonly NavBarItem[] = [
   },
   {
     icon: <FaListOl className="h-6 w-6" />,
-    title: 'Scores',
+    title: 'Scoreboard',
     rootPath: '/scoreboard',
   },
   {

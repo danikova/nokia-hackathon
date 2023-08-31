@@ -1,7 +1,8 @@
-import { navBarItems, staffNavBarItems } from '@/app/_constans/navBar';
-import NavBarItem from './NavBarItem';
 import { cn } from '@/lib/utils';
+import NavBarItemC from './NavBarItem';
 import { getUserRole } from '@/lib/pocketbase';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
+import { NavBarItem, navBarItems, staffNavBarItems } from '@/app/_constans/navBar';
 
 export default function SideNavBar() {
   const role = getUserRole();
@@ -10,31 +11,17 @@ export default function SideNavBar() {
   return (
     <div className="flex flex-col justify-between min-h-full bg-background border-r-2 border-secondary">
       <div>
-        {navBarItems.slice(0, -1).map((item) => {
-          return (
-            <div key={item.title} className="hover:bg-secondary hover:cursor-pointer hover:shadow-inner transition-all h-16">
-              <NavBarItem item={item} />
-            </div>
-          );
-        })}
+        {navBarItems.slice(0, -1).map((item) => <NavBarItemWrapper key={item.title} item={item} />)}
         {role === 'staff' && (
           <>
             <Divider className="my-4" />
-            {staffNavBarItems.map((item) => {
-              return (
-                <div key={item.title} className="hover:bg-secondary hover:cursor-pointer hover:shadow-inner transition-all h-16">
-                  <NavBarItem item={item} />
-                </div>
-              );
-            })}
+            {staffNavBarItems.map((item) => <NavBarItemWrapper key={item.title} item={item} />)}
           </>
         )}
       </div>
       <div>
         <Divider />
-        <div key={lastItem.title} className="hover:bg-secondary hover:cursor-pointer hover:shadow-inner transition-all h-16">
-          <NavBarItem item={lastItem} />
-        </div>
+        <NavBarItemWrapper item={lastItem} />
       </div>
     </div>
   );
@@ -42,4 +29,15 @@ export default function SideNavBar() {
 
 function Divider({ className }: { className?: string }) {
   return <div className={cn("border-t-2 border-secondary", className)} />;
+}
+
+function NavBarItemWrapper({ item }: { item: NavBarItem }) {
+  return (
+    <Tooltip delayDuration={600} key={item.title}>
+      <TooltipTrigger className="hover:bg-secondary hover:cursor-pointer hover:shadow-inner transition-all h-16 w-16">
+        <NavBarItemC item={item} />
+      </TooltipTrigger>
+      <TooltipContent side='right'>{item.title}</TooltipContent>
+    </Tooltip>
+  )
 }
