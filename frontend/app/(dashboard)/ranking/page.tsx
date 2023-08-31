@@ -6,7 +6,7 @@ import ReviewDialog from "./ReviewDialog";
 import { ColDef } from "ag-grid-community";
 import { globalRankingAtom, useColumnDefs } from "./columnDefs";
 import { Label } from "@/components/ui/label";
-import { useRunTasks } from "@/lib/dataHooks";
+import { WorkspaceRanking, useRunTasks } from "@/lib/dataHooks";
 import { useColumnTypes } from "./columnTypes";
 import { Switch } from "@/components/ui/switch";
 import { useEffect, useMemo, useRef } from "react";
@@ -24,10 +24,11 @@ export default function RankingPage() {
   const columnDefs = useColumnDefs();
 
   const columnTypes = useColumnTypes();
-  const defaultColDef = useMemo<ColDef>(() => ({
+  const defaultColDef = useMemo<ColDef<WorkspaceRanking>>(() => ({
     sortable: true,
     filter: false,
     flex: 1,
+    cellClass: (params) => !params.data?.expand.workspace.repo_url ? 'line-through-cell' : ''
   }), []);
 
   useEffect(() => {

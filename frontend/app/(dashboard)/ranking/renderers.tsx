@@ -58,7 +58,7 @@ export function CommentRenderer({ data }: ICellRendererParams<WorkspaceRanking>)
           <Dialog open={false}>
             <Tooltip>
               <TooltipTrigger>
-                <Button variant='secondary' className="hidden-ag-cell-feature cursor-pointer line-through">Create new review</Button>
+                <Button variant='secondary' className="hidden-ag-cell-feature cursor-pointer">Create new review</Button>
               </TooltipTrigger>
               <TooltipContent side="left">
                 <div className="max-w-md whitespace-break-spaces">This workspace doesn{"'"}t have a linked repository.</div>

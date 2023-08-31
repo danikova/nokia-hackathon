@@ -141,3 +141,29 @@
 ::-webkit-scrollbar-thumb {
   border-right: var(--fake-scrollbar-width) solid hsl(var(--primary));
 }
+
+.line-through-cell {
+  --line-through-cell-color: rgba(0, 0, 0, 0.2);
+  border-left: none !important;
+  border-right: none !important;
+}
+
+.line-through-cell,
+.line-through-cell * {
+  cursor: not-allowed;
+}
+
+.line-through-cell::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: var(--line-through-cell-color);
+  cursor: not-allowed;
+}
+
+.ag-row-hover .line-through-cell::after {
+  --line-through-cell-color: rgba(0, 0, 0, 0.6);
+}
