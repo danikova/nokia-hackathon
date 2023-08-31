@@ -28,6 +28,7 @@ function getDefaultColumnDefs(dynamicColumns?: ColDef[]): ColDef[] {
       field: 'workspace',
       maxWidth: 60,
       headerName: '',
+      sortable: false,
       cellRenderer: WorkspaceAvatarRenderer,
       cellRendererParams: {
         workspace: null,

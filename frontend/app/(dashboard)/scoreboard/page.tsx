@@ -18,6 +18,7 @@ export default function App() {
       field: 'id',
       maxWidth: 60,
       headerName: '',
+      sortable: false,
       cellRenderer: WorkspaceAvatarRenderer,
       cellRendererParams: {
         workspace
