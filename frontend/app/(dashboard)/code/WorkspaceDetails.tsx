@@ -1,8 +1,16 @@
 'use client';
 
 import Link from 'next/link';
-import { useEffect, useMemo, useRef } from 'react';
 import { Workspace } from '@/lib/dataHooks';
+import { useEffect, useMemo, useRef } from 'react';
+
+function MissingRepoUrl() {
+  return (
+    <div className='text-sm'>
+      Currently there are no repo url set in this workspace, please go to the <Link href='/settings' className='text-primary hover:underline'>/settings</Link> and set it correctly.
+    </div>
+  );
+}
 
 export function WorkspaceDetails({ workspace, shortVersion = false }: { workspace: Workspace; shortVersion?: boolean }) {
   const isRepoUrlSet = useMemo(() => !!workspace?.repo_url, [workspace]);
@@ -22,9 +30,7 @@ export function WorkspaceDetails({ workspace, shortVersion = false }: { workspac
           <Link href={actionsUrl} className='text-primary hover:underline'>{!shortVersion ? actionsUrl : 'Actions url'}</Link>
         </p>
       </>}
-      {!isRepoUrlSet && <p className="text-sm">
-        Currently there are no repo url set in this workspace, please go to the <Link href='/settings' className='text-primary hover:underline'>/settings</Link> and set it correctly.
-      </p>}
+      {!isRepoUrlSet && <MissingRepoUrl />}
     </>
   );
 }
@@ -56,6 +62,7 @@ export function WorkspaceExtraDetails({ workspace }: { workspace: Workspace; }) 
           </p>
         </>
       }
+      {!isRepoUrlSet && <MissingRepoUrl />}
     </>
   );
 }

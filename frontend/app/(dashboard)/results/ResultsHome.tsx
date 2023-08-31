@@ -6,6 +6,7 @@ import { ResultCharts } from './ResultCharts';
 import { getFastestGridCells } from './getFastestGridCells';
 import { getLastNGridCell } from './getLastNGridCell';
 import { TaskLabels } from './TaskLabels';
+import Details from './Details';
 
 export default function ResultsHome({ runResults }: { runResults: RunResult[] }) {
   const runResultsGroupedByRunId = getGroupedRunResults(runResults, 'run_id');
@@ -26,6 +27,7 @@ export default function ResultsHome({ runResults }: { runResults: RunResult[] })
     <div className='w-full overflow-x-auto'>
       <BreadCrumb items={[navBarItems[1]]} />
       <div className='m-16 max-md:m-8'>
+        <Details />
         <LastNGrid taskKeys={taskKeys} lastCells={lastCells} />
         <FastestGrid taskKeys={taskKeys} fastestCells={fastestCells} runResultsGroupedByTask={runResultsGroupedByTask} fastestSolutions={fastestSolutions} />
       </div>
