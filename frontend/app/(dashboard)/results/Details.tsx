@@ -2,7 +2,7 @@
 'use client'
 
 import { useUserWorkspace } from "@/lib/dataHooks"
-import { WorkspaceDetails, WorkspaceExtraDetails } from "../code/WorkspaceDetails"
+import { WorkspaceDetails, WorkspaceExtraDetails } from "../_code/WorkspaceDetails"
 
 export default function Details() {
   const workspace = useUserWorkspace()

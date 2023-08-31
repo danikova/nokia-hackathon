@@ -9,7 +9,7 @@ import { atom, useAtom, useAtomValue } from "jotai";
 import WorkspaceAvatar from "../settings/WorkspaceAvatar";
 import { ReactElement, useCallback, useEffect, useMemo } from "react";
 import { snackbarWrapper, usePocketBase } from "@/lib/clientPocketbase";
-import { WorkspaceDetails, WorkspaceExtraDetails } from "../code/WorkspaceDetails";
+import { WorkspaceDetails, WorkspaceExtraDetails } from "../_code/WorkspaceDetails";
 import { Ranking, RunTask, WorkspaceRanking, runTasksAtom, useUserModel } from "@/lib/dataHooks";
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
