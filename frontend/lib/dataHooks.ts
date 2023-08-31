@@ -1,5 +1,6 @@
 import { v4 as uuidv4 } from 'uuid';
 import { atom, useAtom } from 'jotai';
+import { enqueueSnackbar } from 'notistack';
 import { Record, RecordFullListQueryParams } from 'pocketbase';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { snackbarWrapper, usePocketBase, userModelAtom } from './clientPocketbase';
@@ -235,25 +236,32 @@ export function useWorkspaceRankings(onChange?: (data: WorkspaceRanking) => void
       }
       msg.record.expand = { user };
 
-      setWorkspaceRankings((old) => {
-        const newWorkspaceRankings = [...old];
-        const workspaceRankingId = newWorkspaceRankings.findIndex((item) => item.workspace === msg.record.workspace);
-        if (workspaceRankingId !== -1) {
-          const rankingId = newWorkspaceRankings[workspaceRankingId].expand.rankings.findIndex(
-            (item: Record) => item.id === msg.record.id
-          );
-          if (msg.action === 'create') {
-            newWorkspaceRankings[workspaceRankingId].expand.rankings.push(msg.record);
-          } else if (msg.action === 'update' && rankingId !== -1) {
-            //@ts-ignore
-            newWorkspaceRankings[workspaceRankingId].expand.rankings[rankingId] = msg.record;
-          } else if (msg.action === 'delete' && rankingId !== -1) {
-            newWorkspaceRankings[workspaceRankingId].expand.rankings.splice(rankingId, 1);
+      try {
+        setWorkspaceRankings((old) => {
+          const newWorkspaceRankings = [...old];
+          const workspaceRankingId = newWorkspaceRankings.findIndex((item) => item.workspace === msg.record.workspace);
+          if (workspaceRankingId !== -1) {
+            const rankingId = newWorkspaceRankings[workspaceRankingId].expand.rankings.findIndex(
+              (item: Record) => item.id === msg.record.id
+            );
+            if (msg.action === 'create') {
+              newWorkspaceRankings[workspaceRankingId].expand.rankings.push(msg.record);
+            } else if (msg.action === 'update' && rankingId !== -1) {
+              //@ts-ignore
+              newWorkspaceRankings[workspaceRankingId].expand.rankings[rankingId] = msg.record;
+            } else if (msg.action === 'delete' && rankingId !== -1) {
+              newWorkspaceRankings[workspaceRankingId].expand.rankings.splice(rankingId, 1);
+            }
+            onChange && onChange(newWorkspaceRankings[workspaceRankingId] as never as WorkspaceRanking);
           }
-          onChange && onChange(newWorkspaceRankings[workspaceRankingId] as never as WorkspaceRanking);
-        }
-        return newWorkspaceRankings;
-      });
+          return newWorkspaceRankings;
+        });
+      } catch {
+        enqueueSnackbar('Realtime update not working please refresh manually', {
+          variant: 'error',
+          preventDuplicate: true,
+        });
+      }
     },
     [setWorkspaceRankings, pb, onChange]
   );

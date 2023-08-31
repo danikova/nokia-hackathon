@@ -11,7 +11,7 @@ export function rankingValueGetterFactory(valueFn: (data: Ranking) => number, av
   return ({ data }: { data: WorkspaceRanking }) => {
     let sum = 0;
     let validCount = 0;
-    const list = data?.expand.rankings || [];
+    const list = data?.expand?.rankings || [];
     for (const ranking of list) {
       try {
         sum += valueFn(ranking);

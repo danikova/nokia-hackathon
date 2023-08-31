@@ -13,7 +13,7 @@ export function useRowData(onChange?: (data: WorkspaceRanking) => void) {
     if (!globalRankings && user) {
       setFinalRowData(
         rowData.map((workspaceRanking) => {
-          const rankings = workspaceRanking.expand.rankings.filter((ranking) => ranking.user === user.id);
+          const rankings = workspaceRanking.expand?.rankings?.filter((ranking) => ranking.user === user.id) || [];
           return {
             ...workspaceRanking,
             expand: {

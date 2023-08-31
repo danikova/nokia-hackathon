@@ -46,7 +46,7 @@ export function CommentRenderer({ data }: ICellRendererParams<WorkspaceRanking>)
   const { openDialog } = useReviewDialog()
 
   const rankingLength = useMemo(() => {
-    return data?.expand.rankings?.length;
+    return data?.expand?.rankings?.length || 0;
   }, [data]);
 
   if (!data) return null;
@@ -80,7 +80,7 @@ export function CommentRenderer({ data }: ICellRendererParams<WorkspaceRanking>)
       );
 
   if (rankingLength === 1)
-    return data?.expand.rankings.map((ranking) => {
+    return (data?.expand?.rankings || []).map((ranking) => {
       const { comments } = ranking;
       return (
         <div key={ranking.id} className="flex justify-between">
@@ -112,7 +112,7 @@ const maxCommentBubble = 4;
 export function CommentsRenderer({ data }: ICellRendererParams<WorkspaceRanking>) {
 
   const comments = useMemo(() => {
-    const list = data?.expand.rankings || [];
+    const list = data?.expand?.rankings || [];
     const comments = list.map((ranking) => ({
       comments: ranking.comments,
       user: ranking.expand.user
