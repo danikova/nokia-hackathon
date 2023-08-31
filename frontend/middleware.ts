@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getPB } from '@/lib/pocketbase';
 
-const staffRoutes = ['/scoreboard'];
+const staffRoutes = ['/ranking'];
 
 export async function middleware(request: NextRequest) {
   const pb = getPB(request);
