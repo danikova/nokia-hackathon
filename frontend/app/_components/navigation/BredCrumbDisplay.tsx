@@ -11,19 +11,21 @@ export default function BredCrumbDisplay() {
 
   return (
     <div className="h-[--cm-titlebar-h] w-full bg-secondary/50 px-6 drop-shadow-default backdrop-blur-sm">
-      <div className="min-h-full flex items-center text-xl max-md:text-base gap-2 justify-between">
+      <div className='min-h-full flex items-center max-md:text-base text-xl justify-between'>
         <div>
-          {globalBreadCrumb.map((bcItem, i) => {
-            const isLast = i === (globalBreadCrumb.length - 1);
-            const titleItem = bcItem.rootPath && !isLast ?
-              <Link key={bcItem.title} href={bcItem.rootPath}>{bcItem.title}</Link> :
-              <div key={bcItem.title}>{bcItem.title}</div>;
+          <div className="flex items-center gap-2">
+            {globalBreadCrumb.map((bcItem, i) => {
+              const isLast = i === (globalBreadCrumb.length - 1);
+              const titleItem = bcItem.rootPath && !isLast ?
+                <Link key={bcItem.title} href={bcItem.rootPath}>{bcItem.title}</Link> :
+                <div key={bcItem.title}>{bcItem.title}</div>;
 
-            return [
-              titleItem,
-              !isLast && <FaChevronRight key={`${bcItem.title}-chevron`} />
-            ]
-          })}
+              return [
+                titleItem,
+                !isLast && <FaChevronRight key={`${bcItem.title}-chevron`} />
+              ]
+            })}
+          </div>
         </div>
         <div>
           {children}
