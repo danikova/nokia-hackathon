@@ -11,25 +11,21 @@ export function useColumnTypes() {
   }>(
     () => ({
       totalColumn: {
-        flex: 1,
         headerName: 'Total',
         cellRenderer: TotalRenderer,
         valueGetter: rankingValueGetterFactory((data) => data.sum),
       },
       singleCommentColumn: {
-        flex: 1,
         headerName: 'Comment',
         cellRenderer: CommentRenderer,
         valueGetter: rankingValueGetterFactory((data) => (!!data.comments ? 1 : 0), false),
       },
       reviewCountColumn: {
-        flex: 1,
         headerName: 'Review Count',
         cellRenderer: ReviewCountRenderer,
         valueGetter: rankingValueGetterFactory(() => 1, false),
       },
       multipleCommentsColumn: {
-        flex: 1,
         headerName: 'Comments',
         cellRenderer: CommentsRenderer,
         valueGetter: rankingValueGetterFactory((data) => (!!data.comments ? 1 : 0), false),

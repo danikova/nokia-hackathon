@@ -1,5 +1,6 @@
 'use client';
 
+import { cn } from '@/lib/utils';
 import { BiLogOut } from 'react-icons/bi';
 import { enqueueSnackbar } from "notistack";
 import { useRouter } from "next/navigation";
@@ -10,7 +11,6 @@ import { logoutFlow } from "../(authentication)/actions";
 import { usePocketBase } from "../../lib/clientPocketbase";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import { cn } from '@/lib/utils';
 
 export default function UserButton() {
   const router = useRouter();

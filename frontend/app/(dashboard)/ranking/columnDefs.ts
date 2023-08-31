@@ -44,7 +44,6 @@ function getDefaultColumnDefs(dynamicColumns?: ColDef[]): ColDef[] {
 function getTaskColumns(runTasks: RunTask[]) {
   return (
     runTasks?.map((runTask) => ({
-      flex: 1,
       cellRenderer: PointsRenderer,
       headerName: runTask.task_name,
       valueGetter: rankingValueGetterFactory((data) => data.points_sum[runTask.task_name]),

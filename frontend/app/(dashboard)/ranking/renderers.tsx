@@ -3,6 +3,7 @@
 import { useMemo } from 'react';
 import { cn } from '@/lib/utils';
 import { FaComment } from 'react-icons/fa6';
+import { Stack } from '@/components/ui/stack';
 import { Button } from '@/components/ui/button';
 import { Dialog } from '@/components/ui/dialog';
 import { useReviewDialog } from './ReviewDialog';
@@ -107,6 +108,7 @@ export function CommentRenderer({ data }: ICellRendererParams<WorkspaceRanking>)
     });
 }
 
+const maxCommentBubble = 4;
 export function CommentsRenderer({ data }: ICellRendererParams<WorkspaceRanking>) {
 
   const comments = useMemo(() => {
@@ -114,24 +116,38 @@ export function CommentsRenderer({ data }: ICellRendererParams<WorkspaceRanking>
     const comments = list.map((ranking) => ({
       comments: ranking.comments,
       user: ranking.expand.user
-    }));
+    })).filter(c => !!c.comments);
     return comments;
   }, [data]);
+  const commentsLength = useMemo(() => comments.length, [comments]);
 
-  if (comments.length === 0) return null;
+  if (commentsLength === 0) return null;
 
   return <>
     <Popover>
       <PopoverTrigger>
         <div className="h-[var(--ag-row-height)] flex items-center">
-          <FaComment className="h-6 w-6" />
+          <Stack>
+            {
+              Array.from({ length: Math.min(commentsLength, maxCommentBubble) }).map((_, i) => {
+                return <div key={i} className='relative h-6 w-6' style={{ zIndex: 10 - i }}>
+                  <FaComment className="absolute h-6 w-6 scale-110 text-background" />
+                  <FaComment className="absolute h-6 w-6" style={{ opacity: (10 - i) / 10 }} />
+                </div>
+              })
+            }
+            {commentsLength > maxCommentBubble &&
+              <div className='h-6 w-6 flex items-center justify-center pl-4'>
+                <span className='text-base'>+{commentsLength - maxCommentBubble}</span>
+              </div>
+            }
+          </Stack>
         </div>
       </PopoverTrigger>
-      <PopoverContent className='w-10 m-0 p-0 rounded-full box-content'>
+      <PopoverContent className='w-10 m-0 p-0 rounded-full box-content' align='start'>
         <ul className='w-10 p-1 flex flex-col items-center gap-2'>
           {
             comments.map((comment, i) => {
-              if (!comment.comments) return null;
               return <li key={i} className='h-8 w-8'>
                 <Tooltip>
                   <TooltipTrigger>
