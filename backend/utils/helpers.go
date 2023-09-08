@@ -10,14 +10,14 @@ func Contains(s []string, str string) bool {
 	return false
 }
 
-func ContainsWithLambda[T any](s []T, fn func(value T) bool) bool {
+func ContainsWithLambda[T any](s []T, fn func(value T) bool) *T {
 	for _, v := range s {
 		if fn(v) {
-			return true
+			return &v
 		}
 	}
 
-	return false
+	return nil
 }
 
 func Min(a, b int) int {

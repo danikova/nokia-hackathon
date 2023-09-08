@@ -6,6 +6,7 @@ import (
 
 	"github.com/pocketbase/dbx"
 	"github.com/pocketbase/pocketbase"
+	"github.com/pocketbase/pocketbase/apis"
 	"github.com/pocketbase/pocketbase/core"
 	"github.com/pocketbase/pocketbase/models"
 )
@@ -15,6 +16,16 @@ func OnRecordsListRequest(app *pocketbase.PocketBase) {
 }
 
 func expandWorkspaceRankingsCollectionListRequest(app *pocketbase.PocketBase) {
+	app.OnRecordsListRequest(utils.RunTasksCollectionName).Add(func(e *core.RecordsListEvent) error {
+		info := apis.RequestData(e.HttpContext)
+		if info.Admin == nil {
+			for _, record := range e.Records {
+				record.Set("etalon_result", ":(")
+			}
+		}
+		return nil
+	})
+
 	app.OnRecordsListRequest(WorkspaceRankingsCollectionName).Add(func(e *core.RecordsListEvent) error {
 		expandList := utils.Map(strings.Split(e.HttpContext.QueryParam("expand"), ","), func(qp string) string {
 			return strings.TrimSpace(qp)

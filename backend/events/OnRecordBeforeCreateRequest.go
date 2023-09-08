@@ -28,7 +28,7 @@ func getKeysFromTask(task *utils.Task) []string {
 }
 
 func SummarizePointsOnRanking(app *pocketbase.PocketBase, record *models.Record) {
-	tasks := utils.GetRegisteredTasks(app)
+	tasks := utils.GetRegisteredTasks(app, false)
 	points := map[string]int16{}
 	pointsSum := map[string]float64{}
 	record.UnmarshalJSONField("points", &points)

@@ -11,6 +11,7 @@ require (
 
 require (
 	github.com/AlecAivazis/survey/v2 v2.3.7 // indirect
+	github.com/adrg/strutil v0.3.0 // indirect
 	github.com/asaskevich/govalidator v0.0.0-20230301143203-a9d515a09cc2 // indirect
 	github.com/aws/aws-sdk-go v1.44.289 // indirect
 	github.com/aws/aws-sdk-go-v2 v1.18.1 // indirect

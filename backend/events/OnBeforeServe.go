@@ -11,6 +11,8 @@ import (
 	"strings"
 	"time"
 
+	"github.com/adrg/strutil"
+	"github.com/adrg/strutil/metrics"
 	"github.com/labstack/echo/v5"
 	"github.com/pocketbase/dbx"
 	"github.com/pocketbase/pocketbase"
@@ -186,8 +188,14 @@ func addGithubBotFinished(app *pocketbase.PocketBase, e *core.ServeEvent) {
 				record := models.NewRecord(runResultsCollection)
 				record.Set("workspace", workspace.Id)
 				record.Set("run_id", reqBody.Meta.RunId)
+				record.Set("task", nil)
+				record.Set("execution_time", nil)
+				record.Set("output_similarity", nil)
+				record.Set("status", "flowFail")
+				record.Set("output", "")
+				record.Set("stderr", err)
+				record.Set("returncode", nil)
 				record.Set("is_success", false)
-				record.Set("output", err)
 				app.Dao().SaveRecord(record)
 
 				data := &recordData{
@@ -201,11 +209,13 @@ func addGithubBotFinished(app *pocketbase.PocketBase, e *core.ServeEvent) {
 
 			counter := 0
 			unknownTasks := []string{}
-			registeredTasks := utils.GetRegisteredTasks(app)
+			hamming := metrics.NewHamming()
+			registeredTasks := utils.GetRegisteredTasks(app, true)
 			for task, data := range reqBody.Tasks {
-				if utils.ContainsWithLambda(registeredTasks, func(value utils.Task) bool {
+				regTask := utils.ContainsWithLambda(registeredTasks, func(value utils.Task) bool {
 					return value.Name == task
-				}) == false {
+				})
+				if regTask == nil {
 					unknownTasks = append(unknownTasks, task)
 					continue
 				}
@@ -213,15 +223,26 @@ func addGithubBotFinished(app *pocketbase.PocketBase, e *core.ServeEvent) {
 				item := models.NewRecord(runResultsCollection)
 				form := forms.NewRecordUpsert(app, item)
 
+				output_similarity := strutil.Similarity(data.Output, regTask.EtalonResultContent, hamming)
+
+				status := "success"
+				if data.Returncode == 124 {
+					status = "timeout"
+				} else if data.Stderr != "" {
+					status = "fail"
+				}
+
 				form.LoadData(map[string]any{
-					"workspace":      workspace.Id,
-					"run_id":         reqBody.Meta.RunId,
-					"is_success":     true,
-					"task":           task,
-					"output":         data.Output,
-					"stderr":         data.Stderr,
-					"returncode":     data.Returncode,
-					"execution_time": data.Execution_time,
+					"workspace":         workspace.Id,
+					"run_id":            reqBody.Meta.RunId,
+					"task":              task,
+					"execution_time":    data.Execution_time,
+					"output_similarity": output_similarity,
+					"status":            status,
+					"output":            data.Output,
+					"stderr":            data.Stderr,
+					"returncode":        data.Returncode,
+					"is_success":        true,
 				})
 
 				form.Submit()
