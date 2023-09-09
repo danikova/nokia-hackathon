@@ -11,6 +11,7 @@ import { User, useUserModel } from '@/lib/dataHooks';
 import { logoutFlow } from "app/(authentication)/actions";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { Skeleton } from './ui/skeleton';
 
 export default function UserButton() {
   const router = useRouter();
@@ -28,7 +29,7 @@ export default function UserButton() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger className='h-8 w-8 rounded-full'>
-        {model && <UserAvatar user={model} />}
+        {model ? <UserAvatar user={model} /> : <Skeleton className='h-8 w-8 rounded-full' />}
       </DropdownMenuTrigger>
       <DropdownMenuContent className='mx-4'>
         <DropdownMenuLabel>
