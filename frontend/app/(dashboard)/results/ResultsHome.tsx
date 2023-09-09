@@ -4,17 +4,19 @@ import { TaskLabels } from './TaskLabels';
 import { ResultCharts } from './ResultCharts';
 import { navBarItems } from '@/lib/navBar';
 import { getLastNGridCell } from './getLastNGridCell';
-import { getFastestGridCells } from './getFastestGridCells';
+import { getBestGridCells } from './getBestGridCells';
 import BreadCrumb from '@/components/navigation/BreadCrumb';
 import { RunResult, getGroupedRunResults, perPage } from './helpers';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 
-export default function ResultsHome({ runResults }: { runResults: RunResult[] }) {
+export default async function ResultsHome({ runResults }: { runResults: RunResult[] }) {
+  const workspaceId = runResults[0]?.workspace;
   const runResultsGroupedByRunId = getGroupedRunResults(runResults, 'run_id');
   const runResultsGroupedByTask = new Map([...getGroupedRunResults(runResults, 'task').entries()].sort());
   const taskKeys = [...runResultsGroupedByTask.keys()];
 
   const lastCells = getLastNGridCell(runResultsGroupedByRunId, taskKeys);
-  const { fastestCells, fastestSolutions } = getFastestGridCells(runResultsGroupedByTask);
+  const { bestCells, bestSolutions } = await getBestGridCells(workspaceId);
 
   if (runResultsGroupedByRunId.size === 0)
     return <FirstSteps />
@@ -25,7 +27,7 @@ export default function ResultsHome({ runResults }: { runResults: RunResult[] })
       <div className='m-16 max-md:m-8'>
         <Details />
         <LastNGrid taskKeys={taskKeys} lastCells={lastCells} />
-        <FastestGrid taskKeys={taskKeys} fastestCells={fastestCells} runResultsGroupedByTask={runResultsGroupedByTask} fastestSolutions={fastestSolutions} />
+        <BestGrid taskKeys={taskKeys} bestCells={bestCells} runResultsGroupedByTask={runResultsGroupedByTask} bestSolutions={bestSolutions} />
       </div>
     </div >
   )
@@ -45,23 +47,34 @@ function LastNGrid({ taskKeys, lastCells }: { taskKeys: string[], lastCells: JSX
   );
 }
 
-function FastestGrid({ taskKeys, fastestCells, runResultsGroupedByTask, fastestSolutions }: {
+function BestGrid({ taskKeys, bestCells, runResultsGroupedByTask, bestSolutions }: {
   taskKeys: string[],
-  fastestCells: JSX.Element[],
+  bestCells: JSX.Element[],
   runResultsGroupedByTask: Map<string, RunResult[]>,
-  fastestSolutions: RunResult[]
+  bestSolutions: RunResult[]
 }) {
   return (
     <div className='grid gap-x-8 gap-y-2' style={{
       gridTemplateColumns: `repeat(${taskKeys.length},minmax(300px, 1fr))`
     }}>
-      <h2 className='text-2xl my-8 col-span-2'>Fastest Solutions <sub className='text-sm max-md:block'>(based on the last {perPage} records)</sub></h2>
-      {fastestCells}
+      <Tooltip>
+        <TooltipTrigger>
+          <h2 className='text-2xl mt-8 mb-6'>Best Solutions</h2>
+        </TooltipTrigger>
+        <TooltipContent>
+
+        </TooltipContent>
+      </Tooltip>
+      {bestCells}
       <div className='col-start-2 row-start-2' style={{
-        gridRowEnd: `span ${fastestCells.length + 1}`,
+        gridRowEnd: `span ${bestCells.length + 1}`,
         gridColumnEnd: `span ${taskKeys.length - 1}`
       }}>
-        <ResultCharts runResultsGroupedByTask={runResultsGroupedByTask} fastestSolutions={fastestSolutions} />
+        <ResultCharts
+          taskKeys={taskKeys}
+          runResultsGroupedByTask={runResultsGroupedByTask}
+          bestSolutions={bestSolutions}
+        />
       </div>
     </div>
   );
