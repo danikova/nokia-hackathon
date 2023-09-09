@@ -11,6 +11,8 @@ export type RunResult = {
   run_id: string;
   task: string;
   execution_time?: number;
+  output_similarity: number;
+  status: 'success' | 'fail' | 'timeout' | 'flowFail';
   output: string;
   returncode: number;
   is_success: boolean;
