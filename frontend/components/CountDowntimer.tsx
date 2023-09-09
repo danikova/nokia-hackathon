@@ -39,7 +39,7 @@ export default function CountDownTimer(props: any) {
 
   return (
     <Tooltip>
-      <TooltipTrigger>
+      <TooltipTrigger className="-mb-[2px]">
         <span className={cn("countdown font-mono text-2xl opacity-40 hover:opacity-90 cursor-default", props.className)}>
           <span style={{ "--value": !isEnded ? (days || 0) : 0 } as React.CSSProperties}></span>:
           <span style={{ "--value": !isEnded ? (hours || 0) : 0 } as React.CSSProperties}></span>:
