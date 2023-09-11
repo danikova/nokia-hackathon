@@ -4,7 +4,7 @@
 import { v4 as uuid4 } from "uuid";
 import { atom, useAtom } from "jotai";
 import { FaLink } from 'react-icons/fa'
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import * as TooltipPrimitive from "@radix-ui/react-tooltip"
 import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
 
@@ -18,7 +18,18 @@ type WindowLinkProps = {
 } & React.ComponentPropsWithoutRef<typeof TooltipPrimitive.Content>;
 
 export default function WindowLink({ url, ...props }: WindowLinkProps) {
-  const [, setsetFloatingWindowProps] = useAtom(floatingWindowPropsAtom);
+  const [, setFloatingWindowProps] = useAtom(floatingWindowPropsAtom);
+  const wasItClicked = useRef(false);
+
+  useEffect(() => {
+    return () => {
+      if (wasItClicked.current) {
+        setFloatingWindowProps({ url: undefined, key: uuid4() });
+      }
+    }
+  }, [setFloatingWindowProps]
+  );
+
   return (
     <Tooltip>
       <TooltipTrigger>
@@ -27,7 +38,8 @@ export default function WindowLink({ url, ...props }: WindowLinkProps) {
           onClick={(e) => {
             e.preventDefault();
             e.stopPropagation();
-            setsetFloatingWindowProps({ url, key: uuid4() });
+            wasItClicked.current = true;
+            setFloatingWindowProps({ url, key: uuid4() });
           }}
         />
       </TooltipTrigger>
@@ -40,12 +52,12 @@ export default function WindowLink({ url, ...props }: WindowLinkProps) {
 
 export function FloatingWindowService() {
   const windowRef = useRef<Window | null>();
-  const [setFloatingWindowProps, setsetFloatingWindowProps] = useAtom(floatingWindowPropsAtom);
+  const [floatingWindowProps, setFloatingWindowProps] = useAtom(floatingWindowPropsAtom);
 
   useEffect(() => {
-    if (setFloatingWindowProps.url) {
+    if (floatingWindowProps.url) {
       windowRef.current = window.open(
-        setFloatingWindowProps.url,
+        floatingWindowProps.url,
         "MsgWindow",
         "width=1200,height=800,toolbar=no,menubar=no,resizable=yes"
       );
@@ -53,17 +65,21 @@ export function FloatingWindowService() {
     return () => {
       windowRef.current?.close();
     };
-  }, [setFloatingWindowProps]);
+  }, [floatingWindowProps]);
 
   useEffect(() => {
     const timer = setInterval(function () {
       if (windowRef.current?.closed) {
         clearInterval(timer);
-        setsetFloatingWindowProps({ url: undefined, key: uuid4() });
+        setFloatingWindowProps({ url: undefined, key: uuid4() });
       }
     }, 1000);
     return () => clearInterval(timer);
-  }, [windowRef, setsetFloatingWindowProps]);
+  }, [windowRef, setFloatingWindowProps]);
+
+  useEffect(() => {
+    return () => windowRef.current?.close();
+  }, []);
 
   return null;
 }
