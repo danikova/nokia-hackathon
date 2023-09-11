@@ -109,6 +109,7 @@ export type Workspace = {
   id: string;
   user: string;
   repo_url: string;
+  last_valid_sha: string;
   [k: string]: any;
 };
 

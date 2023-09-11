@@ -270,6 +270,11 @@ func addGithubBotFinished(app *pocketbase.PocketBase, e *core.ServeEvent) {
 				return echo.NewHTTPError(http.StatusBadRequest, err)
 			}
 
+			err = updateWorkspaceWithSha(app, workspace, &reqBody.Meta)
+			if err != nil {
+				return echo.NewHTTPError(http.StatusBadRequest, err)
+			}
+
 			runResultsCollection, err := app.Dao().FindCollectionByNameOrId(runResultsCollectionName)
 			if err != nil {
 				return echo.NewHTTPError(http.StatusBadRequest, err)
@@ -288,6 +293,7 @@ func addGithubBotFinished(app *pocketbase.PocketBase, e *core.ServeEvent) {
 				record.Set("stderr", err)
 				record.Set("returncode", nil)
 				record.Set("is_success", false)
+				record.Set("sha", reqBody.Meta.Sha)
 				app.Dao().SaveRecord(record)
 
 				data := &recordData{
@@ -335,6 +341,7 @@ func addGithubBotFinished(app *pocketbase.PocketBase, e *core.ServeEvent) {
 					"stderr":            data.Stderr,
 					"returncode":        data.Returncode,
 					"is_success":        true,
+					"sha":               reqBody.Meta.Sha,
 				})
 
 				form.Submit()
@@ -370,4 +377,19 @@ func addGithubBotFinished(app *pocketbase.PocketBase, e *core.ServeEvent) {
 			apis.RequireGuestOnly(),
 		},
 	})
+}
+
+func updateWorkspaceWithSha(app *pocketbase.PocketBase, workspace *models.Record, meta *types.GithubMetaType) error {
+	now := time.Now()
+	record, err := utils.GetGlobalValueByKey(app, utils.EventEndDataTime)
+	if err != nil {
+		return err
+	}
+	end_date := record.GetDateTime("value")
+	if now.Sub(end_date.Time()).Minutes() >= 0 {
+		return errors.New("Event is already over")
+	}
+
+	workspace.Set("last_valid_sha", meta.Sha)
+	return app.Dao().SaveRecord(workspace)
 }

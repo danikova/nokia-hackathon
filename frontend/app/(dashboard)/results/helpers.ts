@@ -17,6 +17,7 @@ export type RunResult = {
   returncode: number;
   is_success: boolean;
   stderr?: string;
+  sha: string;
 };
 
 export type GroupedRunResult = Map<string, RunResult[]>;

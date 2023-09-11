@@ -3,6 +3,7 @@ package types
 type GithubMetaType struct {
 	Repository string `json:"repository"`
 	RunId      string `json:"run_id"`
+	Sha        string `json:"sha"`
 }
 
 type GithubTaskType struct {
