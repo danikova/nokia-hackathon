@@ -1,16 +1,38 @@
 import { cn } from '@/lib/utils'
-import hljs from 'highlight.js/lib/core'
-import yaml from 'highlight.js/lib/languages/yaml';
+import { useEffect, useRef } from 'react';
+import { Extension, useCodeMirror } from '@uiw/react-codemirror';
+import { vscodeDark, defaultSettingsVscodeDark } from "@uiw/codemirror-theme-vscode";
 
-import 'highlight.js/styles/agate.css';
+export default function Code(
+  { children, extensions, className }:
+    { children: string, extensions?: Extension[], className?: string }
+) {
+  const editor = useRef<HTMLDivElement>(null);
+  const { setContainer } = useCodeMirror({
+    container: editor.current,
+    value: children,
+    theme: vscodeDark,
+    editable: false,
+    height: '100%',
+    width: '100%',
+    extensions: extensions || [],
+  });
 
-hljs.registerLanguage('yaml', yaml);
+  useEffect(() => {
+    if (editor.current) {
+      setContainer(editor.current);
+    }
+  }, [editor, setContainer]);
 
-export default function Code({ children, language, className }: { children: string, language: string, className?: string }) {
-  const myHtml = hljs.highlight(children, { language }).value
   return (
-    <pre className={cn('bg-[#333333] w-full h-full', className)}>
-      <code dangerouslySetInnerHTML={{ __html: myHtml }} className='break-all whitespace-break-spaces' />
-    </pre>
+    <div
+      className={cn('high-vis-scrollbar rounded-md w-full h-full relative overflow-auto box-border', className)}
+      style={{
+        backgroundColor: defaultSettingsVscodeDark.background,
+        border: `1px solid ${defaultSettingsVscodeDark.background}`,
+      }}
+    >
+      <div ref={editor} className='absolute w-full h-full break-words' />
+    </div>
   )
 }

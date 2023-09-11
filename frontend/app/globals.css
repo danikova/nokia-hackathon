@@ -123,6 +123,7 @@
 * {
   --scrollbar-width: 20px;
   --fake-scrollbar-width: 4px;
+  --scrollbar-color: hsl(var(--primary));
 }
 
 ::-webkit-scrollbar {
@@ -130,16 +131,32 @@
   background: inherit;
 }
 
-::-webkit-scrollbar-track {
+::-webkit-scrollbar-corner {
+  background: inherit;
+}
+
+::-webkit-scrollbar-track:vertical {
   border-right: var(--fake-scrollbar-width) solid rgba(0, 0, 0, 0.1);
+}
+
+::-webkit-scrollbar-thumb:vertical {
+  border-right: var(--fake-scrollbar-width) solid var(--scrollbar-color);
+}
+
+::-webkit-scrollbar-track:horizontal {
+  border-bottom: var(--fake-scrollbar-width) solid rgba(0, 0, 0, 0.1);
+}
+
+::-webkit-scrollbar-thumb:horizontal {
+  border-bottom: var(--fake-scrollbar-width) solid var(--scrollbar-color);
 }
 
 .content-with-scrollbar::-webkit-scrollbar-track {
   margin-top: var(--cm-titlebar-h);
 }
 
-::-webkit-scrollbar-thumb {
-  border-right: var(--fake-scrollbar-width) solid hsl(var(--primary));
+.high-vis-scrollbar * {
+  --scrollbar-color: hsl(var(--background)) !important;
 }
 
 .line-through-cell {

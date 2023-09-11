@@ -9,6 +9,7 @@ import { RunResult } from '../helpers';
 import Code from "@/app/../components/Code";
 import { Button } from "@/components/ui/button";
 import humanizeDuration from "humanize-duration";
+import { EditorView } from "@uiw/react-codemirror";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useEffect, useMemo, useState } from "react";
 import WindowLink from "@/components/FloatingWindowService";
@@ -72,7 +73,9 @@ export default function RunResultDisplay({
         <Header runResult={runResult} hideCreated={hideCreated} hideTaskName={hideTaskName} windowHref={windowHref} />
     }
     {!hideOutput && <div className={cn("relative transition-all delay-150 duration-200", !showMore && 'h-[80px]', showMore && 'h-[400px]')}>
-      <Code language="yaml" className='p-2 rounded-md overflow-auto absolute'>
+      <Code extensions={[
+        EditorView.lineWrapping
+      ]}>
         {runResult.output}
       </Code>
       <Button
@@ -89,7 +92,7 @@ export default function RunResultDisplay({
       </Button>
       <Dialog>
         <DialogTrigger tabIndex={-1}>
-          <FaMaximize className="w-5-h-5 absolute right-2 top-2" />
+          <FaMaximize className="text-background w-5-h-5 absolute right-2 top-2" />
         </DialogTrigger>
         <DialogContent className="max-w-[80vw] h-[80vh]">
           <DialogHeader>
@@ -98,7 +101,7 @@ export default function RunResultDisplay({
             </DialogTitle>
           </DialogHeader>
           <div className="h-[calc(80vh-18px-18px-(24px*2))]">
-            <Code language="yaml" className='p-2 rounded-md overflow-auto'>
+            <Code>
               {runResult.output}
             </Code>
           </div>
