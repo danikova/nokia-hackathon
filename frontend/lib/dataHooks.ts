@@ -1,6 +1,7 @@
 import { v4 as uuidv4 } from 'uuid';
 import { atom, useAtom } from 'jotai';
 import { enqueueSnackbar } from 'notistack';
+import { RunResult } from '@/app/(dashboard)/results/helpers';
 import { Record, RecordFullListQueryParams } from 'pocketbase';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { snackbarWrapper, usePocketBase, userModelAtom } from './clientPocketbase';
@@ -309,4 +310,21 @@ export type User = {
 export function useUserModel() {
   const [model] = useAtom(userModelAtom);
   return model as User | null;
+}
+
+export function useBestRuns(workspaceId: string): RunResult[] {
+  const pb = usePocketBase();
+  const [runResults, setRunResults] = useState<Record[]>([]);
+  useEffect(() => {
+    async function fetch() {
+      try {
+        const url = `/run_result_sum/?workspaceId=${workspaceId}`;
+        const res = await pb.send(url, { method: 'GET' });
+        setRunResults(res);
+      } catch {}
+    }
+    fetch();
+  }, [pb, workspaceId]);
+
+  return runResults as never as RunResult[];
 }
