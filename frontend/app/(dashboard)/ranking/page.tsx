@@ -24,7 +24,9 @@ export default function RankingPage() {
   const redrawRowOnChange = useCallback((data: WorkspaceRanking) => {
     const row = gridRef.current?.api?.getRowNode(data.id)
     if (row)
-      gridRef.current?.api?.redrawRows({ rowNodes: [row] });
+      setTimeout(() => {
+        gridRef.current?.api?.redrawRows({ rowNodes: [row] })
+      }, Math.random() * 200 + 150);
   }, [gridRef]);
 
   const rowData = useRowData(redrawRowOnChange);
