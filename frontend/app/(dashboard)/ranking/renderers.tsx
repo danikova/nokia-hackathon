@@ -130,7 +130,7 @@ export function CommentsRenderer({ data }: ICellRendererParams<WorkspaceRanking>
           <Stack>
             {
               Array.from({ length: Math.min(commentsLength, maxCommentBubble) }).map((_, i) => {
-                return <div key={i} className='relative h-6 w-6' style={{ zIndex: 10 - i }}>
+                return <div key={i} className='relative h-6 w-6'>
                   <FaComment className="absolute h-6 w-6 scale-110 text-background" />
                   <FaComment className="absolute h-6 w-6" style={{ opacity: (10 - i) / 10 }} />
                 </div>
@@ -144,7 +144,7 @@ export function CommentsRenderer({ data }: ICellRendererParams<WorkspaceRanking>
           </Stack>
         </div>
       </PopoverTrigger>
-      <PopoverContent className='w-10 m-0 p-0 rounded-full box-content' align='start'>
+      <PopoverContent className='w-10 m-0 p-0 rounded-full box-content'>
         <ul className='w-10 p-1 flex flex-col items-center gap-2'>
           {
             comments.map((comment, i) => {

@@ -201,35 +201,35 @@ export type WorkspaceRanking = {
   };
 };
 
+const defaultEmptyList: WorkspaceRanking[] = [];
 export function useWorkspaceRankings(onChange?: (data: WorkspaceRanking) => void) {
   const pb = usePocketBase();
   const userMapping = useRef<Map<string, User>>(new Map());
   const [workspaceRankings, setWorkspaceRankings] = useState<Record[]>([]);
+  const [isWrReady, setIsWrReady] = useState(false);
 
-  const onRankingsFirstFetch = useCallback(
-    (data: Record[]) => {
-      const rankingMapping = new Map<string, Record>();
-      for (const ranking of data) {
-        rankingMapping.set(ranking.id, ranking);
-        userMapping.current.set(ranking.user as string, ranking.expand.user as never as User);
-      }
+  const onRankingsFirstFetch = useCallback((data: Record[]) => {
+    const rankingMapping = new Map<string, Record>();
+    for (const ranking of data) {
+      rankingMapping.set(ranking.id, ranking);
+      userMapping.current.set(ranking.user as string, ranking.expand.user as never as User);
+    }
 
-      setWorkspaceRankings((old) => {
-        return old.map((record) => {
-          const rankingIds = record.rankings as string[];
-          const rankings = rankingIds
-            .map((id) => rankingMapping.get(id))
-            .filter((item) => item !== undefined) as Record[];
-          record.expand = {
-            ...record.expand,
-            rankings,
-          };
-          return record;
-        });
+    setWorkspaceRankings((old) => {
+      return old.map((record) => {
+        const rankingIds = record.rankings as string[];
+        const rankings = rankingIds
+          .map((id) => rankingMapping.get(id))
+          .filter((item) => item !== undefined) as Record[];
+        record.expand = {
+          ...record.expand,
+          rankings,
+        };
+        return record;
       });
-    },
-    [setWorkspaceRankings]
-  );
+    });
+    setIsWrReady(true);
+  }, []);
 
   const onRankingRealtime = useCallback(
     async (msg: { action: string; record: Ranking }) => {
@@ -275,6 +275,8 @@ export function useWorkspaceRankings(onChange?: (data: WorkspaceRanking) => void
   usePbGetFullList('workspace_rankings', setWorkspaceRankings, wrParams);
   usePbGetFullList('rankings', onRankingsFirstFetch, rParams);
   usePbRealtime('rankings/*', onRankingRealtime);
+
+  if (!isWrReady) return defaultEmptyList;
   return workspaceRankings as never as WorkspaceRanking[];
 }
 
