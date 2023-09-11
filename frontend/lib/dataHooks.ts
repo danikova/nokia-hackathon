@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import { v4 as uuidv4 } from 'uuid';
 import { atom, useAtom } from 'jotai';
 import { enqueueSnackbar } from 'notistack';
@@ -201,35 +202,37 @@ export type WorkspaceRanking = {
   };
 };
 
-const defaultEmptyList: WorkspaceRanking[] = [];
 export function useWorkspaceRankings(onChange?: (data: WorkspaceRanking) => void) {
   const pb = usePocketBase();
   const userMapping = useRef<Map<string, User>>(new Map());
+  const [rankings, setRankings] = useState<Record[]>([]);
   const [workspaceRankings, setWorkspaceRankings] = useState<Record[]>([]);
-  const [isWrReady, setIsWrReady] = useState(false);
+  const firstFetch = useRef(true);
 
-  const onRankingsFirstFetch = useCallback((data: Record[]) => {
-    const rankingMapping = new Map<string, Record>();
-    for (const ranking of data) {
-      rankingMapping.set(ranking.id, ranking);
-      userMapping.current.set(ranking.user as string, ranking.expand.user as never as User);
-    }
+  useEffect(() => {
+    if (firstFetch.current && rankings.length !== 0 && workspaceRankings.length !== 0) {
+      const rankingMapping = new Map<string, Record>();
+      for (const ranking of rankings) {
+        rankingMapping.set(ranking.id, ranking);
+        userMapping.current.set(ranking.user as string, ranking.expand.user as never as User);
+      }
 
-    setWorkspaceRankings((old) => {
-      return old.map((record) => {
-        const rankingIds = record.rankings as string[];
-        const rankings = rankingIds
-          .map((id) => rankingMapping.get(id))
-          .filter((item) => item !== undefined) as Record[];
-        record.expand = {
-          ...record.expand,
-          rankings,
-        };
-        return record;
+      setWorkspaceRankings((old) => {
+        return old.map((record) => {
+          const rankingIds = record.rankings as string[];
+          const rankings = rankingIds
+            .map((id) => rankingMapping.get(id))
+            .filter((item) => item !== undefined) as Record[];
+          record.expand = {
+            ...record.expand,
+            rankings,
+          };
+          return record;
+        });
       });
-    });
-    setIsWrReady(true);
-  }, []);
+      firstFetch.current = false;
+    }
+  }, [rankings, workspaceRankings]);
 
   const onRankingRealtime = useCallback(
     async (msg: { action: string; record: Ranking }) => {
@@ -245,18 +248,19 @@ export function useWorkspaceRankings(onChange?: (data: WorkspaceRanking) => void
           const newWorkspaceRankings = [...old];
           const workspaceRankingId = newWorkspaceRankings.findIndex((item) => item.workspace === msg.record.workspace);
           if (workspaceRankingId !== -1) {
-            const rankingId = newWorkspaceRankings[workspaceRankingId].expand.rankings.findIndex(
-              (item: Record) => item.id === msg.record.id
-            );
+            const workspaceRanking = newWorkspaceRankings[workspaceRankingId];
+            const expand = workspaceRanking.expand;
+            _.defaults(expand, { rankings: [] });
+            const rankingId: number = expand.rankings.findIndex((item: Record) => item.id === msg.record.id);
             if (msg.action === 'create') {
-              newWorkspaceRankings[workspaceRankingId].expand.rankings.push(msg.record);
+              expand.rankings.push(msg.record);
             } else if (msg.action === 'update' && rankingId !== -1) {
               //@ts-ignore
-              newWorkspaceRankings[workspaceRankingId].expand.rankings[rankingId] = msg.record;
+              expand.rankings[rankingId] = msg.record;
             } else if (msg.action === 'delete' && rankingId !== -1) {
-              newWorkspaceRankings[workspaceRankingId].expand.rankings.splice(rankingId, 1);
+              expand.rankings.splice(rankingId, 1);
             }
-            onChange && onChange(newWorkspaceRankings[workspaceRankingId] as never as WorkspaceRanking);
+            onChange && onChange(workspaceRanking as never as WorkspaceRanking);
           }
           return newWorkspaceRankings;
         });
@@ -267,16 +271,15 @@ export function useWorkspaceRankings(onChange?: (data: WorkspaceRanking) => void
         });
       }
     },
-    [setWorkspaceRankings, pb, onChange]
+    [pb, onChange]
   );
 
   const wrParams = useMemo(() => ({ expand: 'workspace', sort: 'created' }), []);
   const rParams = useMemo(() => ({ expand: 'user' }), []);
   usePbGetFullList('workspace_rankings', setWorkspaceRankings, wrParams);
-  usePbGetFullList('rankings', onRankingsFirstFetch, rParams);
+  usePbGetFullList('rankings', setRankings, rParams);
   usePbRealtime('rankings/*', onRankingRealtime);
 
-  if (!isWrReady) return defaultEmptyList;
   return workspaceRankings as never as WorkspaceRanking[];
 }
 
