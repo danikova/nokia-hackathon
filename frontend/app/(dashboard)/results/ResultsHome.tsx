@@ -63,7 +63,7 @@ function BestGrid({ taskKeys, bestCells, runResultsGroupedByTask, bestSolutions 
             Best Solutions
           </TooltipTrigger>
           <TooltipContent side='right'>
-            Best solutions for each task based on output similarity and execution time.
+            Best solution for each task based on output similarity and execution time.
           </TooltipContent>
         </Tooltip>
       </h2>

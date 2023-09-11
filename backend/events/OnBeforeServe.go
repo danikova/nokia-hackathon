@@ -108,6 +108,7 @@ type RunResult struct {
 	Stderr           string  `db:"stderr" json:"stderr"`
 	ReturnCode       int     `db:"returncode" json:"returncode"`
 	IsSuccess        bool    `db:"is_success" json:"is_success"`
+	Sha              string  `db:"sha" json:"sha"`
 }
 
 var queryCleaner = regexp.MustCompile(`\s+`)

@@ -1,11 +1,13 @@
 'use client'
 
+import { getEditorUrl } from "@/lib/utils";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Workspace, useBestRuns } from "@/lib/dataHooks";
 import RunResultDisplay from "../../results/[runId]/RunResultDisplay";
 
 export default function WorkspaceInfo({ workspace }: { workspace: Workspace }) {
   const runResults = useBestRuns(workspace.id);
+
   return (
     <div className="p-4 w-[28rem] max-h-[70vh] overflow-auto">
       <h2 className="text-lg font-bold">Best runs</h2>
@@ -26,6 +28,8 @@ export default function WorkspaceInfo({ workspace }: { workspace: Workspace }) {
             key={runResult.task}
             hideCreated
             runResult={runResult}
+            href={getEditorUrl(workspace.repo_url, runResult.sha)}
+            windowHref={getEditorUrl(workspace.repo_url, runResult.sha)}
           />
         );
       })

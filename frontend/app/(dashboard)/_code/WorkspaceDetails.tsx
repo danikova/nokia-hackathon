@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { useMemo } from 'react';
+import { getEditorUrl } from '@/lib/utils';
 import { Workspace } from '@/lib/dataHooks';
 import WindowLink from '@/components/FloatingWindowService';
 
@@ -13,11 +14,11 @@ function MissingRepoUrl() {
   );
 }
 
-export function WorkspaceDetails({ workspace, shortVersion = false }: { workspace: Workspace; shortVersion?: boolean }) {
+export function WorkspaceDetails({ workspace, shortVersion = false, withSha = false }: { workspace: Workspace; shortVersion?: boolean, withSha?: boolean }) {
   const isRepoUrlSet = useMemo(() => !!workspace?.repo_url, [workspace]);
   const url = workspace?.repo_url || '';
   const actionsUrl = url + (url.endsWith('/') ? 'actions' : '/actions');
-  const editorUrl = useMemo(() => `https://vscode.dev/${workspace.repo_url.replace('https://github.com', 'github')}`, [workspace]);
+  const editorUrl = getEditorUrl(url, withSha ? workspace?.last_valid_sha : undefined);
 
   return (
     <>

@@ -83,7 +83,7 @@ export default function ReviewDialog() {
             </p>
             <div className="flex justify-between">
               <div className="flex gap-4">
-                <WorkspaceDetails workspace={workspace} shortVersion />
+                <WorkspaceDetails workspace={workspace} shortVersion withSha />
               </div>
               <Tooltip>
                 <TooltipTrigger tabIndex={-1} onClick={() => setIsWorkspaceInfoOpen(old => !old)}>
