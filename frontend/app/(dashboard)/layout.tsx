@@ -5,12 +5,14 @@ import UserUpdater from '../../components/UserUpdater';
 import CountDownTimer from '../../components/CountDowntimer';
 import SideNavBar from '../../components/navigation/SideNavBar';
 import BottomNavBar from '../../components/navigation/BottomNavBar';
+import { FloatingWindowService } from '@/components/FloatingWindowService';
 import BredCrumbDisplay from '../../components/navigation/BredCrumbDisplay';
 
 export default async function MainLayout({ children }: { children: ReactElement }) {
   return (
     <>
       <UserUpdater />
+      <FloatingWindowService />
       <div
         className="bg-background min-h-screen text-secondary-foreground grid overflow-hidden"
         style={{

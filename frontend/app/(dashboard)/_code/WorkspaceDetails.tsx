@@ -1,8 +1,9 @@
 'use client';
 
 import Link from 'next/link';
+import { useMemo } from 'react';
 import { Workspace } from '@/lib/dataHooks';
-import { useEffect, useMemo, useRef } from 'react';
+import WindowLink from '@/components/FloatingWindowService';
 
 function MissingRepoUrl() {
   return (
@@ -16,53 +17,31 @@ export function WorkspaceDetails({ workspace, shortVersion = false }: { workspac
   const isRepoUrlSet = useMemo(() => !!workspace?.repo_url, [workspace]);
   const url = workspace?.repo_url || '';
   const actionsUrl = url + (url.endsWith('/') ? 'actions' : '/actions');
+  const editorUrl = useMemo(() => `https://vscode.dev/${workspace.repo_url.replace('https://github.com', 'github')}`, [workspace]);
 
   return (
     <>
-      {isRepoUrlSet && <>
-
-        <p>
-          {!shortVersion ? 'Repo url: ' : ''}
-          <Link href={url} className='text-primary hover:underline'>{!shortVersion ? url : 'Repo url'}</Link>
-        </p>
-        <p>
-          {!shortVersion ? 'Actions url: ' : ''}
-          <Link href={actionsUrl} className='text-primary hover:underline'>{!shortVersion ? actionsUrl : 'Actions url'}</Link>
-        </p>
-      </>}
-      {/* {!isRepoUrlSet && <MissingRepoUrl />} */}
-    </>
-  );
-}
-
-export function WorkspaceExtraDetails({ workspace }: { workspace: Workspace; }) {
-  const windowRef = useRef<any>();
-  const isRepoUrlSet = useMemo(() => !!workspace?.repo_url, [workspace]);
-  const url = useMemo(() => `https://vscode.dev/${workspace.repo_url}`, [workspace]);
-
-  useEffect(() => {
-    return () => { windowRef.current?.close() }
-  }, [windowRef]);
-
-  return (
-    <>
-      {isRepoUrlSet &&
-        <>
-          <p
-            className='text-primary hover:underline cursor-pointer'
-            onClick={() => {
-              windowRef.current = window.open(
-                url,
-                'MsgWindow',
-                "width=1200,height=800,toolbar=no,menubar=no,resizable=yes"
-              )
-            }}
-          >
-            Open editor
-          </p>
-        </>
+      {
+        isRepoUrlSet ?
+          <>
+            <p>
+              {!shortVersion ? 'Repo url: ' : ''}
+              <Link href={url} className='text-primary hover:underline'>{!shortVersion ? url : 'Repo url'}</Link>
+            </p>
+            <p>
+              {!shortVersion ? 'Actions url: ' : ''}
+              <Link href={actionsUrl} className='text-primary hover:underline'>{!shortVersion ? actionsUrl : 'Actions url'}</Link>
+            </p>
+            <p className='flex gap-1'>
+              {!shortVersion ? 'Open editor: ' : ''}
+              <Link href={editorUrl} className='flex gap-1 text-primary hover:underline'>
+                {!shortVersion ? editorUrl : 'Open editor'}
+                <WindowLink url={editorUrl} side='right' />
+              </Link>
+            </p>
+          </> :
+          <MissingRepoUrl />
       }
-      {!isRepoUrlSet && <MissingRepoUrl />}
     </>
   );
 }

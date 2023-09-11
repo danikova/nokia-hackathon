@@ -6,9 +6,9 @@ import WorkspaceInfo from "./WorkspaceInfo";
 import { ReviewDialogContent } from "./ReviewDialogContent";
 import WorkspaceAvatar from "../../settings/WorkspaceAvatar";
 import { FaChevronRight, FaChevronLeft } from "react-icons/fa";
+import { WorkspaceDetails } from "../../_code/WorkspaceDetails";
 import { Ranking, RunTask, Workspace, WorkspaceRanking } from "@/lib/dataHooks";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
-import { WorkspaceDetails, WorkspaceExtraDetails } from "../../_code/WorkspaceDetails";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 
 export const rangeSteps = 7;
@@ -84,7 +84,6 @@ export default function ReviewDialog() {
             <div className="flex justify-between">
               <div className="flex gap-4">
                 <WorkspaceDetails workspace={workspace} shortVersion />
-                <WorkspaceExtraDetails workspace={workspace} />
               </div>
               <Tooltip>
                 <TooltipTrigger tabIndex={-1} onClick={() => setIsWorkspaceInfoOpen(old => !old)}>
