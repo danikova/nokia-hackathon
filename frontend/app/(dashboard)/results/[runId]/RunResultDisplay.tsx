@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button";
 import humanizeDuration from "humanize-duration";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useEffect, useMemo, useState } from "react";
+import WindowLink from "@/components/FloatingWindowService";
 import { FaCircle, FaCircleXmark, FaMaximize } from 'react-icons/fa6';
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
@@ -40,6 +41,7 @@ type RunResultDisplayProps = {
   hideTaskName?: boolean;
   className?: string,
   href?: string,
+  windowHref?: string,
   defaultOpen?: boolean
   tabIndex?: number
 }
@@ -49,7 +51,7 @@ export function getHumaneRunDuration(execution_time: number) {
 }
 
 export default function RunResultDisplay({
-  runResult, hideOutput = false, hideCreated = false, hideTaskName = false, className, href, defaultOpen: defaultIsOpen = false, tabIndex
+  runResult, hideOutput = false, hideCreated = false, hideTaskName = false, className, href, defaultOpen: defaultIsOpen = false, tabIndex, windowHref
 }: RunResultDisplayProps) {
   const id = useMemo<string>(() => uuidv4(), []);
   const [activeId, setActiveId] = useAtom(activeIdAtom);
@@ -65,9 +67,9 @@ export default function RunResultDisplay({
     {
       href ?
         <Link href={href} tabIndex={tabIndex}>
-          <Header runResult={runResult} hideCreated={hideCreated} hideTaskName={hideTaskName} />
+          <Header runResult={runResult} hideCreated={hideCreated} hideTaskName={hideTaskName} windowHref={windowHref} />
         </Link> :
-        <Header runResult={runResult} hideCreated={hideCreated} hideTaskName={hideTaskName} />
+        <Header runResult={runResult} hideCreated={hideCreated} hideTaskName={hideTaskName} windowHref={windowHref} />
     }
     {!hideOutput && <div className={cn("relative transition-all delay-150 duration-200", !showMore && 'h-[80px]', showMore && 'h-[400px]')}>
       <Code language="yaml" className='p-2 rounded-md overflow-auto absolute'>
@@ -106,12 +108,13 @@ export default function RunResultDisplay({
   </div>;
 }
 
-function Header({ runResult, hideCreated = false, hideTaskName = false }: { runResult: RunResult, hideCreated?: boolean, hideTaskName?: boolean }) {
+function Header({ runResult, hideCreated = false, hideTaskName = false, windowHref }: { runResult: RunResult, hideCreated?: boolean, hideTaskName?: boolean, windowHref?: string }) {
   return (
     <div className="flex justify-between gap-2 h-8 whitespace-nowrap p-2 rounded-md bg-[rgba(0,0,0,0.04)]">
       <div className="flex justify-start items-center gap-2">
         <StatusMark runResult={runResult} />
         {!hideTaskName && <div className="text-lg">{runResult.task}</div>}
+        {windowHref && <WindowLink url={windowHref} side="right" />}
       </div>
       <div className="flex justify-start items-center gap-2">
         {!hideCreated && <div>
