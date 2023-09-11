@@ -92,6 +92,7 @@ export function ReviewDialogContent(props: ReviewDialogContentProps) {
   return (
     <div className={cn(props.className)}>
       <ClientForm
+        defaultFocus={true}
         id={formId}
         form={form}
         onSubmit={onSubmit}
