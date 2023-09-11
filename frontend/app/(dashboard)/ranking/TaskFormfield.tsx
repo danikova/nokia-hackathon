@@ -26,7 +26,7 @@ export function TaskFormfield({ task, form }: { task: RunTask; form: any; }) {
             <IconRange
               field={field}
               icon={<Tooltip>
-                <TooltipTrigger tabIndex={-1}>
+                <TooltipTrigger>
                   <FaCogs className="w-5 h-5" />
                 </TooltipTrigger>
                 <TooltipContent side='left'>
@@ -42,7 +42,7 @@ export function TaskFormfield({ task, form }: { task: RunTask; form: any; }) {
             <IconRange
               field={field}
               icon={<Tooltip>
-                <TooltipTrigger tabIndex={-1}>
+                <TooltipTrigger>
                   <FaWrench className="w-5 h-5" />
                 </TooltipTrigger>
                 <TooltipContent side='left'>
@@ -58,7 +58,7 @@ export function TaskFormfield({ task, form }: { task: RunTask; form: any; }) {
             <IconRange
               field={field}
               icon={<Tooltip>
-                <TooltipTrigger tabIndex={-1}>
+                <TooltipTrigger>
                   <FaCrown className="w-5 h-5" />
                 </TooltipTrigger>
                 <TooltipContent side='left'>

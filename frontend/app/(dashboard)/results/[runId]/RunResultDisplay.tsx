@@ -132,7 +132,7 @@ function OutputSimilarity({ runResult }: { runResult: RunResult }) {
   const outputSimilarityPercent = Math.round(runResult.output_similarity * 100);
   return (
     <Tooltip>
-      <TooltipTrigger tabIndex={-1} className={cn({
+      <TooltipTrigger className={cn({
         "text-green-500": 80 <= outputSimilarityPercent,
         "text-orange-500": 20 <= outputSimilarityPercent && outputSimilarityPercent < 80,
         "text-red-500": outputSimilarityPercent < 20,
@@ -149,7 +149,7 @@ function OutputSimilarity({ runResult }: { runResult: RunResult }) {
 function ExecutionTime({ runResult }: { runResult: RunResult }) {
   return (
     <Tooltip>
-      <TooltipTrigger tabIndex={-1}>
+      <TooltipTrigger>
         {getHumaneRunDuration(runResult.execution_time || 0)}
       </TooltipTrigger>
       <TooltipContent>
@@ -189,7 +189,7 @@ function StatusMark({ runResult }: { runResult: RunResult }) {
 
   return (
     <Tooltip>
-      <TooltipTrigger tabIndex={-1}>
+      <TooltipTrigger>
         {state.icon}
       </TooltipTrigger>
       <TooltipContent side="right">

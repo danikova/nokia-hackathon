@@ -86,7 +86,7 @@ export default function ReviewDialog() {
                 <WorkspaceDetails workspace={workspace} shortVersion withSha />
               </div>
               <Tooltip>
-                <TooltipTrigger tabIndex={-1} onClick={() => setIsWorkspaceInfoOpen(old => !old)}>
+                <TooltipTrigger onClick={() => setIsWorkspaceInfoOpen(old => !old)}>
                   {!isWorkspaceInfoOpen ? <FaChevronRight /> : <FaChevronLeft />}
                 </TooltipTrigger>
                 <TooltipContent side="left">

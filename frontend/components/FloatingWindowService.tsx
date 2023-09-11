@@ -21,7 +21,7 @@ export default function WindowLink({ url, ...props }: WindowLinkProps) {
   const [, setsetFloatingWindowProps] = useAtom(floatingWindowPropsAtom);
   return (
     <Tooltip>
-      <TooltipTrigger tabIndex={-1}>
+      <TooltipTrigger>
         <FaLink
           className="text-primary opacity-30 hover:opacity-70 cursor-pointer"
           onClick={(e) => {
