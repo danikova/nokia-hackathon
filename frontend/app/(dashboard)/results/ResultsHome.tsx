@@ -57,14 +57,16 @@ function BestGrid({ taskKeys, bestCells, runResultsGroupedByTask, bestSolutions 
     <div className='grid gap-x-8 gap-y-2' style={{
       gridTemplateColumns: `repeat(${taskKeys.length},minmax(300px, 1fr))`
     }}>
-      <Tooltip>
-        <TooltipTrigger>
-          <h2 className='text-2xl mt-8 mb-6'>Best Solutions</h2>
-        </TooltipTrigger>
-        <TooltipContent>
-
-        </TooltipContent>
-      </Tooltip>
+      <h2 className='text-2xl col-span-full mt-8 mb-6'>
+        <Tooltip>
+          <TooltipTrigger>
+            Best Solutions
+          </TooltipTrigger>
+          <TooltipContent side='right'>
+            Best solutions for each task based on output similarity and execution time.
+          </TooltipContent>
+        </Tooltip>
+      </h2>
       {bestCells}
       <div className='col-start-2 row-start-2' style={{
         gridRowEnd: `span ${bestCells.length + 1}`,
