@@ -37,4 +37,8 @@ const TooltipContent = React.forwardRef<
 ))
 TooltipContent.displayName = TooltipPrimitive.Content.displayName
 
-export { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider }
+const TooltipDescription = ({ className, children }: { className?: string, children: React.ReactNode }) => (
+  <p className={cn("text-xs opacity-80", className)}>{children}</p>
+)
+
+export { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider, TooltipDescription }

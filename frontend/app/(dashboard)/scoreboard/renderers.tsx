@@ -5,7 +5,8 @@ import { ICellRendererParams } from 'ag-grid-community';
 import { RunStatistic, Workspace } from '@/lib/dataHooks';
 import WorkspaceAvatar from '../settings/WorkspaceAvatar';
 import 'ag-grid-community/styles/ag-theme-alpine-no-font.min.css';
-import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
+import { OutputSimilarityRenderer as OSR } from '../results/[runId]/RunResultDisplay';
+import { Tooltip, TooltipContent, TooltipDescription, TooltipTrigger } from '@/components/ui/tooltip';
 
 interface WorkspaceAvatarRendererProps extends ICellRendererParams {
   workspace: Workspace | null
@@ -63,11 +64,14 @@ export function TaskStatisticRenderer({ data }: ICellRendererParams<RunStatistic
           </TooltipTrigger>
         </span>
         <TooltipContent side='right'>
-          Number of tasks that were evaluated by the system
+          Total Evaluated Tasks
+          <TooltipDescription>
+            The total number of tasks that have been evaluated.
+          </TooltipDescription>
         </TooltipContent>
       </Tooltip>
       <span className='opacity-50'>/</span>
-      <span className='flex-[1_1_100px] flex justify-center items-center'>
+      <span className='flex-[1_1_100px] flex justify-center items-center gap-1'>
         <Tooltip>
           <span className='text-green-500 font-bold'>
             <TooltipTrigger>
@@ -75,11 +79,29 @@ export function TaskStatisticRenderer({ data }: ICellRendererParams<RunStatistic
             </TooltipTrigger>
           </span>
           <TooltipContent side='right'>
-            Number of tasks that were successfully evaluated by the system
+            Successful Tasks
+            <TooltipDescription>
+              The number of tasks that completed successfully without errors.
+            </TooltipDescription>
           </TooltipContent>
         </Tooltip>
-        <Tooltip>
-          <span className='text-xs m-1 text-orange-500 font-bold'>
+        {!!data?.number_of_failure_tasks && <Tooltip>
+          <span className='text-xs text-red-500 font-bold'>
+            <TooltipTrigger>
+              {'('}
+              <span>{data?.number_of_failure_tasks}</span>
+              {')'}
+            </TooltipTrigger>
+          </span>
+          <TooltipContent side='right'>
+            Failed Tasks
+            <TooltipDescription>
+              The number of tasks that encountered failures or errors.
+            </TooltipDescription>
+          </TooltipContent>
+        </Tooltip>}
+        {!!data?.number_of_timeouted_tasks && <Tooltip>
+          <span className='text-xs text-orange-500 font-bold'>
             <TooltipTrigger>
               {'('}
               <span>{data?.number_of_timeouted_tasks}</span>
@@ -87,21 +109,34 @@ export function TaskStatisticRenderer({ data }: ICellRendererParams<RunStatistic
             </TooltipTrigger>
           </span>
           <TooltipContent side='right'>
-            Number of tasks that were successfully evaluated by the system but timed out
+            Timed Out Tasks
+            <TooltipDescription>
+              The number of tasks that exceeded their execution time limit and timed out.
+            </TooltipDescription>
           </TooltipContent>
-        </Tooltip>
+        </Tooltip>}
       </span>
       <span className='opacity-50'>/</span>
       <Tooltip>
         <span className='flex-[1_1_100px] flex justify-center items-center text-red-500 font-bold'>
           <TooltipTrigger>
-            {data?.number_of_failure_tasks}
+            {data?.number_of_flow_failure_tasks}
           </TooltipTrigger>
         </span>
         <TooltipContent side='right'>
-          Number of tasks that were the system noticed something changed in the .github folder
+          Flow Anomalies
+          <TooltipDescription>
+            The number of tasks with irregularities in their execution flows, indicating deviations from the normal sequence of tasks.
+          </TooltipDescription>
         </TooltipContent>
       </Tooltip>
     </div>
+  );
+}
+
+export function OutputSimilarityRenderer(props: ICellRendererParams<RunStatistic>) {
+  const outputSimilarity = props.valueFormatted ? props.valueFormatted : props.value;
+  return (
+    <OSR value={outputSimilarity} />
   );
 }

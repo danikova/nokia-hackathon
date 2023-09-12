@@ -14,7 +14,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { useEffect, useMemo, useState } from "react";
 import WindowLink from "@/components/FloatingWindowService";
 import { FaCircle, FaCircleXmark, FaMaximize } from 'react-icons/fa6';
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+import { Tooltip, TooltipContent, TooltipDescription, TooltipTrigger } from "@/components/ui/tooltip";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 
 const shortEnglishHumanizer = humanizeDuration.humanizer({
@@ -131,19 +131,27 @@ function Header({ runResult, hideCreated = false, hideTaskName = false, windowHr
   );
 }
 
+export function OutputSimilarityRenderer({ value }: { value: number }) {
+  const valuePercent = Math.round(value * 100);
+  return <div className={cn({
+    "text-green-500": 80 <= valuePercent,
+    "text-orange-500": 20 <= valuePercent && valuePercent < 80,
+    "text-red-500": valuePercent < 20,
+  })}>
+    {valuePercent}%
+  </div>;
+}
+
 function OutputSimilarity({ runResult }: { runResult: RunResult }) {
   const outputSimilarityPercent = Math.round(runResult.output_similarity * 100);
   return (
     <Tooltip>
-      <TooltipTrigger className={cn({
-        "text-green-500": 80 <= outputSimilarityPercent,
-        "text-orange-500": 20 <= outputSimilarityPercent && outputSimilarityPercent < 80,
-        "text-red-500": outputSimilarityPercent < 20,
-      })}>
-        {outputSimilarityPercent}%
+      <TooltipTrigger >
+        <OutputSimilarityRenderer value={runResult.output_similarity} />
       </TooltipTrigger>
       <TooltipContent>
-        Output similarity was {outputSimilarityPercent}% <p className="text-xs opacity-80">(0% means no similarity, 100% means identical)</p>
+        Output similarity was {outputSimilarityPercent}%
+        <TooltipDescription>(0% means no similarity, 100% means identical)</TooltipDescription>
       </TooltipContent>
     </Tooltip>
   );

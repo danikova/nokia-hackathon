@@ -3,44 +3,15 @@
 import React, { useMemo } from 'react';
 import { ColDef } from 'ag-grid-community';
 import { navBarItems } from '@/lib/navBar';
+import { useColumnDefs } from './columnDefs';
 import BreadCrumb from '@/components/navigation/BreadCrumb';
 import { FullPageAgGridReact } from '../../../components/ui/table';
-import { getHumaneRunDuration } from '../results/[runId]/RunResultDisplay';
 import { RunStatistic, useRunStatistics, useUserWorkspace } from '@/lib/dataHooks';
-import { AverageOutputSizeRenderer, TaskStatisticRenderer, WorkspaceAvatarRenderer } from './renderers';
 
 export default function App() {
   const workspace = useUserWorkspace();
   const rowData = useRunStatistics();
-
-  const columnDefs = useMemo<ColDef<RunStatistic>[]>(() => [
-    {
-      field: 'id',
-      maxWidth: 60,
-      headerName: '',
-      sortable: false,
-      cellRenderer: WorkspaceAvatarRenderer,
-      cellRendererParams: {
-        workspace
-      },
-    },
-    { field: 'number_of_runs', headerName: 'Runs', maxWidth: 80 },
-    {
-      field: 'average_execution_time',
-      headerName: 'Avg. duration',
-      valueGetter: (params) => getHumaneRunDuration(params.data?.average_execution_time || 0)
-    },
-    {
-      field: 'average_output_length',
-      headerName: 'Avg. output length',
-      cellRenderer: AverageOutputSizeRenderer
-    },
-    {
-      headerName: 'Tasks',
-      valueGetter: ({ data }) => data?.number_of_evaluated_tasks,
-      cellRenderer: TaskStatisticRenderer
-    },
-  ], [workspace]);
+  const columnDefs = useColumnDefs(workspace);
 
   const defaultColDef = useMemo<ColDef<RunStatistic>>(() => ({
     sortable: true,

@@ -11,15 +11,16 @@ import (
 )
 
 type AggregatedResults struct {
-	ID                      string  `json:"id" db:"id"`
-	NumberOfRuns            int     `json:"number_of_runs" db:"number_of_runs"`
-	AverageExecutionTime    float64 `json:"average_execution_time" db:"average_execution_time"`
-	AverageOutputLength     int     `json:"average_output_length" db:"average_output_length"`
-	AverageOutputSimilarity float64 `json:"average_output_similarity" db:"average_output_similarity"`
-	NumberOfEvaluatedTasks  int     `json:"number_of_evaluated_tasks" db:"number_of_evaluated_tasks"`
-	NumberOfSuccessfulTasks int     `json:"number_of_successful_tasks" db:"number_of_successful_tasks"`
-	NumberOfFailureTasks    int     `json:"number_of_failure_tasks" db:"number_of_failure_tasks"`
-	NumberOfTimeoutedTasks  int     `json:"number_of_timeouted_tasks" db:"number_of_timeouted_tasks"`
+	ID                       string  `json:"id" db:"id"`
+	NumberOfRuns             int     `json:"number_of_runs" db:"number_of_runs"`
+	AverageExecutionTime     float64 `json:"average_execution_time" db:"average_execution_time"`
+	AverageOutputLength      int     `json:"average_output_length" db:"average_output_length"`
+	AverageOutputSimilarity  float64 `json:"average_output_similarity" db:"average_output_similarity"`
+	NumberOfEvaluatedTasks   int     `json:"number_of_evaluated_tasks" db:"number_of_evaluated_tasks"`
+	NumberOfSuccessfulTasks  int     `json:"number_of_successful_tasks" db:"number_of_successful_tasks"`
+	NumberOfFailureTasks     int     `json:"number_of_failure_tasks" db:"number_of_failure_tasks"`
+	NumberOfTimeoutedTasks   int     `json:"number_of_timeouted_tasks" db:"number_of_timeouted_tasks"`
+	NumberOfFlowFailureTasks int     `json:"number_of_flow_failure_tasks" db:"number_of_flow_failure_tasks"`
 }
 
 var runStatisticsQuery = minifyQueryStr(`
@@ -32,13 +33,19 @@ WITH SuccessfulTasks AS (
 FailureTasks AS (
 	SELECT workspace, COUNT(id) AS number_of_failure_tasks
 	FROM run_results
-	WHERE status = 'fail' OR status = 'flowFail'
+	WHERE status = 'fail'
 	GROUP BY workspace
 ),
 TimeoutTasks AS (
 	SELECT workspace, COUNT(id) AS number_of_timeouted_tasks
 	FROM run_results
 	WHERE status = 'timeout'
+	GROUP BY workspace
+),
+FlowFailureTasks AS (
+	SELECT workspace, COUNT(id) AS number_of_flow_failure_tasks
+	FROM run_results
+	WHERE status = 'flowFail'
 	GROUP BY workspace
 ),
 AggregatedResults AS (
@@ -61,11 +68,13 @@ SELECT
 	COALESCE(ar.number_of_evaluated_tasks, 0) AS number_of_evaluated_tasks,
 	COALESCE(st.number_of_successful_tasks, 0) AS number_of_successful_tasks,
 	COALESCE(ft.number_of_failure_tasks, 0) AS number_of_failure_tasks,
-	COALESCE(tt.number_of_timeouted_tasks, 0) AS number_of_timeouted_tasks
+	COALESCE(tt.number_of_timeouted_tasks, 0) AS number_of_timeouted_tasks,
+	COALESCE(fft.number_of_flow_failure_tasks, 0) AS number_of_flow_failure_tasks
 FROM AggregatedResults AS ar
 LEFT JOIN SuccessfulTasks AS st ON ar.id = st.workspace
 LEFT JOIN FailureTasks AS ft ON ar.id = ft.workspace
 LEFT JOIN TimeoutTasks AS tt ON ar.id = tt.workspace
+LEFT JOIN FlowFailureTasks AS fft ON ar.id = fft.workspace
 WHERE ar.number_of_runs > 0
 ORDER BY ar.average_output_similarity DESC, ar.average_execution_time
 `)
