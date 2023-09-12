@@ -1,17 +1,20 @@
 'use client'
 
-import React, { useMemo } from 'react';
 import { ColDef } from 'ag-grid-community';
 import { navBarItems } from '@/lib/navBar';
+import { AgGridReact } from 'ag-grid-react';
 import { useColumnDefs } from './columnDefs';
+import { RunResult } from '../results/helpers';
+import React, { useEffect, useMemo, useRef } from 'react';
 import BreadCrumb from '@/components/navigation/BreadCrumb';
 import { FullPageAgGridReact } from '../../../components/ui/table';
 import { RunStatistic, useRunStatistics, useUserWorkspace } from '@/lib/dataHooks';
 
 export default function App() {
-  const workspace = useUserWorkspace();
   const rowData = useRunStatistics();
+  const workspace = useUserWorkspace();
   const columnDefs = useColumnDefs(workspace);
+  const gridRef = useRef<AgGridReact<RunResult>>();
 
   const defaultColDef = useMemo<ColDef<RunStatistic>>(() => ({
     sortable: true,
@@ -20,13 +23,21 @@ export default function App() {
     cellClass: (params) => params.data?.id === workspace?.id ? 'bg-primary/20' : ''
   }), [workspace]);
 
+  useEffect(() => {
+    var defaultSortModel = [
+      { colId: 'average_output_similarity', sort: 'desc', sortIndex: 0 },
+      { colId: 'average_execution_time', sort: 'asc', sortIndex: 1 },
+    ];
+
+    // @ts-ignore
+    gridRef.current?.columnApi?.applyColumnState({ state: defaultSortModel });
+  }, [rowData]);
+
   return (
     <>
       <BreadCrumb items={[navBarItems[2]]} />
       <FullPageAgGridReact
-        onGridReady={({ api }) => {
-          api?.sizeColumnsToFit();
-        }}
+        gridRef={gridRef}
         animateRows={true}
         rowData={rowData}
         columnDefs={columnDefs}
