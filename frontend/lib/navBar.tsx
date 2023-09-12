@@ -29,7 +29,7 @@ export const navBarItems: readonly NavBarItem[] = [
     title: 'Scoreboard',
     rootPath: '/scoreboard',
     description: "The Scoreboard page is where users can access an anonym leaderboard and it allows users to see how they or others are performing in comparison to competitors.",
-    shortDescription: "Check anonym the leaderboard."
+    shortDescription: "Check the anonym leaderboard."
   },
   {
     icon: <FaWrench className="h-6 w-6" />,
