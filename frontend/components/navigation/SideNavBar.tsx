@@ -2,7 +2,7 @@ import { cn } from '@/lib/utils';
 import NavBarItemC from './NavBarItem';
 import { getUserRole } from '@/lib/pocketbase';
 import { NavBarItem, navBarItems, staffNavBarItems } from '@/lib/navBar';
-import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
+import { Tooltip, TooltipContent, TooltipDescription, TooltipTrigger } from '@/components/ui/tooltip';
 
 export default function SideNavBar() {
   const role = getUserRole();
@@ -37,7 +37,12 @@ function NavBarItemWrapper({ item }: { item: NavBarItem }) {
       <TooltipTrigger className="hover:bg-secondary hover:cursor-pointer hover:shadow-inner transition-all h-16 w-16">
         <NavBarItemC item={item} />
       </TooltipTrigger>
-      <TooltipContent side='right'>{item.title}</TooltipContent>
+      <TooltipContent side='right'>
+        {item.title}
+        {!!item.shortDescription && <TooltipDescription>
+          {item.shortDescription}
+        </TooltipDescription>}
+      </TooltipContent>
     </Tooltip>
   )
 }

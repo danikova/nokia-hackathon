@@ -2,12 +2,16 @@
 
 import Link from 'next/link';
 import { useAtom } from 'jotai';
-import { FaChevronRight } from 'react-icons/fa';
+import { Tooltip, TooltipContent } from '../ui/tooltip';
+import { TooltipTrigger } from '@radix-ui/react-tooltip';
+import { FaChevronRight, FaInfoCircle } from 'react-icons/fa';
 import { globalBreadCrumbAtom, globelBredCrumbChildrenAtom } from './BreadCrumb';
 
 export default function BredCrumbDisplay() {
   const [globalBreadCrumb] = useAtom(globalBreadCrumbAtom);
   const [children] = useAtom(globelBredCrumbChildrenAtom);
+
+  const description = globalBreadCrumb[globalBreadCrumb.length - 1]?.description;
 
   return (
     <div className="h-[--cm-titlebar-h] w-full bg-secondary/50 px-6 drop-shadow-default backdrop-blur-sm">
@@ -25,6 +29,14 @@ export default function BredCrumbDisplay() {
                 !isLast && <FaChevronRight key={`${bcItem.title}-chevron`} />
               ]
             })}
+            {!!description && <Tooltip>
+              <TooltipTrigger>
+                <FaInfoCircle className='opacity-30' />
+              </TooltipTrigger>
+              <TooltipContent side='bottom' align='start' alignOffset={-120}>
+                {description}
+              </TooltipContent>
+            </Tooltip>}
           </div>
         </div>
         <div>
