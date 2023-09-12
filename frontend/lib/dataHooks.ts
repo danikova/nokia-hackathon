@@ -3,7 +3,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { atom, useAtom } from 'jotai';
 import { enqueueSnackbar } from 'notistack';
 import { RunResult } from '@/app/(dashboard)/results/helpers';
-import { Record, RecordFullListQueryParams } from 'pocketbase';
+import { Record, RecordFullListQueryParams, SendOptions } from 'pocketbase';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { snackbarWrapper, usePocketBase, userModelAtom } from './clientPocketbase';
 
@@ -22,6 +22,24 @@ function usePbGetFullList(
     const result = await snackbarWrapper(pb.collection(collectionIdOrName).getFullList(queryParams));
     onSuccess(result);
   }, [pb, collectionIdOrName, queryParams, onSuccess]);
+
+  useEffect(() => {
+    fetch();
+    return () => {
+      pb.cancelRequest(cancelKey);
+    };
+  }, [pb, fetch, cancelKey]);
+
+  return { refetch: fetch, cancelKey };
+}
+
+function usePbSend(path: string, onSuccess: (data: Record[]) => void, options?: SendOptions) {
+  const pb = usePocketBase();
+  const cancelKey = useMemo(() => uuidv4(), []);
+  const fetch = useCallback(async () => {
+    const result = await snackbarWrapper(pb.send(path, options || {}));
+    onSuccess(result);
+  }, [pb, path, options, onSuccess]);
 
   useEffect(() => {
     fetch();
@@ -87,7 +105,8 @@ export type RunStatistic = {
 export function useRunStatistics(): RunStatistic[] {
   const timeoutId = useRef<NodeJS.Timeout>();
   const [runStatistics, setRunStatistics] = useState<Record[]>([]);
-  const { refetch } = usePbGetFullList('run_statistics', setRunStatistics);
+  const options = useMemo(() => ({ method: 'GET' }), []);
+  const { refetch } = usePbSend('/run_statistics/', setRunStatistics, options);
 
   const onMessage = useCallback(
     (msg: { action: string }) => {
@@ -319,18 +338,9 @@ export function useUserModel() {
 }
 
 export function useBestRuns(workspaceId: string): RunResult[] {
-  const pb = usePocketBase();
   const [runResults, setRunResults] = useState<Record[]>([]);
-  useEffect(() => {
-    async function fetch() {
-      try {
-        const url = `/run_result_sum/?workspaceId=${workspaceId}`;
-        const res = await pb.send(url, { method: 'GET' });
-        setRunResults(res);
-      } catch {}
-    }
-    fetch();
-  }, [pb, workspaceId]);
-
+  const url = useMemo(() => `/run_result_sum/?workspaceId=${workspaceId}`, [workspaceId]);
+  const options = useMemo(() => ({ method: 'GET' }), []);
+  usePbSend(url, setRunResults, options);
   return runResults as never as RunResult[];
 }
