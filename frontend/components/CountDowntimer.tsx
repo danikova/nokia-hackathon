@@ -4,7 +4,7 @@ import { cn } from "@/lib/utils";
 import FromNow from "@/lib/dayjs";
 import { useGlobals } from "@/lib/dataHooks";
 import { useEffect, useMemo, useState } from "react";
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+import { Tooltip, TooltipContent, TooltipDescription, TooltipTrigger } from "@/components/ui/tooltip";
 
 function isValidDate(d: Date): boolean {
   return d instanceof Date && !isNaN(d.getTime());
@@ -54,7 +54,9 @@ export default function CountDownTimer(props: any) {
               ? <div className="font-bold">Event has ended</div>
               : <>
                 <div className="font-bold">Event ends <FromNow date={endDate} /></div>
-                <div>({endDate.toLocaleDateString()} {endDate.toLocaleTimeString()})</div>
+                <TooltipDescription>
+                  ({endDate.toLocaleDateString()} {endDate.toLocaleTimeString()})
+                </TooltipDescription>
               </>
           }
         </div>
