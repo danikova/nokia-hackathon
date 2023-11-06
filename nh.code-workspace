@@ -29,10 +29,7 @@
         "request": "launch",
         "mode": "debug",
         "program": "${workspaceFolder:backend}/main.go",
-        "args": [
-          "serve",
-          "--debug"
-        ]
+        "args": ["serve", "--debug"]
       }
     ]
   },
@@ -60,6 +57,6 @@
     "[python]": {
       "editor.defaultFormatter": "ms-python.autopep8"
     },
-    "python.formatting.provider": "none"
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
   }
 }
