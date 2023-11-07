@@ -64,7 +64,7 @@ export default function FirstSteps() {
             and filling up the necessary details for repository creation,
             <Spacer />
             <span className="font-bold">
-              you must create public a repository
+              you must create a public repository
             </span>
           </li>
           <li className="flex flex-wrap whitespace-nowrap">
@@ -76,7 +76,9 @@ export default function FirstSteps() {
             <Spacer />
             and set your repo in the
             <Spacer />
-            <span className="font-semibold">Used repo</span> section
+            <span className="font-semibold">Used repo</span>
+            <Spacer />
+            section
           </li>
           <li className="flex flex-wrap">
             Then you can use this repo to solve the task in your new repository
