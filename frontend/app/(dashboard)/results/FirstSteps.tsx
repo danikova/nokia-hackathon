@@ -36,7 +36,12 @@ export default function FirstSteps() {
         <h2 className="text-2xl col-span-full pb-8">First steps</h2>
         <ul className="pb-8">
           <li className="flex flex-wrap whitespace-nowrap">
-            You need to create a new public repository by using this
+            You need to create a new<Spacer />
+            <span className="font-bold">
+              public repository
+            </span>
+            <Spacer />
+            by using this
             <Spacer />
             <Link
               href={globals.primary_project || "https://github.com"}
@@ -61,11 +66,7 @@ export default function FirstSteps() {
               <Spacer />
             </Link>
             <Spacer />
-            and filling up the necessary details for repository creation,
-            <Spacer />
-            <span className="font-bold">
-              you must create a public repository
-            </span>
+            and filling up the necessary details for repository creation
           </li>
           <li className="flex flex-wrap whitespace-nowrap">
             After creating the repository, you should go to
