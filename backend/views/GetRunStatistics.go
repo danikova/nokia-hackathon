@@ -54,7 +54,7 @@ AggregatedResults AS (
 			COUNT(DISTINCT r.run_id) AS number_of_runs,
 			AVG(CASE WHEN r.status = 'success' THEN r.execution_time ELSE NULL END) AS average_execution_time,
 			ROUND(AVG(LENGTH(r.output))) AS average_output_length,
-			AVG(CASE WHEN r.status = 'success' THEN r.output_similarity ELSE NULL END) AS average_output_similarity,
+			AVG(CASE WHEN r.status = 'success' AND r.output_similarity > 0.01 THEN r.output_similarity ELSE NULL END) AS average_output_similarity,
 			COUNT(r.run_id) AS number_of_evaluated_tasks
 	FROM run_results AS r
 	GROUP BY r.workspace

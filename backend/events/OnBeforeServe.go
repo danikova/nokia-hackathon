@@ -232,7 +232,9 @@ func addGithubBotFinished(app *pocketbase.PocketBase, e *core.ServeEvent) {
 				item := models.NewRecord(runResultsCollection)
 				form := forms.NewRecordUpsert(app, item)
 
-				output_similarity := strutil.Similarity(data.Output, regTask.EtalonResultContent, hamming)
+				stripedOutput := strings.TrimSpace(data.Output)
+				stripedEtalonResultContent := strings.TrimSpace(regTask.EtalonResultContent)
+				output_similarity := strutil.Similarity(stripedOutput, stripedEtalonResultContent, hamming)
 
 				status := "success"
 				if data.Returncode == 124 {
