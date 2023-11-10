@@ -218,7 +218,9 @@ func addGithubBotFinished(app *pocketbase.PocketBase, e *core.ServeEvent) {
 
 			counter := 0
 			unknownTasks := []string{}
-			hamming := metrics.NewHamming()
+			met := metrics.NewJaccard()
+			met.CaseSensitive = false
+			met.NgramSize = 3
 			registeredTasks := utils.GetRegisteredTasks(app, true)
 			for task, data := range reqBody.Tasks {
 				regTask := utils.ContainsWithLambda(registeredTasks, func(value utils.Task) bool {
@@ -234,7 +236,7 @@ func addGithubBotFinished(app *pocketbase.PocketBase, e *core.ServeEvent) {
 
 				stripedOutput := strings.TrimSpace(data.Output)
 				stripedEtalonResultContent := strings.TrimSpace(regTask.EtalonResultContent)
-				output_similarity := strutil.Similarity(stripedOutput, stripedEtalonResultContent, hamming)
+				output_similarity := strutil.Similarity(stripedOutput, stripedEtalonResultContent, met)
 
 				status := "success"
 				if data.Returncode == 124 {
