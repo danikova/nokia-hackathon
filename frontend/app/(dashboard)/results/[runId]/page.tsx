@@ -39,7 +39,7 @@ export default async function RunDetail({ params }: {
     <>
       {getGroupedKeys(groupedRunResults).map((key) => {
         const firstRunResult = groupedRunResults.get(key)![0];
-        let repo_url = firstRunResult?.expand.workspace.repo_url;
+        let repo_url = firstRunResult?.expand.workspace?.repo_url;
         repo_url = repo_url?.endsWith('/') ? repo_url : repo_url + '/';
         return firstRunResult ? <RunResultDisplay
           key={key}

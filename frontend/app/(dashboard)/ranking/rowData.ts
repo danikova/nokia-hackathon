@@ -1,19 +1,41 @@
-import { useAtomValue } from 'jotai';
-import { useEffect, useState } from 'react';
-import { globalRankingAtom } from './columnDefs';
-import { WorkspaceRanking, useUserModel, useWorkspaceRankings } from '@/lib/dataHooks';
+import { useAtomValue } from "jotai";
+import { globalRankingAtom, hideEmptyWorkspacesAtom } from "./page";
+import { useCallback, useEffect, useState } from "react";
+import {
+  WorkspaceRanking,
+  useUserModel,
+  useWorkspaceRankings,
+} from "@/lib/dataHooks";
 
 export function useRowData(onChange?: (data: WorkspaceRanking) => void) {
   const user = useUserModel();
   const globalRankings = useAtomValue(globalRankingAtom);
+  const hideEmptyWorkspaces = useAtomValue(hideEmptyWorkspacesAtom);
   const rowData = useWorkspaceRankings(onChange);
-  const [finalRowData, setFinalRowData] = useState<WorkspaceRanking[]>(rowData);
+  const [finalRowData, _setFinalRowData] =
+    useState<WorkspaceRanking[]>(rowData);
+  const setFinalRowData = useCallback(
+    (list: WorkspaceRanking[]) => {
+      _setFinalRowData(
+        list.filter((r) => {
+          if (hideEmptyWorkspaces) {
+            return r.expand?.workspace?.repo_url;
+          }
+          return true;
+        })
+      );
+    },
+    [hideEmptyWorkspaces]
+  );
 
   useEffect(() => {
     if (!globalRankings && user) {
       setFinalRowData(
         rowData.map((workspaceRanking) => {
-          const rankings = workspaceRanking.expand?.rankings?.filter((ranking) => ranking.user === user.id) || [];
+          const rankings =
+            workspaceRanking.expand?.rankings?.filter(
+              (ranking) => ranking.user === user.id
+            ) || [];
           return {
             ...workspaceRanking,
             expand: {
@@ -27,7 +49,7 @@ export function useRowData(onChange?: (data: WorkspaceRanking) => void) {
     } else {
       setFinalRowData(rowData);
     }
-  }, [globalRankings, rowData, user]);
+  }, [setFinalRowData, globalRankings, rowData, user]);
 
   return finalRowData;
 }

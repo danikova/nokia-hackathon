@@ -1,13 +1,20 @@
-import { useMemo } from 'react';
-import { ColDef } from 'ag-grid-community';
-import { atom, useAtomValue } from 'jotai';
-import { PointsRenderer } from './renderers';
-import { WorkspaceAvatarRenderer } from '../scoreboard/renderers';
-import { Ranking, RunTask, WorkspaceRanking, runTasksAtom } from '@/lib/dataHooks';
+import { useMemo } from "react";
+import { useAtomValue } from "jotai";
+import { ColDef } from "ag-grid-community";
+import { PointsRenderer } from "./renderers";
+import { WorkspaceAvatarRenderer } from "../scoreboard/renderers";
+import {
+  Ranking,
+  RunTask,
+  WorkspaceRanking,
+  runTasksAtom,
+} from "@/lib/dataHooks";
+import { globalRankingAtom } from "./page";
 
-export const globalRankingAtom = atom(false);
-
-export function rankingValueGetterFactory(valueFn: (data: Ranking) => number, avg = true) {
+export function rankingValueGetterFactory(
+  valueFn: (data: Ranking) => number,
+  avg = true
+) {
   return ({ data }: { data: WorkspaceRanking }) => {
     let sum = 0;
     let validCount = 0;
@@ -25,9 +32,9 @@ export function rankingValueGetterFactory(valueFn: (data: Ranking) => number, av
 function getDefaultColumnDefs(dynamicColumns?: ColDef[]): ColDef[] {
   return [
     {
-      field: 'workspace',
+      field: "workspace",
       maxWidth: 60,
-      headerName: '',
+      headerName: "",
       sortable: false,
       cellRenderer: WorkspaceAvatarRenderer,
       cellRendererParams: {
@@ -35,8 +42,8 @@ function getDefaultColumnDefs(dynamicColumns?: ColDef[]): ColDef[] {
       },
     },
     {
-      field: 'workspace',
-      headerName: 'Workspace Id',
+      field: "workspace",
+      headerName: "Workspace Id",
     },
     ...(dynamicColumns || []),
   ] as ColDef<WorkspaceRanking>[];
@@ -47,7 +54,9 @@ function getTaskColumns(runTasks: RunTask[]) {
     runTasks?.map((runTask) => ({
       cellRenderer: PointsRenderer,
       headerName: runTask.task_name,
-      valueGetter: rankingValueGetterFactory((data) => data.points_sum[runTask.task_name]),
+      valueGetter: rankingValueGetterFactory(
+        (data) => data.points_sum[runTask.task_name]
+      ),
     })) || []
   );
 }
@@ -55,11 +64,11 @@ function getTaskColumns(runTasks: RunTask[]) {
 function getMyRankingColumnDef(runTasks: RunTask[]): ColDef[] {
   return getDefaultColumnDefs([
     {
-      type: 'totalColumn',
+      type: "totalColumn",
     },
     ...getTaskColumns(runTasks),
     {
-      type: 'singleCommentColumn',
+      type: "singleCommentColumn",
     },
   ]);
 }
@@ -67,15 +76,15 @@ function getMyRankingColumnDef(runTasks: RunTask[]): ColDef[] {
 function getGlobalRankingColumnDef(runTasks: RunTask[]): ColDef[] {
   return getDefaultColumnDefs([
     {
-      type: 'totalColumn',
-      initialSort: 'desc',
+      type: "totalColumn",
+      initialSort: "desc",
     },
     ...getTaskColumns(runTasks),
     {
-      type: 'reviewCountColumn',
+      type: "reviewCountColumn",
     },
     {
-      type: 'multipleCommentsColumn',
+      type: "multipleCommentsColumn",
     },
   ]);
 }
