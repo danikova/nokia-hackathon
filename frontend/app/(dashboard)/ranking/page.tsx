@@ -1,10 +1,13 @@
 "use client";
 
-import { atom, useAtom } from "jotai";
+import { useAtom } from "jotai";
 import { useRowData } from "./rowData";
 import ReviewDialog from "./ReviewDialog";
 import { ColDef } from "ag-grid-community";
 import { AgGridReact } from "ag-grid-react";
+import BreadCrumb, {
+  BreadCrumbChildren,
+} from "@/components/navigation/BreadCrumb";
 import { useColumnDefs } from "./columnDefs";
 import { Label } from "@/components/ui/label";
 import { useColumnTypes } from "./columnTypes";
@@ -13,12 +16,7 @@ import { staffNavBarItems } from "@/lib/navBar";
 import { FullPageAgGridReact } from "@/components/ui/table";
 import { WorkspaceRanking, useRunTasks } from "@/lib/dataHooks";
 import { useCallback, useEffect, useMemo, useRef } from "react";
-import BreadCrumb, {
-  BreadCrumbChildren,
-} from "@/components/navigation/BreadCrumb";
-
-export const globalRankingAtom = atom(false);
-export const hideEmptyWorkspacesAtom = atom(false);
+import { globalRankingAtom, hideEmptyWorkspacesAtom } from "./atoms";
 
 export default function RankingPage() {
   useRunTasks();

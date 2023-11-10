@@ -1,5 +1,5 @@
 import { useAtomValue } from "jotai";
-import { globalRankingAtom, hideEmptyWorkspacesAtom } from "./page";
+import { globalRankingAtom, hideEmptyWorkspacesAtom } from "./atoms";
 import { useCallback, useEffect, useState } from "react";
 import {
   WorkspaceRanking,

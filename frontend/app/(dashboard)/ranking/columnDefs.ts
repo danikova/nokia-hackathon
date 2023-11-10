@@ -9,7 +9,7 @@ import {
   WorkspaceRanking,
   runTasksAtom,
 } from "@/lib/dataHooks";
-import { globalRankingAtom } from "./page";
+import { globalRankingAtom } from "./atoms";
 
 export function rankingValueGetterFactory(
   valueFn: (data: Ranking) => number,
