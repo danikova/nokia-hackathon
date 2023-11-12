@@ -60,6 +60,9 @@
     "editor.defaultFormatter": "esbenp.prettier-vscode",
     "[typescriptreact]": {
       "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[sql]": {
+      "editor.defaultFormatter": "adpyke.vscode-sql-formatter"
     }
   }
 }
