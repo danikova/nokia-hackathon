@@ -1,6 +1,10 @@
 /// <reference path="../../pb_data/types.d.ts" />
 
-function createWorkspaceForUser(userId) {
+/**
+ * Generates and initializes a new workspace for the specified user.
+ * @param {string} userId - The user ID for whom the workspace is created.
+ */
+function generateUserWorkspace(userId) {
   const tableNames = require(`${__hooks}/utils/tableNames.js`);
   try {
     const workspaces = $app
@@ -37,5 +41,5 @@ function createWorkspaceForUser(userId) {
 }
 
 module.exports = {
-  createWorkspaceForUser,
+  generateUserWorkspace,
 };

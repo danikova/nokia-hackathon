@@ -1,8 +1,8 @@
 /// <reference path="../pb_data/types.d.ts" />
 
 onRecordAfterAuthWithOAuth2Request((e) => {
-  const { createWorkspaceForUser } = require(`${__hooks}/utils/workspace.js`);
-  createWorkspaceForUser(e.record.id);
+  const { generateUserWorkspace } = require(`${__hooks}/utils/workspace.js`);
+  generateUserWorkspace(e.record.id);
 
   if (e.oAuth2User.username !== "") {
     e.record.set("username", e.oAuth2User.username);

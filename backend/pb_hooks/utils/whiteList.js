@@ -1,6 +1,12 @@
 /// <reference path="../../pb_data/types.d.ts" />
 
-function canUserLogin(username, email) {
+/**
+ * Checks if a user with the given username or email is allowed to log in.
+ * @param {string} username - The username to check.
+ * @param {string} email - The email to check.
+ * @returns {boolean} - True if the user is allowed to log in, false otherwise.
+ */
+function isUserAllowedToLogin(username, email) {
   const tableNames = require(`${__hooks}/utils/tableNames.js`);
 
   let expressions = [];
@@ -23,5 +29,5 @@ function canUserLogin(username, email) {
 }
 
 module.exports = {
-  canUserLogin,
+  isUserAllowedToLogin,
 };
