@@ -1,4 +1,4 @@
-'use client'
+"use client";
 
 import { useCallback } from "react";
 import { atom, useAtom } from "jotai";
@@ -8,10 +8,22 @@ import WorkspaceAvatar from "../../settings/WorkspaceAvatar";
 import { FaChevronRight, FaChevronLeft } from "react-icons/fa";
 import { WorkspaceDetails } from "../../_code/WorkspaceDetails";
 import { Ranking, RunTask, Workspace, WorkspaceRanking } from "@/lib/dataHooks";
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 
-export const rangeSteps = 7;
+export const rangeMaxBase = 7;
+export const getRangeMax = (scoreMultipler: number) => {
+  return Math.max(rangeMaxBase, Math.round(rangeMaxBase * scoreMultipler));
+};
 
 export function getRangeKeysFromTask(task: RunTask) {
   return [
@@ -23,25 +35,31 @@ export function getRangeKeysFromTask(task: RunTask) {
 
 const dialogStateAtom = atom({
   open: false,
-  props: null as null | ReviewDialogProps
+  props: null as null | ReviewDialogProps,
 });
 const workspaceInfoOpenAtom = atom(false);
 
 export function useReviewDialog() {
   const [state, setState] = useAtom(dialogStateAtom);
 
-  const openDialog = useCallback((props: ReviewDialogProps) => {
-    setState({ open: true, props })
-  }, [setState]);
+  const openDialog = useCallback(
+    (props: ReviewDialogProps) => {
+      setState({ open: true, props });
+    },
+    [setState]
+  );
 
   const closeDialog = useCallback(() => {
-    setState({ open: false, props: null })
+    setState({ open: false, props: null });
   }, [setState]);
 
-  const setDialogProps = useCallback((props: Partial<ReviewDialogProps>) => {
-    if (state.props)
-      setState({ ...state, props: { ...state.props, ...props } })
-  }, [state, setState]);
+  const setDialogProps = useCallback(
+    (props: Partial<ReviewDialogProps>) => {
+      if (state.props)
+        setState({ ...state, props: { ...state.props, ...props } });
+    },
+    [state, setState]
+  );
 
   return { openDialog, closeDialog, setDialogProps, state };
 }
@@ -55,27 +73,27 @@ export type ReviewDialogContentProps = {
   workspace: Workspace;
   ranking?: Ranking;
   className?: string;
-}
+};
 
 export default function ReviewDialog() {
-  const [isWorkspaceInfoOpen, setIsWorkspaceInfoOpen] = useAtom(workspaceInfoOpenAtom);
+  const [isWorkspaceInfoOpen, setIsWorkspaceInfoOpen] = useAtom(
+    workspaceInfoOpenAtom
+  );
   const { state, closeDialog } = useReviewDialog();
 
   if (!state.props) return null;
   const {
     data: {
-      expand: { workspace }
+      expand: { workspace },
     },
-    ranking
+    ranking,
   } = state.props;
 
   return (
     <Dialog open={state.open} onOpenChange={closeDialog}>
       <DialogContent className="max-w-fit">
         <DialogHeader>
-          <DialogTitle>
-            {!ranking ? 'Add' : 'Update'} Review
-          </DialogTitle>
+          <DialogTitle>{!ranking ? "Add" : "Update"} Review</DialogTitle>
           <div className="text-sm text-muted-foreground">
             <p className="flex items-center gap-2">
               <WorkspaceAvatar workspaceId={workspace.id} />
@@ -86,23 +104,34 @@ export default function ReviewDialog() {
                 <WorkspaceDetails workspace={workspace} shortVersion withSha />
               </div>
               <Tooltip>
-                <TooltipTrigger onClick={() => setIsWorkspaceInfoOpen(old => !old)}>
-                  {!isWorkspaceInfoOpen ? <FaChevronRight /> : <FaChevronLeft />}
+                <TooltipTrigger
+                  onClick={() => setIsWorkspaceInfoOpen((old) => !old)}
+                >
+                  {!isWorkspaceInfoOpen ? (
+                    <FaChevronRight />
+                  ) : (
+                    <FaChevronLeft />
+                  )}
                 </TooltipTrigger>
                 <TooltipContent side="left">
-                  Click to {!isWorkspaceInfoOpen ? 'expand' : 'collapse'} workspace info
+                  Click to {!isWorkspaceInfoOpen ? "expand" : "collapse"}{" "}
+                  workspace info
                 </TooltipContent>
               </Tooltip>
             </div>
           </div>
         </DialogHeader>
         <div className="flex">
-          <ReviewDialogContent {...{
-            workspace, ranking
-          }} className="w-[500px]" />
+          <ReviewDialogContent
+            {...{
+              workspace,
+              ranking,
+            }}
+            className="w-[500px]"
+          />
           {isWorkspaceInfoOpen && <WorkspaceInfo workspace={workspace} />}
         </div>
       </DialogContent>
     </Dialog>
-  )
+  );
 }

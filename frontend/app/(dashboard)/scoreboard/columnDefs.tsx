@@ -29,6 +29,8 @@ export function useColumnDefs(workspace: Workspace | null) {
         field: "average_output_similarity",
         headerName: "Avg. output similarity",
         cellRenderer: OutputSimilarityRenderer,
+        valueGetter: (params) =>
+          Math.round((params.data?.average_output_similarity || 0) * 100),
         headerTooltip:
           "Shows how similar task results were on average in the last two runs",
         headerComponentParams: {

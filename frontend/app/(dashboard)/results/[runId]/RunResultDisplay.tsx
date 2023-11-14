@@ -183,8 +183,11 @@ function Header({
   );
 }
 
-export function OutputSimilarityRenderer({ value }: { value: number }) {
-  const valuePercent = Math.round(value * 100);
+export function OutputSimilarityRenderer({
+  value: valuePercent,
+}: {
+  value: number;
+}) {
   return (
     <div
       className={cn({
@@ -203,7 +206,7 @@ function OutputSimilarity({ runResult }: { runResult: RunResult }) {
   return (
     <Tooltip>
       <TooltipTrigger>
-        <OutputSimilarityRenderer value={runResult.output_similarity} />
+        <OutputSimilarityRenderer value={outputSimilarityPercent} />
       </TooltipTrigger>
       <TooltipContent>
         Output similarity was {outputSimilarityPercent}%

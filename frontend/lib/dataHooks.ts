@@ -1,11 +1,15 @@
-import _ from 'lodash';
-import { v4 as uuidv4 } from 'uuid';
-import { atom, useAtom } from 'jotai';
-import { enqueueSnackbar } from 'notistack';
-import { RunResult } from '@/app/(dashboard)/results/helpers';
-import { Record, RecordFullListQueryParams, SendOptions } from 'pocketbase';
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { snackbarWrapper, usePocketBase, userModelAtom } from './clientPocketbase';
+import _ from "lodash";
+import { v4 as uuidv4 } from "uuid";
+import { atom, useAtom } from "jotai";
+import { enqueueSnackbar } from "notistack";
+import { RunResult } from "@/app/(dashboard)/results/helpers";
+import { Record, RecordFullListQueryParams, SendOptions } from "pocketbase";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import {
+  snackbarWrapper,
+  usePocketBase,
+  userModelAtom,
+} from "./clientPocketbase";
 
 function getFirstElementFromList<T>(data: T[]): T | null {
   return data.length !== 0 ? data[0] : null;
@@ -19,7 +23,9 @@ function usePbGetFullList(
   const pb = usePocketBase();
   const cancelKey = useMemo(() => uuidv4(), []);
   const fetch = useCallback(async () => {
-    const result = await snackbarWrapper(pb.collection(collectionIdOrName).getFullList(queryParams));
+    const result = await snackbarWrapper(
+      pb.collection(collectionIdOrName).getFullList(queryParams)
+    );
     onSuccess(result);
   }, [pb, collectionIdOrName, queryParams, onSuccess]);
 
@@ -33,7 +39,11 @@ function usePbGetFullList(
   return { refetch: fetch, cancelKey };
 }
 
-function usePbSend(path: string, onSuccess: (data: Record[]) => void, options?: SendOptions) {
+function usePbSend(
+  path: string,
+  onSuccess: (data: Record[]) => void,
+  options?: SendOptions
+) {
   const pb = usePocketBase();
   const cancelKey = useMemo(() => uuidv4(), []);
   const fetch = useCallback(async () => {
@@ -80,7 +90,9 @@ export function useAuthMethods() {
 
   useEffect(() => {
     const _ = async () => {
-      const result = await snackbarWrapper(pb.collection('users').listAuthMethods());
+      const result = await snackbarWrapper(
+        pb.collection("users").listAuthMethods()
+      );
       setAuthMethods(result);
     };
     _();
@@ -107,12 +119,12 @@ export type RunStatistic = {
 export function useRunStatistics(): RunStatistic[] {
   const timeoutId = useRef<NodeJS.Timeout>();
   const [runStatistics, setRunStatistics] = useState<Record[]>([]);
-  const options = useMemo(() => ({ method: 'GET' }), []);
-  const { refetch } = usePbSend('/run_statistics/', setRunStatistics, options);
+  const options = useMemo(() => ({ method: "GET" }), []);
+  const { refetch } = usePbSend("/run_statistics/", setRunStatistics, options);
 
   const onMessage = useCallback(
     (msg: { action: string }) => {
-      if (msg.action === 'create') {
+      if (msg.action === "create") {
         clearTimeout(timeoutId.current!);
         timeoutId.current = setTimeout(() => {
           refetch();
@@ -122,7 +134,7 @@ export function useRunStatistics(): RunStatistic[] {
     [refetch]
   );
 
-  usePbRealtime('run_statistics/*', onMessage);
+  usePbRealtime("run_statistics/*", onMessage);
 
   return runStatistics as never as RunStatistic[];
 }
@@ -143,7 +155,7 @@ export function useUserWorkspace() {
     },
     [_setWorkspace]
   );
-  usePbGetFullList('workspaces', setWorkspace);
+  usePbGetFullList("workspaces", setWorkspace);
   return workspace ? (workspace as never as Workspace) : null;
 }
 
@@ -160,7 +172,7 @@ export function useGlobals() {
     [_setGlobals]
   );
   const params = useMemo(() => ({ $autoCancel: false }), []);
-  usePbGetFullList('globals', setGlobals, params);
+  usePbGetFullList("globals", setGlobals, params);
   return globals;
 }
 
@@ -184,10 +196,10 @@ export function useWorkspaceEvenets() {
     [_setEvents]
   );
   const params = useMemo(() => ({ $autoCancel: false }), []);
-  usePbGetFullList('workspace_events', setEvents, params);
+  usePbGetFullList("workspace_events", setEvents, params);
 
   useEffect(() => {
-    pb.collection('workspace_events').subscribe('*', (data) => {
+    pb.collection("workspace_events").subscribe("*", (data) => {
       _setEvents(data.record);
     });
   }, [pb, _setEvents]);
@@ -197,7 +209,10 @@ export function useWorkspaceEvenets() {
 
 export function useIsWorkspaceBusy() {
   const events = useWorkspaceEvenets();
-  const isLoading = useMemo(() => !!events && !!events.new_run_started, [events]);
+  const isLoading = useMemo(
+    () => !!events && !!events.new_run_started,
+    [events]
+  );
   return isLoading;
 }
 
@@ -223,7 +238,9 @@ export type WorkspaceRanking = {
   };
 };
 
-export function useWorkspaceRankings(onChange?: (data: WorkspaceRanking) => void) {
+export function useWorkspaceRankings(
+  onChange?: (data: WorkspaceRanking) => void
+) {
   const pb = usePocketBase();
   const userMapping = useRef<Map<string, User>>(new Map());
   const [rankings, setRankings] = useState<Record[]>([]);
@@ -231,11 +248,18 @@ export function useWorkspaceRankings(onChange?: (data: WorkspaceRanking) => void
   const firstFetch = useRef(true);
 
   useEffect(() => {
-    if (firstFetch.current && rankings.length !== 0 && workspaceRankings.length !== 0) {
+    if (
+      firstFetch.current &&
+      rankings.length !== 0 &&
+      workspaceRankings.length !== 0
+    ) {
       const rankingMapping = new Map<string, Record>();
       for (const ranking of rankings) {
         rankingMapping.set(ranking.id, ranking);
-        userMapping.current.set(ranking.user as string, ranking.expand.user as never as User);
+        userMapping.current.set(
+          ranking.user as string,
+          ranking.expand.user as never as User
+        );
       }
 
       setWorkspaceRankings((old) => {
@@ -259,7 +283,9 @@ export function useWorkspaceRankings(onChange?: (data: WorkspaceRanking) => void
     async (msg: { action: string; record: Ranking }) => {
       let user = userMapping.current.get(msg.record.user);
       if (!user) {
-        user = (await pb.collection('users').getOne(msg.record.user)) as never as User;
+        user = (await pb
+          .collection("users")
+          .getOne(msg.record.user)) as never as User;
         userMapping.current.set(msg.record.user, user);
       }
       msg.record.expand = { user };
@@ -267,18 +293,22 @@ export function useWorkspaceRankings(onChange?: (data: WorkspaceRanking) => void
       try {
         setWorkspaceRankings((old) => {
           const newWorkspaceRankings = [...old];
-          const workspaceRankingId = newWorkspaceRankings.findIndex((item) => item.workspace === msg.record.workspace);
+          const workspaceRankingId = newWorkspaceRankings.findIndex(
+            (item) => item.workspace === msg.record.workspace
+          );
           if (workspaceRankingId !== -1) {
             const workspaceRanking = newWorkspaceRankings[workspaceRankingId];
             const expand = workspaceRanking.expand;
             _.defaults(expand, { rankings: [] });
-            const rankingId: number = expand.rankings.findIndex((item: Record) => item.id === msg.record.id);
-            if (msg.action === 'create') {
+            const rankingId: number = expand.rankings.findIndex(
+              (item: Record) => item.id === msg.record.id
+            );
+            if (msg.action === "create") {
               expand.rankings.push(msg.record);
-            } else if (msg.action === 'update' && rankingId !== -1) {
+            } else if (msg.action === "update" && rankingId !== -1) {
               //@ts-ignore
               expand.rankings[rankingId] = msg.record;
-            } else if (msg.action === 'delete' && rankingId !== -1) {
+            } else if (msg.action === "delete" && rankingId !== -1) {
               expand.rankings.splice(rankingId, 1);
             }
             onChange && onChange(workspaceRanking as never as WorkspaceRanking);
@@ -286,8 +316,8 @@ export function useWorkspaceRankings(onChange?: (data: WorkspaceRanking) => void
           return newWorkspaceRankings;
         });
       } catch {
-        enqueueSnackbar('Realtime update not working please refresh manually', {
-          variant: 'error',
+        enqueueSnackbar("Realtime update not working please refresh manually", {
+          variant: "error",
           preventDuplicate: true,
         });
       }
@@ -295,18 +325,27 @@ export function useWorkspaceRankings(onChange?: (data: WorkspaceRanking) => void
     [pb, onChange]
   );
 
-  const wrParams = useMemo(() => ({ expand: 'workspace', sort: 'created' }), []);
-  const rParams = useMemo(() => ({ expand: 'user' }), []);
-  usePbGetFullList('workspace_rankings', setWorkspaceRankings, wrParams);
-  usePbGetFullList('rankings', setRankings, rParams);
-  usePbRealtime('rankings/*', onRankingRealtime);
+  const wrParams = useMemo(
+    () => ({ expand: "workspace", sort: "created" }),
+    []
+  );
+  const rParams = useMemo(() => ({ expand: "user" }), []);
+  usePbGetFullList("workspace_rankings", setWorkspaceRankings, wrParams);
+  usePbGetFullList("rankings", setRankings, rParams);
+  usePbRealtime("rankings/*", onRankingRealtime);
 
   return workspaceRankings as never as WorkspaceRanking[];
 }
 
 export type RunTask = {
-  task_name: string;
+  collectionId: string;
+  collectionName: string;
+  created: string;
   etalon_result: string;
+  id: string;
+  score_multipler: number;
+  task_name: string;
+  updated: string;
 };
 
 export const runTasksAtom = atom<RunTask[]>([]);
@@ -321,7 +360,7 @@ export function useRunTasks() {
     },
     [setRunTasksAtom, setRunTasks]
   );
-  usePbGetFullList('run_tasks', setValue);
+  usePbGetFullList("run_tasks", setValue);
   return runTasks as never as RunTask[];
 }
 
@@ -341,8 +380,11 @@ export function useUserModel() {
 
 export function useBestRuns(workspaceId: string): RunResult[] {
   const [runResults, setRunResults] = useState<Record[]>([]);
-  const url = useMemo(() => `/run_result_sum/?workspaceId=${workspaceId}`, [workspaceId]);
-  const options = useMemo(() => ({ method: 'GET' }), []);
+  const url = useMemo(
+    () => `/run_result_sum/?workspaceId=${workspaceId}`,
+    [workspaceId]
+  );
+  const options = useMemo(() => ({ method: "GET" }), []);
   usePbSend(url, setRunResults, options);
   return runResults as never as RunResult[];
 }
