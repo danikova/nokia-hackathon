@@ -24,11 +24,11 @@
         "cwd": "${workspaceFolder:frontend}"
       },
       {
-        "name": "backend dev",
+        "name": "backend old dev",
         "type": "go",
         "request": "launch",
         "mode": "debug",
-        "program": "${workspaceFolder:backend}/main.go",
+        "program": "./backend/old_backend/main.go",
         "args": ["serve", "--debug"]
       }
     ]
