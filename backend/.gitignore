@@ -1,7 +1,5 @@
 .env
 
-*.exe
-__debug*
+pocketbase.exe
+pocketbase
 pb_data
-pb_git_sandbox/*
-hackathon-backend*
