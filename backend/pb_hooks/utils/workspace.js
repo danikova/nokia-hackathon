@@ -40,6 +40,59 @@ function generateUserWorkspace(userId) {
   } catch (e) {}
 }
 
+/**
+ * Retrieves a workspace record by repository name.
+ * @param {string} repositoryName - The name of the repository.
+ * @returns {models.Record} - The workspace record associated with the repository.
+ * @throws {BadRequestError} - If the repository is not connected to any workspace.
+ */
+function findWorkspaceByRepository(repositoryName) {
+  const tableNames = require(`${__hooks}/utils/tableNames.js`);
+  const repoUrl = `https://github.com/${repositoryName}`;
+
+  let workspace = new Record();
+  try {
+    workspace = $app
+      .dao()
+      .findFirstRecordByData(tableNames.workspace, "repo_url", repoUrl);
+  } catch {
+    throw new BadRequestError(
+      `This repository (${repositoryName}) is not connected with any workspace`
+    );
+  }
+
+  return workspace;
+}
+
+/**
+ * Retrieves a workspace event record by workspace.
+ * @param {models.Record} workspace - The workspace record.
+ * @returns {models.Record} - The workspace event record associated with the workspace.
+ * @throws {BadRequestError} - If the workspace event is not found for the given workspace.
+ */
+function findWorkspaceEventByWorkspace(workspace) {
+  const tableNames = require(`${__hooks}/utils/tableNames.js`);
+
+  let workspaceEvent = new Record();
+  try {
+    workspaceEvent = $app
+      .dao()
+      .findFirstRecordByData(
+        tableNames.workspaceEvents,
+        "workspace",
+        workspace.id
+      );
+  } catch {
+    throw new BadRequestError(
+      `Workspace event not found, with workspace id (${workspace.id})`
+    );
+  }
+
+  return workspaceEvent;
+}
+
 module.exports = {
   generateUserWorkspace,
+  findWorkspaceByRepository,
+  findWorkspaceEventByWorkspace,
 };

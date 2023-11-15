@@ -18,16 +18,16 @@ function generateKeysForTask(taskName) {
  * @param {models.Record} record - The ranking record to summarize points on.
  */
 function summarizePoints(record) {
-  /** @type {{fetchRegisteredTasks: function():DynamicModel[]}} */
+  /** @type {{fetchRegisteredTasks: ()=>models.Record[]}} */
   const { fetchRegisteredTasks } = require(`${__hooks}/utils/task.js`);
 
-  const taskRecords = fetchRegisteredTasks();
+  const registeredTasks = fetchRegisteredTasks();
 
   let finalSum = 0;
   const pointsSum = {};
   const points = JSON.parse(record.get("points") || "{}");
 
-  for (const task of taskRecords) {
+  for (const task of registeredTasks) {
     const taskName = task["task_name"];
     const rangeKeys = generateKeysForTask(taskName);
 
@@ -42,7 +42,7 @@ function summarizePoints(record) {
     pointsSum[taskName] /= pointsSumCount;
     finalSum += pointsSum[taskName];
   }
-  finalSum /= taskRecords.length;
+  finalSum /= registeredTasks.length;
 
   pointsSumStr = JSON.stringify(pointsSum);
   record.set("points_sum", pointsSumStr);

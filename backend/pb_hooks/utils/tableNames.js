@@ -9,4 +9,5 @@ module.exports = {
   userWhitelist: "user_whitelist",
   rankings: "rankings",
   runTasks: "run_tasks",
+  runResults: "run_results",
 };
