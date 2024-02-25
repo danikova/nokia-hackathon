@@ -1,6 +1,7 @@
 package events
 
 import (
+	"hackathon-backend/src/tables"
 	"log"
 
 	"github.com/pocketbase/pocketbase"
@@ -8,19 +9,9 @@ import (
 	"github.com/pocketbase/pocketbase/models"
 )
 
-var UsersCollectionName = "users"
-var RankingsCollectionName = "rankings"
-var WorkspacesCollectionName = "workspaces"
-var WorkspaceEventsCollectionName = "workspace_events"
-var WorkspaceRankingsCollectionName = "workspace_rankings"
-
-var UserFieldKey = "user"
-var WorkspaceFieldKey = "workspace"
-var RankingsFieldKey = "rankings"
-
 func OnRecordAfterCreateRequest(app *pocketbase.PocketBase) {
 	app.OnRecordAfterCreateRequest().Add(func(e *core.RecordCreateEvent) error {
-		if e.Record.Collection().Name == UsersCollectionName {
+		if e.Record.Collection().Name == tables.UsersCollectionName {
 			CreateWorkspaceForUser(app, &e.Record.Id)
 		}
 		return nil
@@ -28,31 +19,31 @@ func OnRecordAfterCreateRequest(app *pocketbase.PocketBase) {
 }
 
 func CreateWorkspaceForUser(app *pocketbase.PocketBase, userId *string) error {
-	workspaces, err := app.Dao().FindCollectionByNameOrId(WorkspacesCollectionName)
+	workspaces, err := app.Dao().FindCollectionByNameOrId(tables.WorkspacesCollectionName)
 	if err != nil {
 		return err
 	}
 
-	workspace_events, err := app.Dao().FindCollectionByNameOrId(WorkspaceEventsCollectionName)
+	workspace_events, err := app.Dao().FindCollectionByNameOrId(tables.WorkspaceEventsCollectionName)
 	if err != nil {
 		return err
 	}
 
-	workspace_rankings, err := app.Dao().FindCollectionByNameOrId(WorkspaceRankingsCollectionName)
+	workspace_rankings, err := app.Dao().FindCollectionByNameOrId(tables.WorkspaceRankingsCollectionName)
 	if err != nil {
 		return err
 	}
 
 	workspaceRecord := models.NewRecord(workspaces)
-	workspaceRecord.Set(UserFieldKey, userId)
+	workspaceRecord.Set(tables.UserFieldKey, userId)
 	app.Dao().SaveRecord(workspaceRecord)
 
 	workspaceEventRecord := models.NewRecord(workspace_events)
-	workspaceEventRecord.Set(WorkspaceFieldKey, workspaceRecord.Id)
+	workspaceEventRecord.Set(tables.WorkspaceFieldKey, workspaceRecord.Id)
 	app.Dao().SaveRecord(workspaceEventRecord)
 
 	workspaceRankingRecord := models.NewRecord(workspace_rankings)
-	workspaceRankingRecord.Set(WorkspaceFieldKey, workspaceRecord.Id)
+	workspaceRankingRecord.Set(tables.WorkspaceFieldKey, workspaceRecord.Id)
 	app.Dao().SaveRecord(workspaceRankingRecord)
 
 	log.Println("new workspace", workspaceRecord.Id, "generated for user", userId)

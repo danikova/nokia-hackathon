@@ -1,7 +1,7 @@
 package crons
 
 import (
-	"hackathon-backend/src/utils"
+	"hackathon-backend/src/tables"
 	"time"
 
 	"github.com/pocketbase/dbx"
@@ -13,7 +13,7 @@ func AddUpdateStaleRunTimers(app *pocketbase.PocketBase) {
 	scheduler := cron.New()
 
 	workspaceEventsCleanup := func() {
-		records, _ := app.Dao().FindRecordsByExpr(utils.WorkspaceEventsCollectionName,
+		records, _ := app.Dao().FindRecordsByExpr(tables.WorkspaceEventsCollectionName,
 			dbx.NewExp("new_run_started  <> '' AND new_run_started IS NOT NULL"),
 		)
 

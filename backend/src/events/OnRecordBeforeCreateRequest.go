@@ -2,6 +2,7 @@ package events
 
 import (
 	"encoding/json"
+	"hackathon-backend/src/tables"
 	"hackathon-backend/src/utils"
 
 	"github.com/pocketbase/pocketbase"
@@ -11,7 +12,7 @@ import (
 
 func OnRecordBeforeCreateRequest(app *pocketbase.PocketBase) {
 	app.OnRecordBeforeCreateRequest().Add(func(e *core.RecordCreateEvent) error {
-		if e.Record.Collection().Name == RankingsCollectionName {
+		if e.Record.Collection().Name == tables.RankingsCollectionName {
 			enforceReadonlyFieldsByUser(app, e.Record, []string{"user", "workspace", "points", "comments"})
 			SummarizePointsOnRanking(app, e.Record)
 		}

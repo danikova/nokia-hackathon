@@ -1,6 +1,7 @@
 package events
 
 import (
+	"hackathon-backend/src/tables"
 	"hackathon-backend/src/utils"
 	"strings"
 
@@ -26,7 +27,7 @@ func expandWorkspaceRankingsCollectionListRequest(app *pocketbase.PocketBase) {
 		return nil
 	})
 
-	app.OnRecordsListRequest(WorkspaceRankingsCollectionName).Add(func(e *core.RecordsListEvent) error {
+	app.OnRecordsListRequest(tables.WorkspaceRankingsCollectionName).Add(func(e *core.RecordsListEvent) error {
 		expandList := utils.Map(strings.Split(e.HttpContext.QueryParam("expand"), ","), func(qp string) string {
 			return strings.TrimSpace(qp)
 		})
@@ -35,8 +36,8 @@ func expandWorkspaceRankingsCollectionListRequest(app *pocketbase.PocketBase) {
 			workspaceId := record.GetString("workspace")
 			if workspaceId != "" {
 
-				rankings, err := app.Dao().FindRecordsByExpr(RankingsCollectionName,
-					dbx.HashExp{WorkspaceFieldKey: workspaceId},
+				rankings, err := app.Dao().FindRecordsByExpr(tables.RankingsCollectionName,
+					dbx.HashExp{tables.WorkspaceFieldKey: workspaceId},
 				)
 
 				rankingIds := utils.Map(rankings, func(ranking *models.Record) string {
@@ -47,18 +48,18 @@ func expandWorkspaceRankingsCollectionListRequest(app *pocketbase.PocketBase) {
 				}
 
 				expandMap := map[string]any{}
-				if utils.Contains(expandList, WorkspaceFieldKey) {
-					workspace, err := app.Dao().FindRecordById(WorkspacesCollectionName, workspaceId)
+				if utils.Contains(expandList, tables.WorkspaceFieldKey) {
+					workspace, err := app.Dao().FindRecordById(tables.WorkspacesCollectionName, workspaceId)
 					if err != nil {
 						return err
 					}
-					expandMap[WorkspaceFieldKey] = workspace
+					expandMap[tables.WorkspaceFieldKey] = workspace
 				}
-				if utils.Contains(expandList, RankingsFieldKey) {
-					expandMap[RankingsFieldKey] = rankings
+				if utils.Contains(expandList, tables.RankingsFieldKey) {
+					expandMap[tables.RankingsFieldKey] = rankings
 				}
 				record.SetExpand(expandMap)
-				record.Set(RankingsFieldKey, rankingIds)
+				record.Set(tables.RankingsFieldKey, rankingIds)
 			}
 		}
 		return nil

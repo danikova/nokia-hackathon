@@ -1,13 +1,16 @@
 package events
 
 import (
+	"hackathon-backend/src/tables"
+
 	"github.com/pocketbase/pocketbase"
 	"github.com/pocketbase/pocketbase/core"
 )
 
 func OnRecordAfterAuth(app *pocketbase.PocketBase) {
 	app.OnRecordAfterAuthWithOAuth2Request().Add(func(e *core.RecordAuthWithOAuth2Event) error {
-		if record, _ := app.Dao().FindFirstRecordByData(WorkspacesCollectionName, UserFieldKey, e.Record.Id); record == nil {
+		record, _ := app.Dao().FindFirstRecordByData(tables.WorkspacesCollectionName, tables.UserFieldKey, e.Record.Id)
+		if record == nil {
 			CreateWorkspaceForUser(app, &e.Record.Id)
 		}
 
@@ -21,10 +24,6 @@ func OnRecordAfterAuth(app *pocketbase.PocketBase) {
 			e.Record.Set("avatarUrl", e.OAuth2User.AvatarUrl)
 		}
 
-		if err := app.Dao().SaveRecord(e.Record); err != nil {
-			return err
-		}
-
-		return nil
+		return app.Dao().SaveRecord(e.Record)
 	})
 }

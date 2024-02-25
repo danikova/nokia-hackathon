@@ -2,6 +2,7 @@ package views
 
 import (
 	"errors"
+	"hackathon-backend/src/tables"
 	"hackathon-backend/src/types"
 	"hackathon-backend/src/utils"
 	"net/http"
@@ -40,7 +41,7 @@ func AddGithubBotFinished(app *pocketbase.PocketBase, e *core.ServeEvent) {
 			}
 
 			if strings.ToLower(os.Getenv("DEV")) != "true" {
-				records, err := app.Dao().FindRecordsByExpr(utils.RunResultsCollectionName,
+				records, err := app.Dao().FindRecordsByExpr(tables.RunResultsCollectionName,
 					dbx.HashExp{"run_id": reqBody.Meta.RunId},
 				)
 				if err != nil {
@@ -72,7 +73,7 @@ func AddGithubBotFinished(app *pocketbase.PocketBase, e *core.ServeEvent) {
 				return echo.NewHTTPError(http.StatusBadRequest, err)
 			}
 
-			runResultsCollection, err := app.Dao().FindCollectionByNameOrId(utils.RunResultsCollectionName)
+			runResultsCollection, err := app.Dao().FindCollectionByNameOrId(tables.RunResultsCollectionName)
 			if err != nil {
 				return echo.NewHTTPError(http.StatusBadRequest, err)
 			}

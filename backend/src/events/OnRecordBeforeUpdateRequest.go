@@ -1,6 +1,7 @@
 package events
 
 import (
+	"hackathon-backend/src/tables"
 	"hackathon-backend/src/utils"
 	"reflect"
 
@@ -25,10 +26,10 @@ func enforceReadonlyFieldsByUser(app *pocketbase.PocketBase, record *models.Reco
 
 func OnRecordBeforeUpdateRequest(app *pocketbase.PocketBase) {
 	app.OnRecordBeforeUpdateRequest().Add(func(e *core.RecordUpdateEvent) error {
-		if e.Record.Collection().Name == WorkspacesCollectionName {
+		if e.Record.Collection().Name == tables.WorkspacesCollectionName {
 			enforceReadonlyFieldsByUser(app, e.Record, []string{"repo_url"})
 		}
-		if e.Record.Collection().Name == RankingsCollectionName {
+		if e.Record.Collection().Name == tables.RankingsCollectionName {
 			enforceReadonlyFieldsByUser(app, e.Record, []string{"points", "comments"})
 			SummarizePointsOnRanking(app, e.Record)
 		}
