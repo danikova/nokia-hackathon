@@ -1,0 +1,5 @@
+# Ignore node_modules in the frontend folder
+frontend/node_modules
+
+# Ignore bin in the backend folder
+backend/bin
