@@ -57,7 +57,7 @@ func CheckGithubFolderContent(m *types.GithubMetaType, app *pocketbase.PocketBas
 
 	primaryProject, err := GetGlobalValueByKey(app, PrimaryProjectKey)
 	if err != nil {
-		return echo.NewHTTPError(http.StatusBadRequest, "primary_project not found, please contact with an admin")
+		return echo.NewHTTPError(http.StatusBadRequest, "'primary_project' not found, please contact with an admin")
 	}
 
 	primaryProjectUrl := primaryProject.GetString("value")

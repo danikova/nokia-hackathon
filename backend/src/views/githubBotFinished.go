@@ -51,7 +51,7 @@ func AddGithubBotFinished(app *pocketbase.PocketBase, e *core.ServeEvent) {
 					for i := 0; i < len(records); i++ {
 						record := records[i]
 						if record.GetBool("is_success") {
-							return echo.NewHTTPError(http.StatusNotAcceptable, "This run_id ("+reqBody.Meta.RunId+") is already registered")
+							return echo.NewHTTPError(http.StatusNotAcceptable, "This 'run_id' ("+reqBody.Meta.RunId+") is already registered")
 						}
 						app.Dao().DeleteRecord(record)
 					}

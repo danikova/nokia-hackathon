@@ -44,7 +44,7 @@ func AddGetRunResultsSumView(app *pocketbase.PocketBase, e *core.ServeEvent) {
 			workspaceId := strings.TrimSpace(c.QueryParam("workspaceId"))
 
 			if workspaceId == "" {
-				return echo.NewHTTPError(http.StatusBadRequest, "workspaceId is required")
+				return echo.NewHTTPError(http.StatusBadRequest, "'workspaceId' is required")
 			}
 
 			workspaces, err := getWorkspaces(app, info, workspaceId)
