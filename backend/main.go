@@ -7,7 +7,7 @@ import (
 	"github.com/pocketbase/pocketbase"
 	"github.com/pocketbase/pocketbase/plugins/migratecmd"
 
-	"hackathon-backend/events"
+	"hackathon-backend/src/events"
 	_ "hackathon-backend/migrations"
 )
 

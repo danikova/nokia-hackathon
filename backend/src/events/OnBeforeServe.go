@@ -2,9 +2,9 @@ package events
 
 import (
 	"errors"
-	"hackathon-backend/types"
-	"hackathon-backend/utils"
-	"hackathon-backend/views"
+	"hackathon-backend/src/views"
+	"hackathon-backend/src/types"
+	"hackathon-backend/src/utils"
 	"net/http"
 	"os"
 	"sort"

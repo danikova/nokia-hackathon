@@ -1,7 +1,7 @@
 package events
 
 import (
-	"hackathon-backend/utils"
+	"hackathon-backend/src/utils"
 	"log"
 	"os"
 
@@ -12,8 +12,7 @@ import (
 
 func OnAfterBootstrap(app *pocketbase.PocketBase) {
 	app.OnAfterBootstrap().Add(func(e *core.BootstrapEvent) error {
-		args := os.Args[1:]
-		if utils.Contains(args, "migrate") {
+		if utils.Contains(os.Args[1:], "migrate") {
 			return nil
 		}
 
@@ -22,13 +21,10 @@ func OnAfterBootstrap(app *pocketbase.PocketBase) {
 			log.Panic("please migrate the database")
 		}
 
-		for i := 0; i < len(utils.FixGlobalKeys); i++ {
-			fixGlobalKey := utils.FixGlobalKeys[i]
-			_, err := app.Dao().FindFirstRecordByData(utils.GlobalCollectionName, utils.GlobalCollectionKeyName, fixGlobalKey)
-			if err != nil {
+		for _, fixGlobalKey := range utils.FixGlobalKeys {
+			if _, err := app.Dao().FindFirstRecordByData(utils.GlobalCollectionName, utils.GlobalCollectionKeyName, fixGlobalKey); err != nil {
 				record := models.NewRecord(collection)
 				record.Set(utils.GlobalCollectionKeyName, fixGlobalKey)
-
 				app.Dao().SaveRecord(record)
 			}
 		}

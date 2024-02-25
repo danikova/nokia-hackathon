@@ -1,7 +1,7 @@
 package events
 
 import (
-	"hackathon-backend/utils"
+	"hackathon-backend/src/utils"
 	"net/http"
 
 	"github.com/labstack/echo/v5"

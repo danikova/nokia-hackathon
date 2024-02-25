@@ -2,7 +2,7 @@ package events
 
 import (
 	"encoding/json"
-	"hackathon-backend/utils"
+	"hackathon-backend/src/utils"
 
 	"github.com/pocketbase/pocketbase"
 	"github.com/pocketbase/pocketbase/core"

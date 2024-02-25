@@ -2,7 +2,7 @@ package utils
 
 import (
 	"errors"
-	"hackathon-backend/types"
+	"hackathon-backend/src/types"
 	"log"
 	"net/http"
 	"os"
