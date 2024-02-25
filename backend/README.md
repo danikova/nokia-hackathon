@@ -6,7 +6,7 @@ testuser@test.com
 
 before run:
 
-- go mod download
+- go mod tidy
 - go run main.go migrate
 - go run main.go
 
