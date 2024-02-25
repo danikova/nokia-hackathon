@@ -1,6 +1,7 @@
 package views
 
 import (
+	"hackathon-backend/src/views/queries"
 	"log"
 	"net/http"
 	"strings"
@@ -10,6 +11,7 @@ import (
 	"github.com/pocketbase/pocketbase"
 	"github.com/pocketbase/pocketbase/apis"
 	"github.com/pocketbase/pocketbase/core"
+	"github.com/pocketbase/pocketbase/models"
 )
 
 type RunResult struct {
@@ -31,21 +33,7 @@ type RunResult struct {
 	Sha              string  `db:"sha" json:"sha"`
 }
 
-var runResultQuery = minifyQueryStr(`
-WITH RankedResults AS (
-	SELECT
-			t1.*,
-			ws.repo_url,
-			ROW_NUMBER() OVER (PARTITION BY t1.task
-												 ORDER BY t1.output_similarity DESC, t1.execution_time ASC) AS row_num
-	FROM run_results t1
-	INNER JOIN workspaces ws ON t1.workspace = ws.id
-	WHERE ws.id = {:workspaceId}
-)
-SELECT *
-FROM RankedResults
-WHERE row_num = 1
-`)
+var runResultQuery = minifyQueryStr(queries.GetRunResultsSumQuery)
 
 func AddGetRunResultsSumView(app *pocketbase.PocketBase, e *core.ServeEvent) {
 	e.Router.AddRoute(echo.Route{
@@ -59,33 +47,16 @@ func AddGetRunResultsSumView(app *pocketbase.PocketBase, e *core.ServeEvent) {
 				return echo.NewHTTPError(http.StatusBadRequest, "workspaceId is required")
 			}
 
-			expressions := []dbx.Expression{
-				dbx.HashExp{"id": workspaceId},
-			}
-			if info.AuthRecord.Get("role") != "staff" {
-				expressions = append(expressions, dbx.HashExp{"user": info.AuthRecord.Id})
-			}
-
-			workspaces, err := app.Dao().FindRecordsByExpr("workspaces",
-				dbx.And(expressions[:]...),
-			)
-
+			workspaces, err := getWorkspaces(app, info, workspaceId)
 			if err != nil || len(workspaces) == 0 {
 				return echo.NewHTTPError(http.StatusBadRequest, "No workspace found")
 			}
 
-			if workspaceId == "" || info.AuthRecord.Get("role") != "staff" {
+			if info.AuthRecord.Get("role") != "staff" {
 				workspaceId = workspaces[0].Id
 			}
 
-			results := []RunResult{}
-			err = app.Dao().DB().
-				NewQuery(runResultQuery).
-				Bind(dbx.Params{
-					"workspaceId": workspaceId,
-				}).
-				All(&results)
-
+			results, err := getRunResults(app, workspaceId)
 			if err != nil || len(results) == 0 {
 				log.Panic(err)
 				return echo.NewHTTPError(http.StatusBadRequest, "Wrong query")
@@ -98,4 +69,25 @@ func AddGetRunResultsSumView(app *pocketbase.PocketBase, e *core.ServeEvent) {
 			apis.RequireRecordAuth(),
 		},
 	})
+}
+
+func getWorkspaces(app *pocketbase.PocketBase, info *models.RequestData, workspaceId string) ([]*models.Record, error) {
+	expressions := []dbx.Expression{
+		dbx.HashExp{"id": workspaceId},
+	}
+	if info.AuthRecord.Get("role") != "staff" {
+		expressions = append(expressions, dbx.HashExp{"user": info.AuthRecord.Id})
+	}
+	return app.Dao().FindRecordsByExpr("workspaces", dbx.And(expressions...))
+}
+
+func getRunResults(app *pocketbase.PocketBase, workspaceId string) ([]RunResult, error) {
+	results := []RunResult{}
+	err := app.Dao().DB().
+		NewQuery(runResultQuery).
+		Bind(dbx.Params{
+			"workspaceId": workspaceId,
+		}).
+		All(&results)
+	return results, err
 }

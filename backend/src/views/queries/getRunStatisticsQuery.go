@@ -1,3 +1,6 @@
+package queries
+
+var GetRunStatisticsQuery = `
 WITH RankedRunResults AS (
   SELECT
     *,
@@ -120,3 +123,4 @@ WHERE
 ORDER BY
   ar.average_output_similarity DESC,
   ar.average_execution_time;
+`
