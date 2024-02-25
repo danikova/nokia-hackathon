@@ -63,6 +63,9 @@
     },
     "[sql]": {
       "editor.defaultFormatter": "adpyke.vscode-sql-formatter"
+    },
+    "[go]": {
+      "editor.defaultFormatter": "golang.go"
     }
   }
 }
