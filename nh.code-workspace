@@ -66,6 +66,7 @@
     },
     "[go]": {
       "editor.defaultFormatter": "golang.go"
-    }
+    },
+    "editor.formatOnSave": true
   }
 }
