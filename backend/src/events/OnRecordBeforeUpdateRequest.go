@@ -3,36 +3,19 @@ package events
 import (
 	"hackathon-backend/src/tables"
 	"hackathon-backend/src/utils"
-	"reflect"
 
 	"github.com/pocketbase/pocketbase"
 	"github.com/pocketbase/pocketbase/core"
-	"github.com/pocketbase/pocketbase/models"
 )
 
-func enforceReadonlyFieldsByUser(app *pocketbase.PocketBase, record *models.Record, editableFields []string) {
-	originalRecord, err := app.Dao().FindRecordById(record.Collection().Name, record.Id, nil)
-	if err != nil {
-		return
-	}
-
-	for _, field := range record.Collection().Schema.Fields() {
-		fieldKey := field.Name
-		if !utils.Contains(editableFields, fieldKey) && !reflect.DeepEqual(record.Get(fieldKey), originalRecord.Get(fieldKey)) {
-			record.Set(fieldKey, originalRecord.Get(fieldKey))
-		}
-	}
-}
-
 func OnRecordBeforeUpdateRequest(app *pocketbase.PocketBase) {
-	app.OnRecordBeforeUpdateRequest().Add(func(e *core.RecordUpdateEvent) error {
-		if e.Record.Collection().Name == tables.WorkspacesCollectionName {
-			enforceReadonlyFieldsByUser(app, e.Record, []string{"repo_url"})
-		}
-		if e.Record.Collection().Name == tables.RankingsCollectionName {
-			enforceReadonlyFieldsByUser(app, e.Record, []string{"points", "comments"})
-			SummarizePointsOnRanking(app, e.Record)
-		}
+	app.OnRecordBeforeUpdateRequest(tables.WorkspacesCollectionName).Add(func(e *core.RecordUpdateEvent) error {
+		utils.EnforceReadonlyFieldsByUser(app, e.Record, []string{"repo_url"})
+		return nil
+	})
+	app.OnRecordBeforeUpdateRequest(tables.RankingsCollectionName).Add(func(e *core.RecordUpdateEvent) error {
+		utils.EnforceReadonlyFieldsByUser(app, e.Record, []string{"points", "comments"})
+		utils.SummarizePointsOnRanking(app, e.Record)
 		return nil
 	})
 }
