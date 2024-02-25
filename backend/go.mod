@@ -3,6 +3,7 @@ module hackathon-backend
 go 1.20
 
 require (
+	github.com/adrg/strutil v0.3.0
 	github.com/joho/godotenv v1.5.1
 	github.com/labstack/echo/v5 v5.0.0-20220201181537-ed2888cfa198
 	github.com/pocketbase/dbx v1.10.0
@@ -11,7 +12,6 @@ require (
 
 require (
 	github.com/AlecAivazis/survey/v2 v2.3.7 // indirect
-	github.com/adrg/strutil v0.3.0 // indirect
 	github.com/asaskevich/govalidator v0.0.0-20230301143203-a9d515a09cc2 // indirect
 	github.com/aws/aws-sdk-go v1.44.289 // indirect
 	github.com/aws/aws-sdk-go-v2 v1.18.1 // indirect
