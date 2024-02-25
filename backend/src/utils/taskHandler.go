@@ -2,6 +2,7 @@ package utils
 
 import (
 	"fmt"
+	"hackathon-backend/src/types"
 	"io"
 	"strings"
 
@@ -12,15 +13,8 @@ import (
 
 var RunTasksCollectionName = "run_tasks"
 
-type Task struct {
-	Id                  string `db:"id" json:"id"`
-	Name                string `db:"task_name" json:"task_name"`
-	EtalonResultContent string
-	EtalonResultPath    string `db:"etalon_result" json:"etalon_result"`
-}
-
-func GetRegisteredTasks(app *pocketbase.PocketBase, withFiles bool) []Task {
-	tasks := []Task{}
+func GetRegisteredTasks(app *pocketbase.PocketBase, withFiles bool) []types.Task {
+	tasks := []types.Task{}
 
 	collection, _ := app.Dao().FindCollectionByNameOrId(RunTasksCollectionName)
 
@@ -42,7 +36,7 @@ func GetRegisteredTasks(app *pocketbase.PocketBase, withFiles bool) []Task {
 	}
 
 	if err != nil {
-		return []Task{}
+		return []types.Task{}
 	}
 	return tasks
 }
@@ -57,7 +51,7 @@ func GetFsys(app *pocketbase.PocketBase) (*filesystem.System, error) {
 	return fsys, nil
 }
 
-func getFileContent(task *Task, collection *models.Collection, fs *filesystem.System) string {
+func getFileContent(task *types.Task, collection *models.Collection, fs *filesystem.System) string {
 	fileKey := collection.BaseFilesPath() + "/" + task.Id + "/" + task.EtalonResultPath
 	f, err := fs.GetFile(fileKey)
 	defer f.Close()

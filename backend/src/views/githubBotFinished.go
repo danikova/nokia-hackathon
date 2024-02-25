@@ -110,7 +110,7 @@ func AddGithubBotFinished(app *pocketbase.PocketBase, e *core.ServeEvent) {
 			met.NgramSize = 3
 			registeredTasks := utils.GetRegisteredTasks(app, true)
 			for task, data := range reqBody.Tasks {
-				regTask := utils.ContainsWithLambda(registeredTasks, func(value utils.Task) bool {
+				regTask := utils.ContainsWithLambda(registeredTasks, func(value types.Task) bool {
 					return value.Name == task
 				})
 				if regTask == nil {

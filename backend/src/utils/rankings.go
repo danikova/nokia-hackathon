@@ -2,12 +2,13 @@ package utils
 
 import (
 	"encoding/json"
+	"hackathon-backend/src/types"
 
 	"github.com/pocketbase/pocketbase"
 	"github.com/pocketbase/pocketbase/models"
 )
 
-func getKeysFromTask(task *Task) []string {
+func getKeysFromTask(task *types.Task) []string {
 	return []string{
 		task.Name + "-implementation",
 		task.Name + "-functionality",
