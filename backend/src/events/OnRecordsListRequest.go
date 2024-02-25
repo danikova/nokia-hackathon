@@ -13,55 +13,55 @@ import (
 )
 
 func OnRecordsListRequest(app *pocketbase.PocketBase) {
-	expandWorkspaceRankingsCollectionListRequest(app)
-}
-
-func expandWorkspaceRankingsCollectionListRequest(app *pocketbase.PocketBase) {
 	app.OnRecordsListRequest(utils.RunTasksCollectionName).Add(func(e *core.RecordsListEvent) error {
-		info := apis.RequestData(e.HttpContext)
-		if info.Admin == nil {
+		if apis.RequestData(e.HttpContext).Admin == nil {
 			for _, record := range e.Records {
 				record.Set("etalon_result", ":(")
 			}
 		}
 		return nil
 	})
-
 	app.OnRecordsListRequest(tables.WorkspaceRankingsCollectionName).Add(func(e *core.RecordsListEvent) error {
-		expandList := utils.Map(strings.Split(e.HttpContext.QueryParam("expand"), ","), func(qp string) string {
-			return strings.TrimSpace(qp)
-		})
+		expandList := utils.Map(strings.Split(e.HttpContext.QueryParam("expand"), ","), strings.TrimSpace)
 
 		for _, record := range e.Records {
 			workspaceId := record.GetString("workspace")
 			if workspaceId != "" {
-
-				rankings, err := app.Dao().FindRecordsByExpr(tables.RankingsCollectionName,
-					dbx.HashExp{tables.WorkspaceFieldKey: workspaceId},
-				)
-
-				rankingIds := utils.Map(rankings, func(ranking *models.Record) string {
-					return ranking.Id
-				})
+				rankings, err := getRankings(app, workspaceId)
 				if err != nil {
 					return err
 				}
 
-				expandMap := map[string]any{}
-				if utils.Contains(expandList, tables.WorkspaceFieldKey) {
-					workspace, err := app.Dao().FindRecordById(tables.WorkspacesCollectionName, workspaceId)
-					if err != nil {
-						return err
-					}
-					expandMap[tables.WorkspaceFieldKey] = workspace
+				expandMap, err := buildExpandMapForWorkspaceRankings(app, expandList, workspaceId, rankings)
+				if err != nil {
+					return err
 				}
-				if utils.Contains(expandList, tables.RankingsFieldKey) {
-					expandMap[tables.RankingsFieldKey] = rankings
-				}
+
 				record.SetExpand(expandMap)
-				record.Set(tables.RankingsFieldKey, rankingIds)
+				record.Set(tables.RankingsFieldKey, utils.Map(rankings, func(ranking *models.Record) string {
+					return ranking.Id
+				}))
 			}
 		}
 		return nil
 	})
+}
+
+func getRankings(app *pocketbase.PocketBase, workspaceId string) ([]*models.Record, error) {
+	return app.Dao().FindRecordsByExpr(tables.RankingsCollectionName, dbx.HashExp{tables.WorkspaceFieldKey: workspaceId})
+}
+
+func buildExpandMapForWorkspaceRankings(app *pocketbase.PocketBase, expandList []string, workspaceId string, rankings []*models.Record) (map[string]any, error) {
+	expandMap := map[string]any{}
+	if utils.Contains(expandList, tables.WorkspaceFieldKey) {
+		workspace, err := app.Dao().FindRecordById(tables.WorkspacesCollectionName, workspaceId)
+		if err != nil {
+			return nil, err
+		}
+		expandMap[tables.WorkspaceFieldKey] = workspace
+	}
+	if utils.Contains(expandList, tables.RankingsFieldKey) {
+		expandMap[tables.RankingsFieldKey] = rankings
+	}
+	return expandMap, nil
 }
