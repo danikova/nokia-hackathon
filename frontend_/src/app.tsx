@@ -5,7 +5,6 @@ import { jotaiStore } from "./atoms/store";
 import Snackbar from "./components/snackbar";
 import { RouterProvider } from "@tanstack/react-router";
 import { TooltipProvider } from "./components/ui/tooltip";
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { queryClient, queryClientPersister } from "./@data/client";
 import { PersistQueryClientProvider } from "@tanstack/react-query-persist-client";
 
@@ -21,7 +20,6 @@ export default function App() {
             <RouterProvider router={rootRouter} />
             <Snackbar />
           </TooltipProvider>
-          <ReactQueryDevtools />
         </PersistQueryClientProvider>
       </Provider>
     </StrictMode>
