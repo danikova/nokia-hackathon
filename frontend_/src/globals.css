@@ -2,9 +2,28 @@
 @tailwind components;
 @tailwind utilities;
 
-/* 117, 117, 117 */
-
 @layer base {
+  @font-face {
+    font-family: NokiaPureText;
+    font-weight: 200;
+    src: url(/fonts/NokiaPureText-Light.woff) format("woff");
+  }
+  @font-face {
+    font-family: NokiaPureText;
+    font-weight: 400;
+    src: url(/fonts/NokiaPureText-Regular.woff) format("woff");
+  }
+  @font-face {
+    font-family: NokiaPureText;
+    font-weight: 600;
+    src: url(/fonts/NokiaPureText-Medium.woff) format("woff");
+  }
+  @font-face {
+    font-family: NokiaPureText;
+    font-weight: 700;
+    src: url(/fonts/NokiaPureText-Bold.woff) format("woff");
+  }
+
   :root {
     --background: 0 0% 100%;
     --foreground: 222.2 84% 4.9%;
@@ -68,11 +87,10 @@
 
     --ring: 217.2 32.6% 17.5%;
   }
-}
 
-@layer base {
   * {
     @apply border-border;
+    font-family: NokiaPureText, sans-serif;
   }
   body {
     @apply bg-background text-secondary-foreground;

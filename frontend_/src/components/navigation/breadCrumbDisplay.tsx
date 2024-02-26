@@ -2,11 +2,11 @@ import { useAtom } from "jotai";
 import { Tooltip, TooltipContent } from "../ui/tooltip";
 import { TooltipTrigger } from "@radix-ui/react-tooltip";
 import { FaChevronRight, FaInfoCircle } from "react-icons/fa";
+import { Link } from "@tanstack/react-router";
 import {
   globalBreadCrumbAtom,
   globelBredCrumbChildrenAtom,
-} from "./breadCrumb";
-import { Link } from "@tanstack/react-router";
+} from "@/atoms/breadcrumbs";
 
 export default function BredCrumbDisplay() {
   const [globalBreadCrumb] = useAtom(globalBreadCrumbAtom);

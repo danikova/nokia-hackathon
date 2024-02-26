@@ -16,7 +16,7 @@ export const defaultSB = React.forwardRef<HTMLDivElement, CustomContentProps>(
           }}
         >
           <p>{message}</p>
-          <button className="transition delay-[75ms] opacity-10 group-hover:opacity-90">
+          <button className="transition delay-100 opacity-10 group-hover:opacity-90">
             <FaXmark className="h-5 w-5" />
           </button>
         </div>
@@ -39,7 +39,7 @@ export const errorSB = React.forwardRef<HTMLDivElement, CustomContentProps>(
           }}
         >
           <p>{message}</p>
-          <button className="transition delay-[75ms] opacity-10 group-hover:opacity-90">
+          <button className="transition delay-100 opacity-10 group-hover:opacity-90">
             <FaXmark className="h-5 w-5" />
           </button>
         </div>
@@ -62,7 +62,7 @@ export const successSB = React.forwardRef<HTMLDivElement, CustomContentProps>(
           }}
         >
           <p>{message}</p>
-          <button className="transition delay-[75ms] opacity-10 group-hover:opacity-90">
+          <button className="transition delay-100 opacity-10 group-hover:opacity-90">
             <FaXmark className="h-5 w-5" />
           </button>
         </div>
