@@ -1,14 +1,10 @@
 import { v4 as uuid4 } from "uuid";
-import { atom, useAtom } from "jotai";
+import { useAtom } from "jotai";
 import { FaLink } from "react-icons/fa";
 import { useEffect, useRef } from "react";
 import * as TooltipPrimitive from "@radix-ui/react-tooltip";
 import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
-
-const floatingWindowPropsAtom = atom({
-  url: undefined as string | undefined,
-  key: uuid4(),
-});
+import { floatingWindowPropsAtom } from "@/atoms/floatingWindow";
 
 type WindowLinkProps = {
   url: string;
