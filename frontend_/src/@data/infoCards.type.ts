@@ -1,6 +1,6 @@
 import { BaseCollectionResponse } from "./base.type";
 
-export interface InfoCard {
+export interface InfoCardRecord {
   id: string;
   collectionId: string;
   collectionName: string;
@@ -11,4 +11,4 @@ export interface InfoCard {
   right_image: string;
 }
 
-export type InfoCardResponse = BaseCollectionResponse<InfoCard>;
+export type InfoCardsResponse = BaseCollectionResponse<InfoCardRecord>;

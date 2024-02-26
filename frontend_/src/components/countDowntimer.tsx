@@ -7,6 +7,7 @@ import {
   TooltipDescription,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { useGlobals } from "@/@data/globals";
 
 function isValidDate(d: Date): boolean {
   return d instanceof Date && !isNaN(d.getTime());
@@ -45,7 +46,7 @@ function useCountdownTime(endDate: Date) {
 }
 
 export default function CountDownTimer(props: any) {
-  const globals = { event_end_date_time: new Date() }; // useGlobals();
+  const globals = useGlobals();
   const endDate = useMemo(
     () => new Date(globals["event_end_date_time"]),
     [globals]
