@@ -1,10 +1,10 @@
 import { StrictMode } from "react";
-import { RouterProvider, createRouter } from "@tanstack/react-router";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import { RouterProvider, createRouter } from "@tanstack/react-router";
+import { PersistQueryClientProvider } from "@tanstack/react-query-persist-client";
 
 import { routeTree } from "./routeTree.gen";
-import { queryClient } from "./@data/client";
-import { QueryClientProvider } from "@tanstack/react-query";
+import { queryClient, queryClientPersister } from "./@data/client";
 
 const router = createRouter({ routeTree });
 
@@ -17,10 +17,13 @@ declare module "@tanstack/react-router" {
 export default function App() {
   return (
     <StrictMode>
-      <QueryClientProvider client={queryClient}>
+      <PersistQueryClientProvider
+        client={queryClient}
+        persistOptions={{ persister: queryClientPersister }}
+      >
         <RouterProvider router={router} />
         <ReactQueryDevtools />
-      </QueryClientProvider>
+      </PersistQueryClientProvider>
     </StrictMode>
   );
 }

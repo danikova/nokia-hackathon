@@ -4,11 +4,11 @@ function isAuthenticated() {
   return false;
 }
 
-export const Route = createFileRoute("/_authenticated")({
+export const Route = createFileRoute("/_private")({
   beforeLoad: async ({ location }) => {
     if (!isAuthenticated()) {
       throw redirect({
-        to: "",
+        to: "/login",
         search: {
           redirect: location.href,
         },

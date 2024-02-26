@@ -11,21 +11,21 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
-import { Route as UnauthenticatedImport } from './routes/_un_authenticated'
-import { Route as AuthenticatedImport } from './routes/_authenticated'
+import { Route as PublicImport } from './routes/_public'
+import { Route as PrivateImport } from './routes/_private'
 import { Route as IndexImport } from './routes/index'
-import { Route as UnauthenticatedLoginImport } from './routes/_un_authenticated/login'
-import { Route as AuthenticatedPostsImport } from './routes/_authenticated/posts'
+import { Route as PublicLoginImport } from './routes/_public/login'
+import { Route as PrivatePostsImport } from './routes/_private/posts'
 
 // Create/Update Routes
 
-const UnauthenticatedRoute = UnauthenticatedImport.update({
-  id: '/_un_authenticated',
+const PublicRoute = PublicImport.update({
+  id: '/_public',
   getParentRoute: () => rootRoute,
 } as any)
 
-const AuthenticatedRoute = AuthenticatedImport.update({
-  id: '/_authenticated',
+const PrivateRoute = PrivateImport.update({
+  id: '/_private',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -34,14 +34,14 @@ const IndexRoute = IndexImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
-const UnauthenticatedLoginRoute = UnauthenticatedLoginImport.update({
+const PublicLoginRoute = PublicLoginImport.update({
   path: '/login',
-  getParentRoute: () => UnauthenticatedRoute,
+  getParentRoute: () => PublicRoute,
 } as any)
 
-const AuthenticatedPostsRoute = AuthenticatedPostsImport.update({
+const PrivatePostsRoute = PrivatePostsImport.update({
   path: '/posts',
-  getParentRoute: () => AuthenticatedRoute,
+  getParentRoute: () => PrivateRoute,
 } as any)
 
 // Populate the FileRoutesByPath interface
@@ -52,21 +52,21 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexImport
       parentRoute: typeof rootRoute
     }
-    '/_authenticated': {
-      preLoaderRoute: typeof AuthenticatedImport
+    '/_private': {
+      preLoaderRoute: typeof PrivateImport
       parentRoute: typeof rootRoute
     }
-    '/_un_authenticated': {
-      preLoaderRoute: typeof UnauthenticatedImport
+    '/_public': {
+      preLoaderRoute: typeof PublicImport
       parentRoute: typeof rootRoute
     }
-    '/_authenticated/posts': {
-      preLoaderRoute: typeof AuthenticatedPostsImport
-      parentRoute: typeof AuthenticatedImport
+    '/_private/posts': {
+      preLoaderRoute: typeof PrivatePostsImport
+      parentRoute: typeof PrivateImport
     }
-    '/_un_authenticated/login': {
-      preLoaderRoute: typeof UnauthenticatedLoginImport
-      parentRoute: typeof UnauthenticatedImport
+    '/_public/login': {
+      preLoaderRoute: typeof PublicLoginImport
+      parentRoute: typeof PublicImport
     }
   }
 }
@@ -75,8 +75,8 @@ declare module '@tanstack/react-router' {
 
 export const routeTree = rootRoute.addChildren([
   IndexRoute,
-  AuthenticatedRoute.addChildren([AuthenticatedPostsRoute]),
-  UnauthenticatedRoute.addChildren([UnauthenticatedLoginRoute]),
+  PrivateRoute.addChildren([PrivatePostsRoute]),
+  PublicRoute.addChildren([PublicLoginRoute]),
 ])
 
 /* prettier-ignore-end */
