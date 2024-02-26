@@ -5,6 +5,6 @@
     "strict": true,
     "esModuleInterop": true
   },
-  "include": ["**/*"],
+  "include": ["pb_hooks"],
   "exclude": ["pb_migrations"]
 }
