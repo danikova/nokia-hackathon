@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { atom, useSetAtom } from "jotai";
-import { BreadCrumbItem } from "./breadCrumb";
+import { BreadCrumbItem } from "./breadCrumb.types";
 
 export const globalBreadCrumbAtom = atom<BreadCrumbItem[]>([]);
 export const globelBredCrumbChildrenAtom = atom<

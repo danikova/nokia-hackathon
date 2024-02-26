@@ -5,7 +5,7 @@ import { FaChevronRight, FaInfoCircle } from "react-icons/fa";
 import {
   globalBreadCrumbAtom,
   globelBredCrumbChildrenAtom,
-} from "./BreadCrumb";
+} from "./breadCrumb";
 import { Link } from "@tanstack/react-router";
 
 export default function BredCrumbDisplay() {

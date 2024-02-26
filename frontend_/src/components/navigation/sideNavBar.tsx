@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import NavBarItemC from "./NavBarItem";
+import NavBarItemC from "./navBarItem";
 import { NavBarItem, navBarItems, staffNavBarItems } from "@/lib/navBar";
 import {
   Tooltip,
