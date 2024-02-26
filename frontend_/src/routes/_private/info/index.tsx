@@ -47,27 +47,11 @@ function Section({
         className
       )}
     >
-      {leftImageSrc && (
-        <img
-          height={200}
-          width={200}
-          src={leftImageSrc}
-          alt={"info section image"}
-          className=""
-        />
-      )}
+      {leftImageSrc && <img height={200} width={200} src={leftImageSrc} />}
       <div className="prose">
         <ReactMarkdown>{infoCard.text}</ReactMarkdown>
       </div>
-      {RightImageSrc && (
-        <img
-          height={200}
-          width={200}
-          src={RightImageSrc}
-          alt={"info section image"}
-          className=""
-        />
-      )}
+      {RightImageSrc && <img height={200} width={200} src={RightImageSrc} />}
     </div>
   );
 }
