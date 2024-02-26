@@ -78,7 +78,7 @@
     @apply bg-background text-secondary-foreground;
   }
 
-  .info-card h1 {
+  /* .info-card h1 {
     @apply text-3xl font-bold;
   }
   .info-card h2 {
@@ -105,7 +105,7 @@
 
   .info-card .underlined-line-through {
     text-decoration: underline line-through;
-  }
+  } */
 }
 
 @keyframes gradient {
@@ -171,7 +171,7 @@
 }
 
 .line-through-cell::after {
-  content: '';
+  content: "";
   position: absolute;
   top: 50%;
   left: 0;

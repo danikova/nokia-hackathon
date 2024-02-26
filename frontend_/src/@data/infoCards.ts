@@ -1,9 +1,9 @@
 import axios from "axios";
-import { InfoCardResponse } from "./infoCards.type";
+import { InfoCardsResponse } from "./infoCards.type";
 import { UseQueryOptions, useQuery } from "@tanstack/react-query";
 
 export function useInfoCards(
-  options?: Partial<UseQueryOptions<InfoCardResponse[], Error>>
+  options?: Partial<UseQueryOptions<InfoCardsResponse, Error>>
 ) {
   return useQuery({
     queryKey: ["infoCards"],

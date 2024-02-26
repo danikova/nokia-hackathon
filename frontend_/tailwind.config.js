@@ -1,6 +1,7 @@
-import tailwindcssAnimate from "tailwindcss-animate";
-import tailwindcssForms from "@tailwindcss/forms";
 import daisyui from "daisyui";
+import tailwindcssForms from "@tailwindcss/forms";
+import tailwindcssAnimate from "tailwindcss-animate";
+import tailwindcssTypography from "@tailwindcss/typography";
 
 /** @type {import('tailwindcss').Config} */
 export default {
@@ -74,5 +75,10 @@ export default {
       },
     },
   },
-  plugins: [tailwindcssAnimate, tailwindcssForms, daisyui],
+  plugins: [
+    tailwindcssAnimate,
+    tailwindcssForms,
+    daisyui,
+    tailwindcssTypography,
+  ],
 };

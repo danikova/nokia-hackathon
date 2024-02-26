@@ -95,35 +95,6 @@
   body {
     @apply bg-background text-secondary-foreground;
   }
-
-  .info-card h1 {
-    @apply text-3xl font-bold;
-  }
-  .info-card h2 {
-    @apply text-2xl font-bold;
-  }
-  .info-card h3 {
-    @apply text-xl font-bold;
-  }
-  .info-card h4 {
-    @apply text-lg font-bold;
-  }
-  .info-card blockquote {
-    @apply border-l-2 border-accent-foreground/50 pl-4 opacity-60;
-  }
-  .info-card a {
-    @apply text-primary hover:underline;
-  }
-  .info-card ul li {
-    @apply list-disc list-inside;
-  }
-  .info-card ol li {
-    @apply list-decimal list-inside;
-  }
-
-  .info-card .underlined-line-through {
-    text-decoration: underline line-through;
-  }
 }
 
 @keyframes gradient {
