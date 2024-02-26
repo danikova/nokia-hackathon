@@ -1,6 +1,6 @@
-import { UseMutationOptions, useMutation } from "@tanstack/react-query";
 import axios from "axios";
 import { AuthResponse } from "./users.type";
+import { UseMutationOptions, useMutation } from "@tanstack/react-query";
 
 interface AuthProps {
   identity: string;

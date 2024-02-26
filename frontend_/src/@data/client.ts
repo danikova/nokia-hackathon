@@ -1,3 +1,5 @@
+import axios from "axios";
+import { getStoredToken } from "../@atoms/user";
 import { QueryClient } from "@tanstack/react-query";
 import { createSyncStoragePersister } from "@tanstack/query-sync-storage-persister";
 
@@ -11,4 +13,10 @@ export const queryClient = new QueryClient({
 
 export const queryClientPersister = createSyncStoragePersister({
   storage: window.localStorage,
+});
+
+axios.interceptors.request.use(function (config) {
+  const token = getStoredToken();
+  if (token) config.headers.Authorization = token;
+  return config;
 });
