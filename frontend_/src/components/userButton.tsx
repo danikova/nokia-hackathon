@@ -1,9 +1,6 @@
-import { cn } from "@/lib/utils";
 import { BiLogOut } from "react-icons/bi";
 import { enqueueSnackbar } from "notistack";
-import { minidenticon } from "minidenticons";
 import { useCallback, useMemo } from "react";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -13,34 +10,20 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Skeleton } from "./ui/skeleton";
-import { UserRecord } from "@/@data/users.type";
+import { useAtomValue } from "jotai";
+import { userAtom } from "@/atoms/user";
+import { useLogout } from "@/lib/hooks";
+import { UserAvatar } from "./userAvatar";
 
 export default function UserButton() {
-  // const router = useRouter();
-  // const pb = usePocketBase();
-  // const model = useUserModel();
-  const model: UserRecord = {
-    name: "John Doe",
-    username: "johndoe",
-    email: "johndoe@example.com",
-    avatarUrl: "https://example.com/avatar.jpg",
-    collectionId: "123",
-    collectionName: "users",
-    created: "2022-01-01T00:00:00Z",
-    emailVisibility: true,
-    id: "123",
-    role: "user",
-    updated: "2022-01-01T00:00:00Z",
-    verified: true,
-  };
+  const logoutFlow = useLogout();
+  const model = useAtomValue(userAtom);
   const name = useMemo(() => model?.name || model?.username, [model]);
 
   const logout = useCallback(() => {
-    // pb.authStore.clear();
-    // logoutFlow();
-    // router.push("/login");
+    logoutFlow();
     enqueueSnackbar("Successful logout", { variant: "success" });
-  }, []);
+  }, [logoutFlow]);
 
   return (
     <DropdownMenu>
@@ -65,40 +48,5 @@ export default function UserButton() {
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
-  );
-}
-
-export function UserAvatar({
-  user,
-  className,
-}: {
-  user: UserRecord;
-  className?: string;
-}) {
-  const name = useMemo(() => user?.name || user?.username, [user]);
-  const fallback = useMemo(() => {
-    if (!name) return null;
-    const parts = name.split(" ");
-    if (parts.length === 1) {
-      return name[0].toUpperCase();
-    } else {
-      return parts[0][0].toUpperCase() + parts[1][0].toUpperCase();
-    }
-  }, [name]);
-
-  const avatarURI = useMemo(() => {
-    if (user?.avatarUrl) return user?.avatarUrl;
-    else
-      return (
-        "data:image/svg+xml;utf8," +
-        encodeURIComponent(minidenticon(name, 100, 50))
-      );
-  }, [name, user]);
-
-  return (
-    <Avatar className={cn("bg-background", className)}>
-      <AvatarImage src={avatarURI} alt={name} />
-      <AvatarFallback>{fallback}</AvatarFallback>
-    </Avatar>
   );
 }

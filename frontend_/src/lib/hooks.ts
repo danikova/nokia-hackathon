@@ -1,7 +1,7 @@
 import { useSetAtom } from "jotai";
 import { RESET } from "jotai/utils";
 import { rootRouter } from "../router";
-import { tokenAtom } from "../atoms/user";
+import { tokenAtom, userAtom } from "../atoms/user";
 import { useAuthWithPassword } from "@/@data/users";
 import { MutableRefObject, useEffect } from "react";
 import { useNavigate } from "@tanstack/react-router";
@@ -34,10 +34,13 @@ export function useLogout() {
 export function useFormLogin(setLoading: (value: boolean) => void) {
   const navigate = useNavigate();
   const setToken = useSetAtom(tokenAtom);
+  const setUser = useSetAtom(userAtom);
+
   return useAuthWithPassword({
     onMutate: () => setLoading(true),
     onSuccess: (data) => {
       setToken(data.token);
+      setUser(data.record);
       setLoading(false);
       navigate({
         to: "/",
