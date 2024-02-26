@@ -7,10 +7,10 @@
       "path": "./frontend"
     },
     {
-      "path": "./backend"
+      "path": "./frontend_"
     },
     {
-      "path": "./example_project"
+      "path": "./backend"
     }
   ],
   "launch": {
