@@ -1,5 +1,3 @@
-'use client'
-
 import { useCallback, useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 
@@ -119,9 +117,11 @@ export function EditLinkPlugin() {
         ref={ref}
         style={{ top: pos?.y, left: pos?.x }}
         aria-hidden={!pos?.x || !pos?.y}
-        className={`absolute flex items-center justify-between bg-slate-100 border-[1px] ${error ? "border-red-600" : "border-slate-300"
-          } rounded-md p-1 gap-1 ${pos?.x && pos.y ? "opacity-1 visible" : "opacity-0 invisible"
-          }`}
+        className={`absolute flex items-center justify-between bg-slate-100 border-[1px] ${
+          error ? "border-red-600" : "border-slate-300"
+        } rounded-md p-1 gap-1 ${
+          pos?.x && pos.y ? "opacity-1 visible" : "opacity-0 invisible"
+        }`}
       >
         <input
           ref={inputRef}

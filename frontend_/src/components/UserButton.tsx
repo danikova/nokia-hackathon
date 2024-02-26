@@ -1,5 +1,3 @@
-"use client";
-
 import { cn } from "@/lib/utils";
 import { BiLogOut } from "react-icons/bi";
 import { enqueueSnackbar } from "notistack";

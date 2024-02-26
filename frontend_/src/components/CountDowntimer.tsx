@@ -1,5 +1,3 @@
-"use client";
-
 import { cn } from "@/lib/utils";
 import FromNow from "@/lib/dayjs";
 import { useEffect, useMemo, useState } from "react";

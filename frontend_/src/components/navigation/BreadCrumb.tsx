@@ -1,5 +1,3 @@
-"use client";
-
 import { useEffect } from "react";
 import { atom, useSetAtom } from "jotai";
 import { BreadCrumbItem } from "./breadCrumb";

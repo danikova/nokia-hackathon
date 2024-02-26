@@ -1,5 +1,3 @@
-"use client";
-
 import { useOutsideClickObserver } from "@/lib/helperHooks";
 import { Form } from "@/components/ui/form";
 import { ReactElement, useCallback, useRef, useState } from "react";

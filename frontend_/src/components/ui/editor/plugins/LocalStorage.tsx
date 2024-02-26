@@ -1,5 +1,3 @@
-'use client'
-
 import { useCallback, useEffect } from "react";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
 

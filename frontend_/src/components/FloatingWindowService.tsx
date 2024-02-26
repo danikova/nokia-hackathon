@@ -1,5 +1,3 @@
-"use client";
-
 import { v4 as uuid4 } from "uuid";
 import { atom, useAtom } from "jotai";
 import { FaLink } from "react-icons/fa";

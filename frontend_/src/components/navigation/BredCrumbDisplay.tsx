@@ -1,5 +1,3 @@
-"use client";
-
 import { useAtom } from "jotai";
 import { Tooltip, TooltipContent } from "../ui/tooltip";
 import { TooltipTrigger } from "@radix-ui/react-tooltip";
