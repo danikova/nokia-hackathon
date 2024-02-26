@@ -1,9 +1,9 @@
 import { useMemo, useState } from "react";
 import Spinner from "@/components/Spinner";
-import { useAuthMethods } from "../../@data/users";
-import { PasswordLogin } from "@/components/forms";
+import { useAuthMethods } from "@/@data/users";
+import { PasswordLogin } from "./-components/forms";
 import { createFileRoute } from "@tanstack/react-router";
-import { GithubLogIn, GoogleLogIn } from "../../components/oauth";
+import { GithubLogIn, GoogleLogIn } from "./-components/oauth";
 
 export const Route = createFileRoute("/_public/login")({
   component: Login,
