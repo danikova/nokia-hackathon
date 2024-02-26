@@ -10,4 +10,9 @@ export default defineConfig({
       "/api": "http://localhost:8090",
     },
   },
+  resolve: {
+    alias: {
+      "@/": "/src/",
+    },
+  },
 });

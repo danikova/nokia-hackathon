@@ -1,7 +1,7 @@
 import { Provider } from "jotai";
 import { StrictMode } from "react";
 import { rootRouter } from "./router";
-import { jotaiStore } from "./@atoms/store";
+import { jotaiStore } from "./atoms/store";
 import { RouterProvider } from "@tanstack/react-router";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { queryClient, queryClientPersister } from "./@data/client";

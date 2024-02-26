@@ -1,5 +1,5 @@
 import { Outlet, createFileRoute, redirect } from "@tanstack/react-router";
-import { getStoredToken } from "../@atoms/user";
+import { getStoredToken } from "../atoms/user";
 
 function isAuthenticated() {
   const token = getStoredToken();

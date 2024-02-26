@@ -1,5 +1,5 @@
 import axios from "axios";
-import { getStoredToken } from "../@atoms/user";
+import { getStoredToken } from "../atoms/user";
 import { QueryClient } from "@tanstack/react-query";
 import { createSyncStoragePersister } from "@tanstack/query-sync-storage-persister";
 
