@@ -1,4 +1,5 @@
 import { pb } from "@/@data/client";
+import { pbSnackbarWrapper } from "@/lib/utils";
 import { useNavigate } from "@tanstack/react-router";
 import { useCallback } from "react";
 import { FaGithub, FaGoogle } from "react-icons/fa6";
@@ -11,7 +12,10 @@ function useOAuthOnClick(
 
   const onClick = useCallback(async () => {
     setLoading(true);
-    await pb.collection("users").authWithOAuth2({ provider });
+    await pbSnackbarWrapper(
+      pb.collection("users").authWithOAuth2({ provider }),
+      "Successful login"
+    );
     setLoading(false);
     navigate({
       to: "/",

@@ -17,6 +17,7 @@ import {
 import { pb } from "@/@data/client";
 import { UserRecord } from "@/@data/users.type";
 import { useNavigate } from "@tanstack/react-router";
+import { pbSnackbarWrapper } from "@/lib/utils";
 
 const formSchema = z
   .object({
@@ -35,9 +36,12 @@ function useOnSubmit(setLoading: (isLoading: boolean) => void) {
   return useCallback(
     async ({ userIdentifier, password }: z.infer<typeof formSchema>) => {
       setLoading(true);
-      await pb
-        .collection("users")
-        .authWithPassword<UserRecord>(userIdentifier, password);
+      await pbSnackbarWrapper(
+        pb
+          .collection("users")
+          .authWithPassword<UserRecord>(userIdentifier, password),
+        "Successful login"
+      );
       setLoading(false);
       navigate({
         to: "/",
