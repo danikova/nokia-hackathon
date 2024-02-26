@@ -1,7 +1,9 @@
 import { Outlet, createFileRoute, redirect } from "@tanstack/react-router";
+import { getStoredToken } from "../@atoms/user";
 
 function isAuthenticated() {
-  return false;
+  const token = getStoredToken();
+  return token !== null;
 }
 
 export const Route = createFileRoute("/_private")({

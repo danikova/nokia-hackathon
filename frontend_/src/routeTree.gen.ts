@@ -14,8 +14,8 @@ import { Route as rootRoute } from './routes/__root'
 import { Route as PublicImport } from './routes/_public'
 import { Route as PrivateImport } from './routes/_private'
 import { Route as IndexImport } from './routes/index'
-import { Route as PublicLoginImport } from './routes/_public/login'
 import { Route as PrivatePostsImport } from './routes/_private/posts'
+import { Route as PublicLoginImport } from './routes/_public/login'
 
 // Create/Update Routes
 
@@ -34,14 +34,14 @@ const IndexRoute = IndexImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
-const PublicLoginRoute = PublicLoginImport.update({
-  path: '/login',
-  getParentRoute: () => PublicRoute,
-} as any)
-
 const PrivatePostsRoute = PrivatePostsImport.update({
   path: '/posts',
   getParentRoute: () => PrivateRoute,
+} as any)
+
+const PublicLoginRoute = PublicLoginImport.update({
+  path: '/login',
+  getParentRoute: () => PublicRoute,
 } as any)
 
 // Populate the FileRoutesByPath interface
@@ -60,13 +60,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PublicImport
       parentRoute: typeof rootRoute
     }
-    '/_private/posts': {
-      preLoaderRoute: typeof PrivatePostsImport
-      parentRoute: typeof PrivateImport
-    }
     '/_public/login': {
       preLoaderRoute: typeof PublicLoginImport
       parentRoute: typeof PublicImport
+    }
+    '/_private/posts': {
+      preLoaderRoute: typeof PrivatePostsImport
+      parentRoute: typeof PrivateImport
     }
   }
 }

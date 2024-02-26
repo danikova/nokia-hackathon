@@ -1,3 +1,4 @@
+import { useLogout } from "../../utils/hooks";
 import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/_private/posts")({
@@ -5,5 +6,11 @@ export const Route = createFileRoute("/_private/posts")({
 });
 
 function Posts() {
-  return <div className="p-2">Hello from Posts!</div>;
+  const logout = useLogout();
+
+  return (
+    <div className="p-2">
+      Hello from Posts!<button onClick={logout}>logout</button>
+    </div>
+  );
 }
