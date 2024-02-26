@@ -1,4 +1,4 @@
-import { useLogout } from "../../utils/hooks";
+import { useLogout } from "../../lib/hooks";
 import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/_private/posts")({

@@ -2,8 +2,26 @@ import { useSetAtom } from "jotai";
 import { RESET } from "jotai/utils";
 import { rootRouter } from "../router";
 import { tokenAtom } from "../atoms/user";
-import { useNavigate } from "@tanstack/react-router";
 import { useAuthWithPassword } from "@/@data/users";
+import { MutableRefObject, useEffect } from "react";
+import { useNavigate } from "@tanstack/react-router";
+
+export function useOutsideClickObserver(
+  ref: MutableRefObject<any>,
+  onNotClick: (event: MouseEvent) => void
+) {
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (ref.current && !ref.current.contains(event.target)) {
+        onNotClick(event);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [ref, onNotClick]);
+}
 
 export function useLogout() {
   const setToken = useSetAtom(tokenAtom);

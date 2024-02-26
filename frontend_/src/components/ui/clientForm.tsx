@@ -1,4 +1,4 @@
-import { useOutsideClickObserver } from "@/lib/helperHooks";
+import { useOutsideClickObserver } from "@/lib/hooks";
 import { Form } from "@/components/ui/form";
 import { ReactElement, useCallback, useRef, useState } from "react";
 import FocusLock from "react-focus-lock";
