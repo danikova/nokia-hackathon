@@ -4,12 +4,21 @@ import { useAuthMethods } from "@/@data/users";
 import { PasswordLogin } from "./-components/forms";
 import { createFileRoute } from "@tanstack/react-router";
 import { GithubLogIn, GoogleLogIn } from "./-components/oauth";
+import { LoginLayout } from "@/layouts/login";
 
 export const Route = createFileRoute("/_public/login")({
   component: Login,
 });
 
 function Login() {
+  return (
+    <LoginLayout>
+      <LoginLogic />
+    </LoginLayout>
+  );
+}
+
+function LoginLogic() {
   const [loading, setLoading] = useState(false);
   const { data: authMethods, status } = useAuthMethods();
 
