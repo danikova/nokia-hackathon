@@ -12,15 +12,15 @@ import (
 
 func OnBeforeServe(app *pocketbase.PocketBase) {
 	app.OnBeforeServe().Add(func(e *core.ServeEvent) error {
-		e.Router.GET("/*", apis.StaticDirectoryHandler(os.DirFS("./pb_public"), false))
-		
+		e.Router.GET("/files/*", apis.StaticDirectoryHandler(os.DirFS("./pb_public"), false))
+
 		views.AddGithubBotStarted(app, e)
 		views.AddGithubBotFinished(app, e)
 		views.AddGetRunResultsSumView(app, e)
 		views.AddGetRunStatisticsView(app, e)
 
 		crons.AddUpdateStaleRunTimers(app)
-		
+
 		return nil
 	})
 }

@@ -71,7 +71,7 @@ func AddGetRunResultsSumView(app *pocketbase.PocketBase, e *core.ServeEvent) {
 	})
 }
 
-func getWorkspaces(app *pocketbase.PocketBase, info *models.RequestData, workspaceId string) ([]*models.Record, error) {
+func getWorkspaces(app *pocketbase.PocketBase, info *models.RequestInfo, workspaceId string) ([]*models.Record, error) {
 	expressions := []dbx.Expression{
 		dbx.HashExp{"id": workspaceId},
 	}

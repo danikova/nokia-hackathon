@@ -8,7 +8,6 @@ import (
 	"github.com/pocketbase/pocketbase/plugins/migratecmd"
 
 	"hackathon-backend/src/events"
-	_ "hackathon-backend/migrations"
 )
 
 func main() {
@@ -17,8 +16,10 @@ func main() {
 
 	events.InitializeEvents(app)
 
-	migratecmd.MustRegister(app, app.RootCmd, &migratecmd.Options{
-		Automigrate: false,
+	migratecmd.MustRegister(app, app.RootCmd, migratecmd.Config{
+		TemplateLang: migratecmd.TemplateLangJS,
+		Automigrate:  true,
+		Dir:          "pb_migrations",
 	})
 
 	if err := app.Start(); err != nil {

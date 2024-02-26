@@ -19,11 +19,9 @@ func BroadcastAny(app *pocketbase.PocketBase, eventName string, data any) error 
 		return err
 	}
 
-	encodedData := string(dataBytes)
-
 	msg := subscriptions.Message{
 		Name: eventName,
-		Data: encodedData,
+		Data: dataBytes,
 	}
 
 	for _, client := range clients {
