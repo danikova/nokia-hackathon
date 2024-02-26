@@ -1,11 +1,10 @@
 import { useEffect } from "react";
-import { atom, useSetAtom } from "jotai";
-import { BreadCrumbItem } from "./breadCrumb.types";
-
-export const globalBreadCrumbAtom = atom<BreadCrumbItem[]>([]);
-export const globelBredCrumbChildrenAtom = atom<
-  JSX.Element | JSX.Element[] | undefined
->(undefined);
+import { useSetAtom } from "jotai";
+import { BreadCrumbItem } from "./types";
+import {
+  globalBreadCrumbAtom,
+  globelBredCrumbChildrenAtom,
+} from "@/atoms/breadcrumbs";
 
 export default function BreadCrumb({ items }: { items: BreadCrumbItem[] }) {
   const setGlobalBreadCrumb = useSetAtom(globalBreadCrumbAtom);

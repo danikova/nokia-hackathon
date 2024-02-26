@@ -1,12 +1,13 @@
 import { cn } from "@/lib/utils";
 import NavBarItemC from "./navBarItem";
-import { NavBarItem, navBarItems, staffNavBarItems } from "@/lib/navBar";
 import {
   Tooltip,
   TooltipContent,
   TooltipDescription,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { navBarItems, staffNavBarItems } from "./navBarItems";
+import { NavBarItem } from "./types";
 
 export default function SideNavBar() {
   const role: string = "user";

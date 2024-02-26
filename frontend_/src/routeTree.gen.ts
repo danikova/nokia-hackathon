@@ -15,6 +15,7 @@ import { Route as PublicImport } from './routes/_public'
 import { Route as PrivateImport } from './routes/_private'
 import { Route as IndexImport } from './routes/index'
 import { Route as PublicLoginImport } from './routes/_public/login'
+import { Route as PrivateSettingsIndexImport } from './routes/_private/settings/index'
 import { Route as PrivateScoreboardIndexImport } from './routes/_private/scoreboard/index'
 import { Route as PrivateResultsIndexImport } from './routes/_private/results/index'
 import { Route as PrivateRankingIndexImport } from './routes/_private/ranking/index'
@@ -40,6 +41,11 @@ const IndexRoute = IndexImport.update({
 const PublicLoginRoute = PublicLoginImport.update({
   path: '/login',
   getParentRoute: () => PublicRoute,
+} as any)
+
+const PrivateSettingsIndexRoute = PrivateSettingsIndexImport.update({
+  path: '/settings/',
+  getParentRoute: () => PrivateRoute,
 } as any)
 
 const PrivateScoreboardIndexRoute = PrivateScoreboardIndexImport.update({
@@ -98,6 +104,10 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PrivateScoreboardIndexImport
       parentRoute: typeof PrivateImport
     }
+    '/_private/settings/': {
+      preLoaderRoute: typeof PrivateSettingsIndexImport
+      parentRoute: typeof PrivateImport
+    }
   }
 }
 
@@ -110,6 +120,7 @@ export const routeTree = rootRoute.addChildren([
     PrivateRankingIndexRoute,
     PrivateResultsIndexRoute,
     PrivateScoreboardIndexRoute,
+    PrivateSettingsIndexRoute,
   ]),
   PublicRoute.addChildren([PublicLoginRoute]),
 ])

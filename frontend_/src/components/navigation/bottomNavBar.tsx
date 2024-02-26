@@ -1,6 +1,6 @@
 import NavBarItem from "./navBarItem";
-import { navBarItems } from "@/lib/navBar";
 import UserButton from "../userButton";
+import { navBarItems } from "./navBarItems";
 
 export default function BottomNavBar() {
   return (
