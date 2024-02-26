@@ -1,5 +1,6 @@
 import { Outlet, createFileRoute, redirect } from "@tanstack/react-router";
 import { getStoredToken } from "../atoms/user";
+import { DashboardLayout } from "@/layouts/dashboard";
 
 function isAuthenticated() {
   const token = getStoredToken();
@@ -22,9 +23,8 @@ export const Route = createFileRoute("/_private")({
 
 function Authenticated() {
   return (
-    <div className="p-2">
-      Hello from Authenticated!
+    <DashboardLayout>
       <Outlet />
-    </div>
+    </DashboardLayout>
   );
 }
