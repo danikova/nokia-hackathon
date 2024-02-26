@@ -1,10 +1,6 @@
-import { useSetAtom } from "jotai";
-import { RESET } from "jotai/utils";
+import { pb } from "@/@data/client";
 import { rootRouter } from "../router";
-import { tokenAtom, userAtom } from "../atoms/user";
-import { useAuthWithPassword } from "@/@data/users";
 import { MutableRefObject, useEffect } from "react";
-import { useNavigate } from "@tanstack/react-router";
 
 export function useOutsideClickObserver(
   ref: MutableRefObject<any>,
@@ -24,28 +20,8 @@ export function useOutsideClickObserver(
 }
 
 export function useLogout() {
-  const setToken = useSetAtom(tokenAtom);
   return () => {
-    setToken(RESET);
+    pb.authStore.clear();
     rootRouter.invalidate();
   };
-}
-
-export function useFormLogin(setLoading: (value: boolean) => void) {
-  const navigate = useNavigate();
-  const setToken = useSetAtom(tokenAtom);
-  const setUser = useSetAtom(userAtom);
-
-  return useAuthWithPassword({
-    onMutate: () => setLoading(true),
-    onSuccess: (data) => {
-      setToken(data.token);
-      setUser(data.record);
-      setLoading(false);
-      navigate({
-        to: "/",
-        replace: false,
-      });
-    },
-  });
 }

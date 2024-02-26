@@ -14,7 +14,9 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { useFormLogin } from "@/lib/hooks";
+import { pb } from "@/@data/client";
+import { UserRecord } from "@/@data/users.type";
+import { useNavigate } from "@tanstack/react-router";
 
 const formSchema = z
   .object({
@@ -27,22 +29,34 @@ const formSchema = z
   })
   .required();
 
+function useOnSubmit(setLoading: (isLoading: boolean) => void) {
+  const navigate = useNavigate();
+
+  return useCallback(
+    async ({ userIdentifier, password }: z.infer<typeof formSchema>) => {
+      setLoading(true);
+      await pb
+        .collection("users")
+        .authWithPassword<UserRecord>(userIdentifier, password);
+      setLoading(false);
+      navigate({
+        to: "/",
+        replace: false,
+      });
+    },
+    [setLoading, navigate]
+  );
+}
+
 export function PasswordLogin({
   setLoading,
 }: {
   setLoading: (isLoading: boolean) => void;
 }) {
-  const { mutateAsync } = useFormLogin(setLoading);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
   });
-
-  const onSubmit = useCallback(
-    async ({ userIdentifier, password }: z.infer<typeof formSchema>) => {
-      await mutateAsync({ identity: userIdentifier, password });
-    },
-    [mutateAsync]
-  );
+  const onSubmit = useOnSubmit(setLoading);
 
   return (
     <ClientForm

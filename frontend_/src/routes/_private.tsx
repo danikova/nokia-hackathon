@@ -1,10 +1,10 @@
 import { Outlet, createFileRoute, redirect } from "@tanstack/react-router";
-import { getStoredToken } from "../atoms/user";
 import { DashboardLayout } from "@/layouts/dashboard";
+import { pb } from "@/@data/client";
 
 function isAuthenticated() {
-  const token = getStoredToken();
-  return token !== null;
+  const token = pb.authStore.token;
+  return !!token;
 }
 
 export const Route = createFileRoute("/_private")({

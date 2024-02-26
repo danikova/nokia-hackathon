@@ -1,18 +1,29 @@
+import { pb } from "@/@data/client";
+import { useNavigate } from "@tanstack/react-router";
+import { useCallback } from "react";
 import { FaGithub, FaGoogle } from "react-icons/fa6";
 
-export type CompProps = {
-  setLoading: (value: boolean) => void;
-};
+function useOAuthOnClick(
+  provider: string,
+  setLoading: (isLoading: boolean) => void
+) {
+  const navigate = useNavigate();
 
-// prettier-ignore
-const useOAuthOnClick = (provider: string, props: CompProps) => { // eslint-disable-line @typescript-eslint/no-unused-vars
-  const onClick = async () => {};
+  const onClick = useCallback(async () => {
+    setLoading(true);
+    await pb.collection("users").authWithOAuth2({ provider });
+    setLoading(false);
+    navigate({
+      to: "/",
+      replace: false,
+    });
+  }, [navigate, provider, setLoading]);
 
   return onClick;
-};
+}
 
-export function GithubLogIn(props: CompProps) {
-  const onClick = useOAuthOnClick("github", props);
+export function GithubLogIn(setLoading: (isLoading: boolean) => void) {
+  const onClick = useOAuthOnClick("github", setLoading);
 
   return (
     <button
@@ -26,8 +37,8 @@ export function GithubLogIn(props: CompProps) {
   );
 }
 
-export function GoogleLogIn(props: CompProps) {
-  const onClick = useOAuthOnClick("google", props);
+export function GoogleLogIn(setLoading: (isLoading: boolean) => void) {
+  const onClick = useOAuthOnClick("google", setLoading);
 
   return (
     <button

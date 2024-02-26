@@ -1,6 +1,5 @@
 import axios from "axios";
 import PocketBase from "pocketbase";
-import { getStoredToken } from "../atoms/user";
 import { QueryClient } from "@tanstack/react-query";
 import { createSyncStoragePersister } from "@tanstack/query-sync-storage-persister";
 
@@ -17,7 +16,7 @@ export const queryClientPersister = createSyncStoragePersister({
 });
 
 axios.interceptors.request.use(function (config) {
-  const token = getStoredToken();
+  const token = pb.authStore.token;
   if (token) config.headers.Authorization = token;
   return config;
 });
