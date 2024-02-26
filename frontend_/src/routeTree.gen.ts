@@ -15,7 +15,10 @@ import { Route as PublicImport } from './routes/_public'
 import { Route as PrivateImport } from './routes/_private'
 import { Route as IndexImport } from './routes/index'
 import { Route as PublicLoginImport } from './routes/_public/login'
-import { Route as PrivatePostsImport } from './routes/_private/posts'
+import { Route as PrivateScoreboardIndexImport } from './routes/_private/scoreboard/index'
+import { Route as PrivateResultsIndexImport } from './routes/_private/results/index'
+import { Route as PrivateRankingIndexImport } from './routes/_private/ranking/index'
+import { Route as PrivateInfoIndexImport } from './routes/_private/info/index'
 
 // Create/Update Routes
 
@@ -39,8 +42,23 @@ const PublicLoginRoute = PublicLoginImport.update({
   getParentRoute: () => PublicRoute,
 } as any)
 
-const PrivatePostsRoute = PrivatePostsImport.update({
-  path: '/posts',
+const PrivateScoreboardIndexRoute = PrivateScoreboardIndexImport.update({
+  path: '/scoreboard/',
+  getParentRoute: () => PrivateRoute,
+} as any)
+
+const PrivateResultsIndexRoute = PrivateResultsIndexImport.update({
+  path: '/results/',
+  getParentRoute: () => PrivateRoute,
+} as any)
+
+const PrivateRankingIndexRoute = PrivateRankingIndexImport.update({
+  path: '/ranking/',
+  getParentRoute: () => PrivateRoute,
+} as any)
+
+const PrivateInfoIndexRoute = PrivateInfoIndexImport.update({
+  path: '/info/',
   getParentRoute: () => PrivateRoute,
 } as any)
 
@@ -60,13 +78,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PublicImport
       parentRoute: typeof rootRoute
     }
-    '/_private/posts': {
-      preLoaderRoute: typeof PrivatePostsImport
-      parentRoute: typeof PrivateImport
-    }
     '/_public/login': {
       preLoaderRoute: typeof PublicLoginImport
       parentRoute: typeof PublicImport
+    }
+    '/_private/info/': {
+      preLoaderRoute: typeof PrivateInfoIndexImport
+      parentRoute: typeof PrivateImport
+    }
+    '/_private/ranking/': {
+      preLoaderRoute: typeof PrivateRankingIndexImport
+      parentRoute: typeof PrivateImport
+    }
+    '/_private/results/': {
+      preLoaderRoute: typeof PrivateResultsIndexImport
+      parentRoute: typeof PrivateImport
+    }
+    '/_private/scoreboard/': {
+      preLoaderRoute: typeof PrivateScoreboardIndexImport
+      parentRoute: typeof PrivateImport
     }
   }
 }
@@ -75,7 +105,12 @@ declare module '@tanstack/react-router' {
 
 export const routeTree = rootRoute.addChildren([
   IndexRoute,
-  PrivateRoute.addChildren([PrivatePostsRoute]),
+  PrivateRoute.addChildren([
+    PrivateInfoIndexRoute,
+    PrivateRankingIndexRoute,
+    PrivateResultsIndexRoute,
+    PrivateScoreboardIndexRoute,
+  ]),
   PublicRoute.addChildren([PublicLoginRoute]),
 ])
 
