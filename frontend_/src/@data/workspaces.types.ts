@@ -1,11 +1,6 @@
-import { BaseCollectionResponse } from './base.types';
+import { BaseCollectionResponse, BaseRecord } from './base.types';
 
-export interface WorkspaceRecord {
-  id: string;
-  collectionId: string;
-  collectionName: string;
-  created: string;
-  updated: string;
+export interface WorkspaceRecord extends BaseRecord {
   user: string;
   repo_url: string;
   last_valid_sha: string;

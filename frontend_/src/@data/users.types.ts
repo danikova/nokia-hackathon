@@ -1,14 +1,11 @@
-export interface UserRecord {
+import { BaseRecord } from './base.types';
+
+export interface UserRecord extends BaseRecord {
   avatarUrl: string;
-  collectionId: string;
-  collectionName: string;
-  created: string;
   email: string;
   emailVisibility: boolean;
-  id: string;
   name: string;
   role: string;
-  updated: string;
   username: string;
   verified: boolean;
 }

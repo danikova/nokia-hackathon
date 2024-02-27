@@ -1,11 +1,6 @@
-import { BaseCollectionResponse } from './base.types';
+import { BaseCollectionResponse, BaseRecord } from './base.types';
 
-export interface GlobalRecord {
-  id: string;
-  collectionId: string;
-  collectionName: string;
-  created: string;
-  updated: string;
+export interface GlobalRecord extends BaseRecord {
   key: string;
   value: string;
 }

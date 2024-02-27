@@ -1,8 +1,9 @@
-import { BaseCollectionResponse, Expandable } from './base.types';
+import { BaseCollectionResponse, BaseRecord, Expandable } from './base.types';
 import { UserRecord } from './users.types';
 
-export interface RankingRecord extends Expandable<{ user: UserRecord }> {
-  id: string;
+export interface RankingRecord
+  extends Expandable<{ user: UserRecord }>,
+    BaseRecord {
   user: string;
   workspace: string;
   points: { [k: string]: number };

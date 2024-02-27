@@ -1,11 +1,6 @@
-import { BaseCollectionResponse } from './base.types';
+import { BaseCollectionResponse, BaseRecord } from './base.types';
 
-export interface InfoCardRecord {
-  id: string;
-  collectionId: string;
-  collectionName: string;
-  created: string;
-  updated: string;
+export interface InfoCardRecord extends BaseRecord {
   left_image: string;
   text: string;
   right_image: string;

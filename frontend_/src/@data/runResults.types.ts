@@ -1,11 +1,6 @@
-import { BaseCollectionResponse } from './base.types';
+import { BaseCollectionResponse, BaseRecord } from './base.types';
 
-export interface RunResultRecord {
-  id: string;
-  collectionId: string;
-  collectionName: string;
-  created: string;
-  updated: string;
+export interface RunResultRecord extends BaseRecord {
   workspace: string;
   run_id: string;
   task: string;
