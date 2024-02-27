@@ -23,7 +23,7 @@ export function CommentRenderer({
   if (!data) return null;
 
   if (rankingLength === 0)
-    if (!data.expand.workspace?.repo_url)
+    if (!data?.expand?.workspace?.repo_url)
       return (
         <div className="flex justify-end">
           <Dialog open={false}>

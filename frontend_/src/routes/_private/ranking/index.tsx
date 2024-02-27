@@ -52,7 +52,7 @@ function Ranking() {
       filter: false,
       flex: 1,
       cellClass: params =>
-        !params.data?.expand.workspace?.repo_url
+        !params.data?.expand?.workspace?.repo_url
           ? 'line-through-cell opacity-30'
           : '',
     }),

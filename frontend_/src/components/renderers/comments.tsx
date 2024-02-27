@@ -24,7 +24,7 @@ export function CommentsRenderer({
     const comments = list
       .map(ranking => ({
         comments: ranking.comments,
-        user: ranking.expand.user,
+        user: ranking?.expand?.user,
       }))
       .filter(c => !!c.comments);
     return comments;
@@ -66,22 +66,24 @@ export function CommentsRenderer({
           <ul className="flex w-10 flex-col items-center gap-2 p-1">
             {comments.map((comment, i) => {
               return (
-                <li key={i} className="h-8 w-8">
-                  <Tooltip>
-                    <TooltipTrigger>
-                      <UserAvatar
-                        user={comment.user}
-                        className="ring-1 ring-primary/25 ring-offset-1"
-                      />
-                    </TooltipTrigger>
-                    <TooltipContent side="left">
-                      <div
-                        dangerouslySetInnerHTML={{ __html: comment.comments }}
-                        className="max-w-md whitespace-break-spaces"
-                      />
-                    </TooltipContent>
-                  </Tooltip>
-                </li>
+                comment.user && (
+                  <li key={i} className="h-8 w-8">
+                    <Tooltip>
+                      <TooltipTrigger>
+                        <UserAvatar
+                          user={comment.user}
+                          className="ring-1 ring-primary/25 ring-offset-1"
+                        />
+                      </TooltipTrigger>
+                      <TooltipContent side="left">
+                        <div
+                          dangerouslySetInnerHTML={{ __html: comment.comments }}
+                          className="max-w-md whitespace-break-spaces"
+                        />
+                      </TooltipContent>
+                    </Tooltip>
+                  </li>
+                )
               );
             })}
           </ul>

@@ -17,6 +17,7 @@ import { workspaceInfoOpenAtom } from '@/atoms/workspace';
 import { ReviewDialogContent } from './content';
 import { FaChevronRight, FaChevronLeft } from 'react-icons/fa';
 import WorkspaceAvatar from '@/routes/_private/settings/-components/workspaceAvatar';
+import { useMemo } from 'react';
 
 export default function ReviewDialog() {
   const [isWorkspaceInfoOpen, setIsWorkspaceInfoOpen] = useAtom(
@@ -24,56 +25,59 @@ export default function ReviewDialog() {
   );
   const { state, closeDialog } = useReviewDialog();
 
-  if (!state.props) return null;
-  const {
-    data: {
-      expand: { workspace },
-    },
-    ranking,
-  } = state.props;
+  const { data, ranking } = state.props ?? {};
+  const workspace = useMemo(() => data?.expand?.workspace, [data]);
 
   return (
     <Dialog open={state.open} onOpenChange={closeDialog}>
       <DialogContent className="max-w-fit">
-        <DialogHeader>
-          <DialogTitle>{!ranking ? 'Add' : 'Update'} Review</DialogTitle>
-          <div className="text-sm text-muted-foreground">
-            <p className="flex items-center gap-2">
-              <WorkspaceAvatar workspace={workspace} />
-              {workspace.id}
-            </p>
-            <div className="flex justify-between">
-              <div className="flex gap-4">
-                <WorkspaceDetails workspace={workspace} shortVersion withSha />
+        {workspace && ranking && (
+          <>
+            <DialogHeader>
+              <DialogTitle>{!ranking ? 'Add' : 'Update'} Review</DialogTitle>
+              <div className="text-sm text-muted-foreground">
+                <p className="flex items-center gap-2">
+                  <WorkspaceAvatar workspace={workspace} />
+                  {workspace.id}
+                </p>
+                <div className="flex justify-between">
+                  <div className="flex gap-4">
+                    <WorkspaceDetails
+                      workspace={workspace}
+                      shortVersion
+                      withSha
+                    />
+                  </div>
+                  <Tooltip>
+                    <TooltipTrigger
+                      onClick={() => setIsWorkspaceInfoOpen(old => !old)}
+                    >
+                      {!isWorkspaceInfoOpen ? (
+                        <FaChevronRight />
+                      ) : (
+                        <FaChevronLeft />
+                      )}
+                    </TooltipTrigger>
+                    <TooltipContent side="left">
+                      Click to {!isWorkspaceInfoOpen ? 'expand' : 'collapse'}{' '}
+                      workspace info
+                    </TooltipContent>
+                  </Tooltip>
+                </div>
               </div>
-              <Tooltip>
-                <TooltipTrigger
-                  onClick={() => setIsWorkspaceInfoOpen(old => !old)}
-                >
-                  {!isWorkspaceInfoOpen ? (
-                    <FaChevronRight />
-                  ) : (
-                    <FaChevronLeft />
-                  )}
-                </TooltipTrigger>
-                <TooltipContent side="left">
-                  Click to {!isWorkspaceInfoOpen ? 'expand' : 'collapse'}{' '}
-                  workspace info
-                </TooltipContent>
-              </Tooltip>
+            </DialogHeader>
+            <div className="flex">
+              <ReviewDialogContent
+                {...{
+                  workspace,
+                  ranking,
+                }}
+                className="w-[500px]"
+              />
+              {isWorkspaceInfoOpen && <WorkspaceInfo workspace={workspace} />}
             </div>
-          </div>
-        </DialogHeader>
-        <div className="flex">
-          <ReviewDialogContent
-            {...{
-              workspace,
-              ranking,
-            }}
-            className="w-[500px]"
-          />
-          {isWorkspaceInfoOpen && <WorkspaceInfo workspace={workspace} />}
-        </div>
+          </>
+        )}
       </DialogContent>
     </Dialog>
   );
