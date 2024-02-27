@@ -38,7 +38,7 @@ var runResultQuery = minifyQueryStr(queries.GetRunResultsSumQuery)
 func AddGetRunResultsSumView(app *pocketbase.PocketBase, e *core.ServeEvent) {
 	e.Router.AddRoute(echo.Route{
 		Method: http.MethodGet,
-		Path:   "/run_result_sum/",
+		Path:   "/custom_api/run_result_sum/",
 		Handler: func(c echo.Context) error {
 			info := apis.RequestData(c)
 			workspaceId := strings.TrimSpace(c.QueryParam("workspaceId"))

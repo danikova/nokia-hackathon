@@ -31,7 +31,7 @@ type recordData struct {
 func AddGithubBotFinished(app *pocketbase.PocketBase, e *core.ServeEvent) {
 	e.Router.AddRoute(echo.Route{
 		Method: http.MethodPost,
-		Path:   "/github-bot-finished/",
+		Path:   "/custom_api/github-bot-finished/",
 		Handler: func(c echo.Context) error {
 			var reqBody types.GithubRequestBody
 			var err error

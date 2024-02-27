@@ -15,7 +15,7 @@ import (
 func AddGithubBotStarted(app *pocketbase.PocketBase, e *core.ServeEvent) {
 	e.Router.AddRoute(echo.Route{
 		Method: http.MethodPost,
-		Path:   "/github-bot-started/",
+		Path:   "/custom_api/github-bot-started/",
 		Handler: func(c echo.Context) error {
 			var reqBody types.GithubRequestBody
 			var err error

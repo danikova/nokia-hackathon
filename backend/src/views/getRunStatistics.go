@@ -28,7 +28,7 @@ var runStatisticsQuery = minifyQueryStr(queries.GetRunStatisticsQuery)
 func AddGetRunStatisticsView(app *pocketbase.PocketBase, e *core.ServeEvent) {
 	e.Router.AddRoute(echo.Route{
 		Method: http.MethodGet,
-		Path:   "/run_statistics/",
+		Path:   "/custom_api/run_statistics/",
 		Handler: func(c echo.Context) error {
 
 			results := []AggregatedResults{}
