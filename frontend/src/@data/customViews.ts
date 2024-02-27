@@ -1,36 +1,38 @@
-import axios from 'axios';
-import {
-  RunStatisticResponse,
-  RunResultSumResponse,
-} from './customViews.types';
+import { RunStatisticRecord } from './customViews.types';
 import { UseQueryOptions, useQuery } from '@tanstack/react-query';
 import { WorkspaceRecord } from './workspaces.types';
+import { pb } from './client';
+import { sw } from '@/lib/utils';
+import { RunResultRecord } from './runResults.types';
 
 export function useRunStatistics(
-  options?: Partial<UseQueryOptions<RunStatisticResponse, Error>>
+  options?: Partial<UseQueryOptions<RunStatisticRecord[], Error>>
 ) {
   return useQuery({
     queryKey: ['runStatistic'],
-    queryFn: async () => {
-      const response = await axios.get('/custom_api/run_statistics/');
-      return response.data;
-    },
+    queryFn: async () =>
+      await sw(
+        pb.send<RunStatisticRecord[]>('/custom_api/run_statistics/', {
+          method: 'GET',
+        })
+      ),
     ...options,
   });
 }
 
 export function useBestRuns(
   workspace: WorkspaceRecord,
-  options?: Partial<UseQueryOptions<RunResultSumResponse, Error>>
+  options?: Partial<UseQueryOptions<RunResultRecord[], Error>>
 ) {
   return useQuery({
     queryKey: ['bestRuns'],
-    queryFn: async () => {
-      const response = await axios.get(
-        `/custom_api/run_result_sum/?workspaceId=${workspace.id}`
-      );
-      return response.data;
-    },
+    queryFn: async () =>
+      await sw(
+        pb.send<RunResultRecord[]>('/custom_api/run_result_sum/', {
+          method: 'GET',
+          query: { workspaceId: workspace.id },
+        })
+      ),
     ...options,
   });
 }

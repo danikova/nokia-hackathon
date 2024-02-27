@@ -14,15 +14,13 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
-import { pb } from '@/@data/client';
-import { UserRecord } from '@/@data/users.types';
 import { useNavigate } from '@tanstack/react-router';
-import { pbSnackbarWrapper } from '@/lib/utils';
 import { LoginComponentProps } from './type';
+import { useAuthWithPassword } from '@/@data/users';
 
 const formSchema = z
   .object({
-    userIdentifier: z.string().min(1, {
+    usernameOrEmail: z.string().min(1, {
       message: 'Email or username is required.',
     }),
     password: z.string().min(1, {
@@ -33,17 +31,13 @@ const formSchema = z
 
 function useOnSubmit(setLoading: LoginComponentProps['setLoading']) {
   const navigate = useNavigate();
+  const { mutateAsync } = useAuthWithPassword();
 
   return useCallback(
-    async ({ userIdentifier, password }: z.infer<typeof formSchema>) => {
+    async ({ usernameOrEmail, password }: z.infer<typeof formSchema>) => {
       setLoading(true);
       try {
-        await pbSnackbarWrapper(
-          pb
-            .collection('users')
-            .authWithPassword<UserRecord>(userIdentifier, password),
-          'Successful login'
-        );
+        await mutateAsync({ usernameOrEmail, password });
       } finally {
         setLoading(false);
       }
@@ -52,7 +46,7 @@ function useOnSubmit(setLoading: LoginComponentProps['setLoading']) {
         replace: false,
       });
     },
-    [setLoading, navigate]
+    [setLoading, navigate, mutateAsync]
   );
 }
 
@@ -70,7 +64,7 @@ export function PasswordLogin({ setLoading }: LoginComponentProps) {
     >
       <FormField
         control={form.control}
-        name="userIdentifier"
+        name="usernameOrEmail"
         render={({ field }) => (
           <FormItem>
             <FormLabel>User identifier</FormLabel>

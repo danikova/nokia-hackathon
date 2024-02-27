@@ -1,4 +1,4 @@
-import { BaseCollectionResponse, BaseRecord } from './base.types';
+import { BaseRecord } from './base.types';
 
 export interface RunResultRecord extends BaseRecord {
   workspace: string;
@@ -13,5 +13,3 @@ export interface RunResultRecord extends BaseRecord {
   is_success: boolean;
   sha: string;
 }
-
-export type RunResultsResponse = BaseCollectionResponse<RunResultRecord>;

@@ -17,7 +17,7 @@ function Info() {
   return (
     <div className="info-card m-16 flex flex-col gap-8 max-md:m-8">
       <BreadCrumb items={[navBarItems[0]]} />
-      {infoCards?.items.map(infoCard => {
+      {infoCards?.map(infoCard => {
         return (
           <div key={infoCard.id}>
             <Section infoCard={infoCard} />

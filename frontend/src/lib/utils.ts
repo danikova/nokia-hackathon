@@ -14,12 +14,10 @@ export function getEditorUrl(repo_url: string, sha?: string) {
   return `${url}${url.endsWith('/') ? '' : '/'}commit/${sha}`;
 }
 
-export async function pbSnackbarWrapper<T>(
-  pbPromise: T,
-  successMessage?: string
-): Promise<T> {
+// snack wrapper
+export async function sw<T>(promise: T, successMessage?: string): Promise<T> {
   try {
-    const result = await pbPromise;
+    const result = await promise;
     successMessage && enqueueSnackbar(successMessage, { variant: 'success' });
     return result;
   } catch (error) {

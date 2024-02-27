@@ -10,7 +10,7 @@ export function useRowData(onChange?: (data: WorkspaceRankingRecord) => void) {
   const globalRankings = useAtomValue(globalRankingAtom);
   const hideEmptyWorkspaces = useAtomValue(hideEmptyWorkspacesAtom);
   const { data } = useWorkspaceRankings({}, onChange);
-  const rowData = useMemo(() => data?.items || [], [data]);
+  const rowData = useMemo(() => data || [], [data]);
   const [finalRowData, _setFinalRowData] =
     useState<WorkspaceRankingRecord[]>(rowData);
   const setFinalRowData = useCallback(

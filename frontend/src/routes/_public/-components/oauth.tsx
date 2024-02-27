@@ -1,23 +1,20 @@
-import { pb } from '@/@data/client';
-import { pbSnackbarWrapper } from '@/lib/utils';
-import { useNavigate } from '@tanstack/react-router';
 import { useCallback } from 'react';
-import { FaGithub, FaGoogle } from 'react-icons/fa6';
 import { LoginComponentProps } from './type';
+import { useAuthWithOAuth2 } from '@/@data/users';
+import { useNavigate } from '@tanstack/react-router';
+import { FaGithub, FaGoogle } from 'react-icons/fa6';
 
 function useOAuthOnClick(
   provider: string,
   setLoading: LoginComponentProps['setLoading']
 ) {
   const navigate = useNavigate();
+  const { mutateAsync } = useAuthWithOAuth2();
 
   const onClick = useCallback(async () => {
     setLoading(true);
     try {
-      await pbSnackbarWrapper(
-        pb.collection('users').authWithOAuth2({ provider }),
-        'Successful login'
-      );
+      await mutateAsync({ provider });
     } finally {
       setLoading(false);
     }
@@ -25,7 +22,7 @@ function useOAuthOnClick(
       to: '/',
       replace: false,
     });
-  }, [navigate, provider, setLoading]);
+  }, [navigate, provider, setLoading, mutateAsync]);
 
   return onClick;
 }

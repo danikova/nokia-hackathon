@@ -1,17 +1,7 @@
-export interface BaseCollectionResponse<T> {
-  page: number;
-  perPage: number;
-  totalPages: number;
-  totalItems: number;
-  items: T[];
-}
+import { RecordModel } from 'pocketbase';
 
-export interface BaseRecord {
-  id: string;
-  collectionId: string;
-  collectionName: string;
-  created: string;
-  updated: string;
-}
+export interface BaseRecord extends RecordModel {}
 
-export type Expandable<T> = { expand?: Partial<T> };
+export interface ExpandedBaseRecord<T> extends BaseRecord {
+  expand?: Partial<T>;
+}

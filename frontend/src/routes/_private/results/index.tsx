@@ -25,11 +25,11 @@ function Results() {
   const { data: runResults } = useRunResults();
 
   const runResultsGroupedByRunId = getGroupedRunResults(
-    runResults?.items ?? [],
+    runResults ?? [],
     'run_id'
   );
   const runResultsGroupedByTask = new Map(
-    [...getGroupedRunResults(runResults?.items ?? [], 'task').entries()].sort()
+    [...getGroupedRunResults(runResults ?? [], 'task').entries()].sort()
   );
   const taskKeys = [...runResultsGroupedByTask.keys()];
 

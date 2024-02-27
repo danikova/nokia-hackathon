@@ -1,16 +1,15 @@
-import axios from 'axios';
-import { InfoCardsResponse } from './infoCards.types';
+import { sw } from '@/lib/utils';
+import { pb } from './client';
+import { InfoCardRecord } from './infoCards.types';
 import { UseQueryOptions, useQuery } from '@tanstack/react-query';
 
 export function useInfoCards(
-  options?: Partial<UseQueryOptions<InfoCardsResponse, Error>>
+  options?: Partial<UseQueryOptions<InfoCardRecord[], Error>>
 ) {
   return useQuery({
     queryKey: ['infoCards'],
-    queryFn: async () => {
-      const response = await axios.get('/api/collections/info_cards/records');
-      return response.data;
-    },
+    queryFn: async () =>
+      await sw(pb.collection('info_cards').getFullList<InfoCardRecord>()),
     ...options,
   });
 }

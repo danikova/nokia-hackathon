@@ -1,4 +1,4 @@
-import { cn, pbSnackbarWrapper } from '@/lib/utils';
+import { cn, sw } from '@/lib/utils';
 import { useAtomValue } from 'jotai';
 import { useForm } from 'react-hook-form';
 import { Button } from '@/components/ui/button';
@@ -41,7 +41,7 @@ export function ReviewDialogContent(props: ReviewDialogContentProps) {
   const formId = useMemo(() => `create-form-for-${workspace.id}`, [workspace]);
 
   useEffect(() => {
-    for (const runTask of runTasks?.items ?? []) {
+    for (const runTask of runTasks ?? []) {
       const rangeMax = getRangeMax(runTask.score_multipler || 1);
       const defaultValue = Math.ceil(rangeMax / 2);
       for (const key of getRangeKeysFromTask(runTask)) {
@@ -74,12 +74,12 @@ export function ReviewDialogContent(props: ReviewDialogContentProps) {
       };
       try {
         if (ranking) {
-          await pbSnackbarWrapper(
+          await sw(
             pb.collection('rankings').update(ranking.id, reqData),
             'Review updated'
           );
         } else {
-          const ranking = (await pbSnackbarWrapper(
+          const ranking = (await sw(
             pb.collection('rankings').create(reqData),
             'Review created'
           )) as never as RankingRecord;
@@ -94,7 +94,7 @@ export function ReviewDialogContent(props: ReviewDialogContentProps) {
 
   const onDelete = useCallback(async () => {
     try {
-      await pbSnackbarWrapper(
+      await sw(
         pb.collection('rankings').delete(ranking?.id as string),
         'Review deleted'
       );
@@ -117,7 +117,7 @@ export function ReviewDialogContent(props: ReviewDialogContentProps) {
 
   const additionalFormFields: ReactElement[] = useMemo(() => {
     return (
-      runTasks?.items.map(task => (
+      (runTasks ?? []).map(task => (
         <TaskFormfield key={task.task_name} task={task} form={form} />
       )) ?? []
     );

@@ -95,9 +95,9 @@ export function useColumnDefs() {
 
   const columnDefs = useMemo<ColDef<WorkspaceRankingRecord>[]>(() => {
     if (!globalRankings) {
-      return getMyRankingColumnDef(runTasks?.items || []);
+      return getMyRankingColumnDef(runTasks || []);
     }
-    return getGlobalRankingColumnDef(runTasks?.items || []);
+    return getGlobalRankingColumnDef(runTasks || []);
   }, [runTasks, globalRankings]);
 
   return columnDefs;

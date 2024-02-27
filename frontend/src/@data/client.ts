@@ -1,4 +1,3 @@
-import axios from 'axios';
 import PocketBase from 'pocketbase';
 import { enqueueSnackbar } from 'notistack';
 import { MutationCache, QueryCache, QueryClient } from '@tanstack/react-query';
@@ -30,12 +29,6 @@ export const queryClient = new QueryClient({
 
 export const queryClientPersister = createSyncStoragePersister({
   storage: window.localStorage,
-});
-
-axios.interceptors.request.use(function (config) {
-  const token = pb.authStore.token;
-  if (token) config.headers.Authorization = token;
-  return config;
 });
 
 export const pb = new PocketBase();
