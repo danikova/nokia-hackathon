@@ -31,7 +31,7 @@ export default function ReviewDialog() {
   return (
     <Dialog open={state.open} onOpenChange={closeDialog}>
       <DialogContent className="max-w-fit">
-        {workspace && ranking && (
+        {workspace && (
           <>
             <DialogHeader>
               <DialogTitle>{!ranking ? 'Add' : 'Update'} Review</DialogTitle>

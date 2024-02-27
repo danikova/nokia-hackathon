@@ -3,13 +3,13 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
+import { ReactElement } from 'react';
 import { Label } from '@/components/ui/label';
-import { CSSProperties, ReactElement } from 'react';
-import { getRangeKeysFromTask, getRangeMax } from './utils';
+import { RunTaskRecord } from '@/@data/runTasks.types';
 import { ControllerRenderProps } from 'react-hook-form';
 import { FaCogs, FaWrench, FaCrown } from 'react-icons/fa';
+import { getRangeKeysFromTask, getRangeMax } from './utils';
 import { FormField, FormLabel } from '@/components/ui/form';
-import { RunTaskRecord } from '@/@data/runTasks.types';
 
 export function TaskFormfield({
   task,
@@ -110,11 +110,6 @@ function IconRange({
           step="1"
           min={1}
           max={rangeMax}
-          style={
-            {
-              '--range-shdw': 'var(--primary)',
-            } as CSSProperties
-          }
           {...field}
           onChange={event => field.onChange(+event.target.value)}
         />
