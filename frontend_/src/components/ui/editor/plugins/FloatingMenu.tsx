@@ -9,8 +9,8 @@ import { IconButton } from "../IconButton";
 
 import { $isRangeSelected } from "../utils/$isRangeSelected";
 import { useUserInteractions } from "../hooks/useUserInteractions";
-import { TOGGLE_EDIT_LINK_MENU } from "./EditLink";
 import { cn } from "@/lib/utils";
+import { TOGGLE_EDIT_LINK_MENU } from "../constans";
 
 type FloatingMenuPosition = { x: number; y: number } | undefined;
 

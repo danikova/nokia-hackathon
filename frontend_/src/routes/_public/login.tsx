@@ -5,6 +5,7 @@ import { PasswordLogin } from './-components/forms';
 import { createFileRoute } from '@tanstack/react-router';
 import { GithubLogIn, GoogleLogIn } from './-components/oauth';
 import { LoginLayout } from '@/layouts/login';
+import { LoginComponent } from './-components/type';
 
 export const Route = createFileRoute('/_public/login')({
   component: Login,
@@ -22,7 +23,7 @@ function LoginLogic() {
   const [loading, setLoading] = useState(false);
   const { data: authMethods, status } = useAuthMethods();
 
-  const OAuthButtons = useMemo(() => {
+  const OAuthButtons = useMemo<LoginComponent[]>(() => {
     const oAuthButtons = [];
     const providerNames = (authMethods?.authProviders ?? []).map(i => i.name);
     if (providerNames.includes('google')) oAuthButtons.push(GoogleLogIn);
@@ -30,7 +31,7 @@ function LoginLogic() {
     return oAuthButtons;
   }, [authMethods]);
 
-  const Forms = useMemo(() => {
+  const Forms = useMemo<LoginComponent[]>(() => {
     const forms = [];
     if (authMethods?.usernamePassword || authMethods?.emailPassword)
       forms.push(PasswordLogin);

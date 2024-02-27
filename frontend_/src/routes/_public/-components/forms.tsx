@@ -18,6 +18,7 @@ import { pb } from '@/@data/client';
 import { UserRecord } from '@/@data/users.types';
 import { useNavigate } from '@tanstack/react-router';
 import { pbSnackbarWrapper } from '@/lib/utils';
+import { LoginComponentProps } from './type';
 
 const formSchema = z
   .object({
@@ -30,7 +31,7 @@ const formSchema = z
   })
   .required();
 
-function useOnSubmit(setLoading: (isLoading: boolean) => void) {
+function useOnSubmit(setLoading: LoginComponentProps['setLoading']) {
   const navigate = useNavigate();
 
   return useCallback(
@@ -52,11 +53,7 @@ function useOnSubmit(setLoading: (isLoading: boolean) => void) {
   );
 }
 
-export function PasswordLogin({
-  setLoading,
-}: {
-  setLoading: (isLoading: boolean) => void;
-}) {
+export function PasswordLogin({ setLoading }: LoginComponentProps) {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
   });

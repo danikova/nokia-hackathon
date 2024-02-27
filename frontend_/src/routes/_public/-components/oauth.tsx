@@ -3,10 +3,11 @@ import { pbSnackbarWrapper } from '@/lib/utils';
 import { useNavigate } from '@tanstack/react-router';
 import { useCallback } from 'react';
 import { FaGithub, FaGoogle } from 'react-icons/fa6';
+import { LoginComponentProps } from './type';
 
 function useOAuthOnClick(
   provider: string,
-  setLoading: (isLoading: boolean) => void
+  setLoading: LoginComponentProps['setLoading']
 ) {
   const navigate = useNavigate();
 
@@ -26,7 +27,7 @@ function useOAuthOnClick(
   return onClick;
 }
 
-export function GithubLogIn(setLoading: (isLoading: boolean) => void) {
+export function GithubLogIn({ setLoading }: LoginComponentProps) {
   const onClick = useOAuthOnClick('github', setLoading);
 
   return (
@@ -41,7 +42,7 @@ export function GithubLogIn(setLoading: (isLoading: boolean) => void) {
   );
 }
 
-export function GoogleLogIn(setLoading: (isLoading: boolean) => void) {
+export function GoogleLogIn({ setLoading }: LoginComponentProps) {
   const onClick = useOAuthOnClick('google', setLoading);
 
   return (

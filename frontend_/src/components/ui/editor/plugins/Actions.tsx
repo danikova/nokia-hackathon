@@ -9,8 +9,8 @@ import {
   UNDO_COMMAND,
 } from "lexical";
 
-import { useEditorHistoryState } from "../context/EditorHistoryState";
 import { IconButton } from "../IconButton";
+import { useEditorHistoryState } from "@/lib/hooks";
 
 export function ActionsPlugin() {
   const [editor] = useLexicalComposerContext();

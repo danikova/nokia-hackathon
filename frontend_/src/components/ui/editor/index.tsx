@@ -21,10 +21,10 @@ import { LocalStoragePlugin } from "./plugins/LocalStorage";
 import { OpenLinkPlugin } from "./plugins/OpenLink";
 import {
   EditorHistoryStateContext,
-  useEditorHistoryState,
 } from "./context/EditorHistoryState";
 import { cn } from "@/lib/utils";
 import { ReactElement } from "react";
+import { useEditorHistoryState } from "@/lib/hooks";
 
 const EDITOR_NODES = [
   AutoLinkNode,

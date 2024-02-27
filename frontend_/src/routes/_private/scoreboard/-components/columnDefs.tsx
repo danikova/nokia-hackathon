@@ -7,9 +7,9 @@ import { WorkspaceRecord } from '@/@data/workspaces.types';
 import { RunStatisticRecord } from '@/@data/customViews.types';
 import { WorkspaceAvatarRenderer } from '@/components/renderers/workspaceAvatar';
 import { OutputSimilarityRenderer } from '@/components/renderers/outputSimilarity';
-import { getHumaneRunDuration } from '@/components/runResultDisplay';
 import { AverageOutputSizeRenderer } from '@/components/renderers/averageOutputSize';
 import { TaskStatisticRenderer } from '@/components/renderers/taskStatistic';
+import { getHumaneRunDuration } from '@/lib/utils';
 
 export function useColumnDefs(workspace: WorkspaceRecord | null) {
   return useMemo<ColDef<RunStatisticRecord>[]>(
