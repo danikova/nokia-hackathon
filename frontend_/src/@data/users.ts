@@ -1,5 +1,5 @@
 import axios from "axios";
-import { AuthMethodsResponse } from "./users.type";
+import { AuthMethodsResponse } from "./users.types";
 import { UseQueryOptions, useQuery } from "@tanstack/react-query";
 
 export function useAuthMethods(

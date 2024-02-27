@@ -1,5 +1,5 @@
 import axios from "axios";
-import { InfoCardsResponse } from "./infoCards.type";
+import { InfoCardsResponse } from "./infoCards.types";
 import { UseQueryOptions, useQuery } from "@tanstack/react-query";
 
 export function useInfoCards(

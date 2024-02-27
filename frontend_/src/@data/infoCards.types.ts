@@ -1,4 +1,4 @@
-import { BaseCollectionResponse } from "./base.type";
+import { BaseCollectionResponse } from "./base.types";
 
 export interface InfoCardRecord {
   id: string;

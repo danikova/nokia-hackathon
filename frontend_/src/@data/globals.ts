@@ -1,6 +1,6 @@
 import { UseQueryOptions, useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import { Globals, GlobalsResponse } from "./globals.type";
+import { Globals, GlobalsResponse } from "./globals.types";
 
 export function useGlobals(options?: Partial<UseQueryOptions<Globals, Error>>) {
   const { data } = useQuery({
