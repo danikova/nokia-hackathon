@@ -74,7 +74,7 @@ export default function Editor(props: EditorProps) {
               },
             },
             onError: (error) => {
-              console.log(error);
+              console.error(error);
             },
           }}
         >

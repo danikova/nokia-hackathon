@@ -60,7 +60,7 @@ function Ranking() {
   );
 
   useEffect(() => {
-    gridRef.current?.api?.setRowData(rowData);
+    gridRef.current?.api?.updateGridOptions({ rowData });
   }, [rowData, gridRef]);
 
   useEffect(() => {

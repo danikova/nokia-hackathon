@@ -1,13 +1,28 @@
 import { RunStatisticRecord } from './customViews.types';
-import { UseQueryOptions, useQuery } from '@tanstack/react-query';
+import {
+  UseQueryOptions,
+  useQuery,
+  useQueryClient,
+} from '@tanstack/react-query';
 import { WorkspaceRecord } from './workspaces.types';
-import { pb } from './client';
+import { pb, useRealtime } from './client';
 import { sw } from '@/lib/utils';
 import { RunResultRecord } from './runResults.types';
+import { useCallback } from 'react';
 
 export function useRunStatistics(
   options?: Partial<UseQueryOptions<RunStatisticRecord[], Error>>
 ) {
+  const queryClient = useQueryClient();
+  const onMessage = useCallback(
+    (msg: { action: string }) => {
+      if (msg.action === 'create')
+        queryClient.invalidateQueries({ queryKey: ['runStatistic'] });
+    },
+    [queryClient]
+  );
+  useRealtime('run_statistics/*', onMessage);
+
   return useQuery({
     queryKey: ['runStatistic'],
     queryFn: async () =>

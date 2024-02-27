@@ -1,4 +1,4 @@
-import { useWorkspaceRankings } from '@/@data/workspaceRankings';
+import { useCombinedRankings } from '@/@data/workspaceRankings';
 import { WorkspaceRankingRecord } from '@/@data/workspaceRankings.types';
 import { globalRankingAtom, hideEmptyWorkspacesAtom } from '@/atoms/ranking';
 import { userAtom } from '@/atoms/user';
@@ -9,7 +9,7 @@ export function useRowData(onChange?: (data: WorkspaceRankingRecord) => void) {
   const user = useAtomValue(userAtom);
   const globalRankings = useAtomValue(globalRankingAtom);
   const hideEmptyWorkspaces = useAtomValue(hideEmptyWorkspacesAtom);
-  const { data } = useWorkspaceRankings({}, onChange);
+  const { data } = useCombinedRankings(onChange);
   const rowData = useMemo(() => data || [], [data]);
   const [finalRowData, _setFinalRowData] =
     useState<WorkspaceRankingRecord[]>(rowData);

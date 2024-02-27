@@ -23,7 +23,7 @@ export function useWorkspaces(
 
 export function useUserWorkspace() {
   const { data } = useWorkspaces();
-  return useMemo(() => data![0] ?? undefined, [data]);
+  return useMemo(() => data && data[0], [data]);
 }
 
 interface UpdateWorkspaceProps {
