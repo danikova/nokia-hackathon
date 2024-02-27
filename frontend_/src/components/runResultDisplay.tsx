@@ -1,46 +1,29 @@
-import Code from "./code";
-import { cn } from "@/lib/utils";
+import Code from './code';
+import { cn, getHumaneRunDuration } from '@/lib/utils';
 import {
   Tooltip,
   TooltipContent,
   TooltipDescription,
   TooltipTrigger,
-} from "@/components/ui/tooltip";
+} from '@/components/ui/tooltip';
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog";
-import FromNow from "@/lib/dayjs";
-import { v4 as uuidv4 } from "uuid";
-import { atom, useAtom } from "jotai";
-import { Link } from "@tanstack/react-router";
-import { Button } from "@/components/ui/button";
-import humanizeDuration from "humanize-duration";
-import { EditorView } from "@uiw/react-codemirror";
-import { Skeleton } from "@/components/ui/skeleton";
-import { useEffect, useMemo, useState } from "react";
-import { RunResultRecord } from "@/@data/customViews.types";
-import WindowLink from "@/components/floatingWindowService";
-import { FaCircle, FaCircleXmark, FaMaximize } from "react-icons/fa6";
-
-const shortEnglishHumanizer = humanizeDuration.humanizer({
-  language: "shortEn",
-  languages: {
-    shortEn: {
-      y: () => "y",
-      mo: () => "mo",
-      w: () => "w",
-      d: () => "d",
-      h: () => "h",
-      m: () => "m",
-      s: () => "s",
-      ms: () => "ms",
-    },
-  },
-});
+} from '@/components/ui/dialog';
+import FromNow from '@/lib/dayjs';
+import { v4 as uuidv4 } from 'uuid';
+import { atom, useAtom } from 'jotai';
+import { Link } from '@tanstack/react-router';
+import { Button } from '@/components/ui/button';
+import { EditorView } from '@uiw/react-codemirror';
+import { Skeleton } from '@/components/ui/skeleton';
+import { useEffect, useMemo, useState } from 'react';
+import { RunResultRecord } from '@/@data/customViews.types';
+import WindowLink from '@/components/floatingWindowService';
+import { FaCircle, FaCircleXmark, FaMaximize } from 'react-icons/fa6';
 
 const activeIdAtom = atom<null | string>(null);
 
@@ -55,12 +38,6 @@ type RunResultDisplayProps = {
   defaultOpen?: boolean;
   tabIndex?: number;
 };
-
-export function getHumaneRunDuration(execution_time: number) {
-  return shortEnglishHumanizer((execution_time || 0) * 1000, {
-    maxDecimalPoints: 3,
-  });
-}
 
 export default function RunResultDisplay({
   runResult,
@@ -86,8 +63,8 @@ export default function RunResultDisplay({
   return (
     <div
       className={cn(
-        "flex flex-col gap-2 bg-[rgba(0,0,0,0.02)] rounded-md min-w-min p-2",
-        className
+        'flex flex-col gap-2 bg-[rgba(0,0,0,0.02)] rounded-md min-w-min p-2',
+        className,
       )}
     >
       {href ? (
@@ -110,23 +87,23 @@ export default function RunResultDisplay({
       {!hideOutput && (
         <div
           className={cn(
-            "relative transition-all delay-150 duration-200",
-            !showMore && "h-[80px]",
-            showMore && "h-[400px]"
+            'relative transition-all delay-150 duration-200',
+            !showMore && 'h-[80px]',
+            showMore && 'h-[400px]',
           )}
         >
           <Code extensions={[EditorView.lineWrapping]}>{runResult.output}</Code>
           <Button
             tabIndex={tabIndex}
             className="absolute right-2 bottom-2"
-            onClick={(e) => {
+            onClick={e => {
               e.preventDefault();
-              setShowMore((v) => !v);
+              setShowMore(v => !v);
               if (!showMore) setActiveId(id);
               else setActiveId(null);
             }}
           >
-            {!showMore ? "Show more" : "Show less"}
+            {!showMore ? 'Show more' : 'Show less'}
           </Button>
           <Dialog>
             <DialogTrigger tabIndex={-1}>
@@ -189,9 +166,9 @@ export function OutputSimilarityRenderer({
   return (
     <div
       className={cn({
-        "text-green-500": 60 <= valuePercent,
-        "text-orange-500": 10 <= valuePercent && valuePercent < 60,
-        "text-red-500": valuePercent < 10,
+        'text-green-500': 60 <= valuePercent,
+        'text-orange-500': 10 <= valuePercent && valuePercent < 60,
+        'text-red-500': valuePercent < 10,
       })}
     >
       {valuePercent}%
@@ -233,28 +210,28 @@ function StatusMark({ runResult }: { runResult: RunResultRecord }) {
   const { status } = runResult;
   let state = {
     icon: <Skeleton className="h-5 w-5 rounded-full" />,
-    tooltipText: "",
+    tooltipText: '',
   };
 
-  if (status === "success")
+  if (status === 'success')
     state = {
       icon: <FaCircle className="text-green-500 h-5 w-5" />,
-      tooltipText: "Success",
+      tooltipText: 'Success',
     };
-  else if (status === "fail")
+  else if (status === 'fail')
     state = {
       icon: <FaCircle className="text-red-500 h-5 w-5" />,
-      tooltipText: "Unexpected error, please check the logs",
+      tooltipText: 'Unexpected error, please check the logs',
     };
-  else if (status === "timeout")
+  else if (status === 'timeout')
     state = {
       icon: <FaCircle className="text-orange-500 h-5 w-5" />,
-      tooltipText: "Timeout",
+      tooltipText: 'Timeout',
     };
-  else if (status === "flowFail")
+  else if (status === 'flowFail')
     state = {
       icon: <FaCircleXmark className="text-red-500 h-5 w-5" />,
-      tooltipText: "Flow fail, please check the logs",
+      tooltipText: 'Flow fail, please check the logs',
     };
 
   return (

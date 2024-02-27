@@ -1,18 +1,14 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from 'react';
 
-import { createCommand, LexicalCommand } from "lexical";
-import { computePosition } from "@floating-ui/dom";
-import { LinkNode } from "@lexical/link";
-import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
+import { computePosition } from '@floating-ui/dom';
+import { LinkNode } from '@lexical/link';
+import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
 
-import { debounce } from "../utils/debounce";
-import { IconButton } from "../IconButton";
+import { debounce } from '../utils/debounce';
+import { IconButton } from '../IconButton';
+import { LINK_SELECTOR, OPEN_LINK_MENU_ID } from '../constans';
 
 type OpenLinkMenuPosition = { x: number; y: number } | undefined;
-
-export const LINK_SELECTOR = `[data-lexical-editor] a`;
-export const OPEN_LINK_MENU_ID = "open-link-menu";
-export const TOGGLE_EDIT_LINK_MENU: LexicalCommand<undefined> = createCommand();
 
 export function OpenLinkPlugin() {
   const ref = useRef<HTMLDivElement>(null);
@@ -28,12 +24,12 @@ export function OpenLinkPlugin() {
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
       const menu = (e.target as HTMLElement).closest<HTMLElement>(
-        `#${OPEN_LINK_MENU_ID}`
+        `#${OPEN_LINK_MENU_ID}`,
       );
       if (menu) return;
 
       const link = (e.target as HTMLElement).closest<HTMLElement>(
-        LINK_SELECTOR
+        LINK_SELECTOR,
       );
 
       if (!link || !ref.current) {
@@ -42,10 +38,10 @@ export function OpenLinkPlugin() {
         return;
       }
 
-      computePosition(link, ref.current, { placement: "bottom" })
-        .then((pos) => {
+      computePosition(link, ref.current, { placement: 'bottom' })
+        .then(pos => {
           setPos({ x: pos.x, y: pos.y + 10 });
-          setLink(link.getAttribute("href"));
+          setLink(link.getAttribute('href'));
         })
         .catch(() => {
           setPos(undefined);
@@ -56,20 +52,20 @@ export function OpenLinkPlugin() {
 
     const debouncedMouseMove = debounce(handleMouseMove, 200);
 
-    return editor.registerMutationListener(LinkNode, (mutations) => {
+    return editor.registerMutationListener(LinkNode, mutations => {
       for (const [key, type] of mutations) {
         switch (type) {
-          case "created":
-          case "updated":
+          case 'created':
+          case 'updated':
             linkSetRef.current.add(key);
             if (linkSetRef.current.size === 1)
-              document.addEventListener("mousemove", debouncedMouseMove);
+              document.addEventListener('mousemove', debouncedMouseMove);
             break;
 
-          case "destroyed":
+          case 'destroyed':
             linkSetRef.current.delete(key);
             if (linkSetRef.current.size === 0)
-              document.removeEventListener("mousemove", debouncedMouseMove);
+              document.removeEventListener('mousemove', debouncedMouseMove);
             break;
         }
       }
@@ -83,7 +79,7 @@ export function OpenLinkPlugin() {
       style={{ top: pos?.y, left: pos?.x, width }}
       aria-hidden={!pos?.x || !pos?.y}
       className={`absolute flex items-center justify-between bg-slate-100 border-[1px] border-slate-300 rounded-md p-1 gap-[2px] ${
-        pos?.x && pos.y ? "opacity-1 visible" : "opacity-0 invisible"
+        pos?.x && pos.y ? 'opacity-1 visible' : 'opacity-0 invisible'
       }`}
     >
       {link && !copied ? (
@@ -97,7 +93,7 @@ export function OpenLinkPlugin() {
         </a>
       ) : (
         <span className="w-full text-xs text-center opacity-75 cursor-pointer">
-          {copied ? "🎉 Copied!" : "No link"}
+          {copied ? '🎉 Copied!' : 'No link'}
         </span>
       )}
       {link ? (

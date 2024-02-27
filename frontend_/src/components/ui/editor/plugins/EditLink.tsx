@@ -1,30 +1,24 @@
-import { useCallback, useEffect, useRef, useState } from "react";
-import { createPortal } from "react-dom";
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
 
-import {
-  $getSelection,
-  COMMAND_PRIORITY_LOW,
-  createCommand,
-  LexicalCommand,
-} from "lexical";
-import { TOGGLE_LINK_COMMAND } from "@lexical/link";
-import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
-import { computePosition } from "@floating-ui/dom";
+import { $getSelection, COMMAND_PRIORITY_LOW } from 'lexical';
+import { TOGGLE_LINK_COMMAND } from '@lexical/link';
+import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
+import { computePosition } from '@floating-ui/dom';
 
-import { IconButton } from "../IconButton";
+import { IconButton } from '../IconButton';
 
-import { useClickOutside } from "../hooks/useClickOutside";
-import { $getSharedLinkTarget } from "../utils/$getSharedLinkTarget";
+import { useClickOutside } from '../hooks/useClickOutside';
+import { $getSharedLinkTarget } from '../utils/$getSharedLinkTarget';
+import { TOGGLE_EDIT_LINK_MENU } from '../constans';
 
 type EditLinkMenuPosition = { x: number; y: number } | undefined;
-
-export const TOGGLE_EDIT_LINK_MENU: LexicalCommand<undefined> = createCommand();
 
 export function EditLinkPlugin() {
   const ref = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const [value, setValue] = useState("");
+  const [value, setValue] = useState('');
   const [error, setError] = useState(false);
   const [pos, setPos] = useState<EditLinkMenuPosition>(undefined);
   const [domRange, setDomRange] = useState<Range | undefined>(undefined);
@@ -33,7 +27,7 @@ export function EditLinkPlugin() {
   const [editor] = useLexicalComposerContext();
 
   const resetState = useCallback(() => {
-    setValue("");
+    setValue('');
     setError(false);
     setPos(undefined);
     setDomRange(undefined);
@@ -55,8 +49,8 @@ export function EditLinkPlugin() {
 
         const domRange = nativeSel.getRangeAt(0);
 
-        computePosition(domRange, ref.current, { placement: "bottom" })
-          .then((pos) => {
+        computePosition(domRange, ref.current, { placement: 'bottom' })
+          .then(pos => {
             setPos({ x: pos.x, y: pos.y + 10 });
             setDomRange(domRange);
             editor.getEditorState().read(() => {
@@ -71,17 +65,17 @@ export function EditLinkPlugin() {
 
         return true;
       },
-      COMMAND_PRIORITY_LOW
+      COMMAND_PRIORITY_LOW,
     );
   }, [editor, pos, resetState]);
 
   useEffect(() => {
     if (pos?.x && pos?.y) {
-      let initialUrl = "";
+      let initialUrl = '';
 
       editor.getEditorState().read(() => {
         const selection = $getSelection();
-        initialUrl = $getSharedLinkTarget(selection) ?? "";
+        initialUrl = $getSharedLinkTarget(selection) ?? '';
       });
 
       setValue(initialUrl);
@@ -98,7 +92,7 @@ export function EditLinkPlugin() {
 
     const isLinkSet = editor.dispatchCommand(TOGGLE_LINK_COMMAND, {
       url: value,
-      target: "_blank",
+      target: '_blank',
     });
 
     if (isLinkSet) resetState();
@@ -118,25 +112,25 @@ export function EditLinkPlugin() {
         style={{ top: pos?.y, left: pos?.x }}
         aria-hidden={!pos?.x || !pos?.y}
         className={`absolute flex items-center justify-between bg-slate-100 border-[1px] ${
-          error ? "border-red-600" : "border-slate-300"
+          error ? 'border-red-600' : 'border-slate-300'
         } rounded-md p-1 gap-1 ${
-          pos?.x && pos.y ? "opacity-1 visible" : "opacity-0 invisible"
+          pos?.x && pos.y ? 'opacity-1 visible' : 'opacity-0 invisible'
         }`}
       >
         <input
           ref={inputRef}
           value={value}
-          onChange={(e) => setValue(e.target.value)}
+          onChange={e => setValue(e.target.value)}
           className="px-2 py-1 text-xs bg-transparent border-none outline-none"
           placeholder="Enter URL"
-          onKeyDown={(e) => {
-            if (e.key === "Enter") {
+          onKeyDown={e => {
+            if (e.key === 'Enter') {
               e.preventDefault();
               handleSetLink();
               return;
             }
 
-            if (e.key === "Escape") {
+            if (e.key === 'Escape') {
               e.preventDefault();
               resetState();
               return;
@@ -171,6 +165,6 @@ function FakeSelection({ range }: { range: Range | undefined }) {
         height: domRect.height + 4,
       }}
     />,
-    document.body
+    document.body,
   );
 }
