@@ -34,7 +34,7 @@ export default function UserButton() {
           <Skeleton className="h-8 w-8 rounded-full" />
         )}
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="mx-4">
+      <DropdownMenuContent className="mx-4 w-[300px]">
         <DropdownMenuLabel>
           <div className="flex flex-col">
             <p>{name}</p>

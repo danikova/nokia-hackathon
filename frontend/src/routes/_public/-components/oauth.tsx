@@ -13,6 +13,7 @@ function useOAuthOnClick(
 
   const onClick = useCallback(async () => {
     setLoading(true);
+    setTimeout(() => setLoading(false), 2000);
     try {
       await mutateAsync({ provider });
     } finally {
