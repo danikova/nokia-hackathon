@@ -7,6 +7,7 @@ import {
 } from '@tanstack/react-query';
 import { WorkspaceRecord, WorkspacesResponse } from './workspaces.types';
 import axios from 'axios';
+import { enqueueSnackbar } from 'notistack';
 
 export function useWorkspaces(
   options?: Partial<UseQueryOptions<WorkspacesResponse, Error>>
@@ -43,6 +44,7 @@ export function useUpdateWorkspace(
       return response.data;
     },
     onSuccess: () => {
+      enqueueSnackbar('Workspace updated', { variant: 'success' });
       queryClient.invalidateQueries({ queryKey: ['workspaces'] });
     },
     ...options,
