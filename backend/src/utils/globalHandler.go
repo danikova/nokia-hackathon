@@ -1,6 +1,8 @@
 package utils
 
 import (
+	"hackathon-backend/src/tables"
+
 	"github.com/pocketbase/pocketbase"
 	"github.com/pocketbase/pocketbase/models"
 )
@@ -10,11 +12,9 @@ var DisableLoginKey = "disable_login"
 var EventEndDataTime = "event_end_date_time"
 
 var FixGlobalKeys = []string{PrimaryProjectKey, DisableLoginKey, EventEndDataTime}
-var GlobalCollectionName = "globals"
-var GlobalCollectionKeyName = "key"
 
 func GetGlobalValueByKey(app *pocketbase.PocketBase, key string) (*models.Record, error) {
-	record, err := app.Dao().FindFirstRecordByData(GlobalCollectionName, GlobalCollectionKeyName, key)
+	record, err := app.Dao().FindFirstRecordByData(tables.GlobalCollectionName, tables.GlobalCollectionKeyFieldKey, key)
 	if err != nil {
 		return nil, err
 	}
