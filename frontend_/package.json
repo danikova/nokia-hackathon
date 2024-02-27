@@ -7,7 +7,9 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview",
-    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0 --ignore-path .eslintignore",
+    "es-lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0 --ignore-path .eslintignore",
+    "ts-lint": "tsc --noEmit",
+    "lint": "npm run es-lint && npm run ts-lint",
     "format": "prettier --write \"**/*.+(js|ts|tsx|json)\" --ignore-path .prettierignore"
   },
   "dependencies": {

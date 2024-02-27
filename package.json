@@ -3,8 +3,7 @@
   "version": "1.0.0",
   "description": "Monorepo root folder",
   "scripts": {
-    "prepare": "husky",
-    "test-frontend": "cd frontend_ && npm run lint && npm run format"
+    "prepare": "husky"
   },
   "license": "MIT",
   "devDependencies": {

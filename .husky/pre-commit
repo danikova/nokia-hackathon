@@ -1,5 +1,6 @@
 #!/bin/sh
 . "$(dirname "$0")/_/husky.sh"
 
-npm run test-frontend
-git add .
+cd frontend_
+npm run lint
+npm run format
