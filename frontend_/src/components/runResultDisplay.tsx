@@ -21,7 +21,7 @@ import { Button } from '@/components/ui/button';
 import { EditorView } from '@uiw/react-codemirror';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useEffect, useMemo, useState } from 'react';
-import { RunResultRecord } from '@/@data/customViews.types';
+import { RunResultRecord } from '@/@data/runResults.types';
 import WindowLink from '@/components/floatingWindowService';
 import { FaCircle, FaCircleXmark, FaMaximize } from 'react-icons/fa6';
 

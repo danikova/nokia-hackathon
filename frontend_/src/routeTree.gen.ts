@@ -20,6 +20,7 @@ import { Route as PrivateScoreboardIndexImport } from './routes/_private/scorebo
 import { Route as PrivateResultsIndexImport } from './routes/_private/results/index'
 import { Route as PrivateRankingIndexImport } from './routes/_private/ranking/index'
 import { Route as PrivateInfoIndexImport } from './routes/_private/info/index'
+import { Route as PrivateResultsRunIdImport } from './routes/_private/results/$runId'
 
 // Create/Update Routes
 
@@ -68,6 +69,11 @@ const PrivateInfoIndexRoute = PrivateInfoIndexImport.update({
   getParentRoute: () => PrivateRoute,
 } as any)
 
+const PrivateResultsRunIdRoute = PrivateResultsRunIdImport.update({
+  path: '/results/$runId',
+  getParentRoute: () => PrivateRoute,
+} as any)
+
 // Populate the FileRoutesByPath interface
 
 declare module '@tanstack/react-router' {
@@ -87,6 +93,10 @@ declare module '@tanstack/react-router' {
     '/_public/login': {
       preLoaderRoute: typeof PublicLoginImport
       parentRoute: typeof PublicImport
+    }
+    '/_private/results/$runId': {
+      preLoaderRoute: typeof PrivateResultsRunIdImport
+      parentRoute: typeof PrivateImport
     }
     '/_private/info/': {
       preLoaderRoute: typeof PrivateInfoIndexImport
@@ -116,6 +126,7 @@ declare module '@tanstack/react-router' {
 export const routeTree = rootRoute.addChildren([
   IndexRoute,
   PrivateRoute.addChildren([
+    PrivateResultsRunIdRoute,
     PrivateInfoIndexRoute,
     PrivateRankingIndexRoute,
     PrivateResultsIndexRoute,

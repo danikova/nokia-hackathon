@@ -5,10 +5,11 @@ import { useEffect, useMemo, useRef } from 'react';
 import { useRunStatistics } from '@/@data/customViews';
 import { createFileRoute } from '@tanstack/react-router';
 import { useColumnDefs } from './-components/columnDefs';
+import { RunResultRecord } from '@/@data/runResults.types';
 import BreadCrumb from '@/components/navigation/breadCrumb';
 import { FullPageAgGridReact } from '@/components/ui/table';
+import { RunStatisticRecord } from '@/@data/customViews.types';
 import { navBarItems } from '@/components/navigation/navBarItems';
-import { RunResultRecord, RunStatisticRecord } from '@/@data/customViews.types';
 
 export const Route = createFileRoute('/_private/scoreboard/')({
   component: Scoreboard,
