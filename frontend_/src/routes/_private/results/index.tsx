@@ -1,30 +1,28 @@
-import { useWorkspaces } from '@/@data/workspaces';
-import { createFileRoute } from '@tanstack/react-router';
-import { useMemo } from 'react';
-import { getGroupedRunResults } from './-components/helpers';
-import { useRunResults } from '@/@data/runResults';
-import { useBestGridCells, getLastNGridCell } from './-components/utils';
-import FirstSteps from './-components/firstSteps';
-import BreadCrumb from '@/components/navigation/breadCrumb';
-import { navBarItems } from '@/components/navigation/navBarItems';
-import Details from './-components/details';
-import { TaskLabels } from './-components/taskLabels';
-import { RunResultRecord } from '@/@data/runResults.types';
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
+import Details from './-components/details';
+import FirstSteps from './-components/firstSteps';
+import { useRunResults } from '@/@data/runResults';
+import { useUserWorkspace } from '@/@data/workspaces';
+import { TaskLabels } from './-components/taskLabels';
+import { createFileRoute } from '@tanstack/react-router';
 import { ResultCharts } from './-components/resultCharts';
+import { RunResultRecord } from '@/@data/runResults.types';
+import BreadCrumb from '@/components/navigation/breadCrumb';
+import { getGroupedRunResults } from './-components/helpers';
+import { navBarItems } from '@/components/navigation/navBarItems';
+import { useBestGridCells, getLastNGridCell } from './-components/utils';
 
 export const Route = createFileRoute('/_private/results/')({
   component: Results,
 });
 
 function Results() {
-  const { data } = useWorkspaces();
+  const userWorkspace = useUserWorkspace();
   const { data: runResults } = useRunResults();
-  const userWorkspace = useMemo(() => data?.items![0] ?? undefined, [data]);
 
   const runResultsGroupedByRunId = getGroupedRunResults(
     runResults?.items ?? [],

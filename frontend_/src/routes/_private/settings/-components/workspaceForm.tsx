@@ -53,7 +53,7 @@ const formSchema = z
 export default function WorkspaceForm({
   workspace,
 }: {
-  workspace: WorkspaceRecord | null;
+  workspace?: WorkspaceRecord;
 }) {
   const { mutateAsync } = useUpdateWorkspace();
   const form = useForm<z.infer<typeof formSchema>>({

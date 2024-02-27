@@ -1,7 +1,7 @@
 import { ColDef } from 'ag-grid-community';
 import { AgGridReact } from 'ag-grid-react';
-import { useWorkspaces } from '@/@data/workspaces';
 import { useEffect, useMemo, useRef } from 'react';
+import { useUserWorkspace } from '@/@data/workspaces';
 import { useRunStatistics } from '@/@data/customViews';
 import { createFileRoute } from '@tanstack/react-router';
 import { useColumnDefs } from './-components/columnDefs';
@@ -17,8 +17,7 @@ export const Route = createFileRoute('/_private/scoreboard/')({
 
 function Scoreboard() {
   const { data: rowData } = useRunStatistics();
-  const { data } = useWorkspaces();
-  const userWorkspace = useMemo(() => data?.items![0] ?? null, [data]);
+  const userWorkspace = useUserWorkspace();
   const columnDefs = useColumnDefs(userWorkspace);
   const gridRef = useRef<AgGridReact<RunResultRecord>>();
 

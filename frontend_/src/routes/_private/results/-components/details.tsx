@@ -1,11 +1,9 @@
-import { useMemo } from 'react';
-import { useWorkspaces } from '@/@data/workspaces';
 import { Skeleton } from '@/components/ui/skeleton';
+import { useUserWorkspace } from '@/@data/workspaces';
 import { WorkspaceDetails } from '../../ranking/-components/workspaceDetails';
 
 export default function Details() {
-  const { data } = useWorkspaces();
-  const userWorkspace = useMemo(() => data?.items![0] ?? null, [data]);
+  const userWorkspace = useUserWorkspace();
 
   return (
     <div className="mb-8">

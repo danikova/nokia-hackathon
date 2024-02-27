@@ -11,7 +11,7 @@ import { AverageOutputSizeRenderer } from '@/components/renderers/averageOutputS
 import { TaskStatisticRenderer } from '@/components/renderers/taskStatistic';
 import { getHumaneRunDuration } from '@/lib/utils';
 
-export function useColumnDefs(workspace: WorkspaceRecord | null) {
+export function useColumnDefs(workspace?: WorkspaceRecord) {
   return useMemo<ColDef<RunStatisticRecord>[]>(
     () => [
       {

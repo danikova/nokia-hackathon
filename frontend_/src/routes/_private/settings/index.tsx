@@ -1,5 +1,4 @@
-import { useMemo } from 'react';
-import { useWorkspaces } from '@/@data/workspaces';
+import { useUserWorkspace } from '@/@data/workspaces';
 import WorkspaceForm from './-components/workspaceForm';
 import { createFileRoute } from '@tanstack/react-router';
 import BreadCrumb from '@/components/navigation/breadCrumb';
@@ -11,8 +10,7 @@ export const Route = createFileRoute('/_private/settings/')({
 });
 
 function Settings() {
-  const { data } = useWorkspaces();
-  const userWorkspace = useMemo(() => data?.items![0] ?? null, [data]);
+  const userWorkspace = useUserWorkspace();
 
   return (
     <div className="m-16 max-md:m-8 md:max-w-2xl">

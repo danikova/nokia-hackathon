@@ -6,7 +6,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 export default function WorkspaceAvatar({
   workspace,
 }: {
-  workspace: WorkspaceRecord | null;
+  workspace?: WorkspaceRecord;
 }) {
   const workspaceId = workspace?.id ?? '';
 

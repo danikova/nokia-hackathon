@@ -8,6 +8,7 @@ import {
 import { WorkspaceRecord, WorkspacesResponse } from './workspaces.types';
 import axios from 'axios';
 import { enqueueSnackbar } from 'notistack';
+import { useMemo } from 'react';
 
 export function useWorkspaces(
   options?: Partial<UseQueryOptions<WorkspacesResponse, Error>>
@@ -20,6 +21,11 @@ export function useWorkspaces(
     },
     ...options,
   });
+}
+
+export function useUserWorkspace() {
+  const { data } = useWorkspaces();
+  return useMemo(() => data?.items![0] ?? undefined, [data]);
 }
 
 interface UpdateWorkspaceProps {
