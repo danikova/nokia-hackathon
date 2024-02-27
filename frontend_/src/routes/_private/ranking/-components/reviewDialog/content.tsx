@@ -1,21 +1,21 @@
-import { cn, pbSnackbarWrapper } from "@/lib/utils";
-import { useAtomValue } from "jotai";
-import { useForm } from "react-hook-form";
-import { Button } from "@/components/ui/button";
-import { TaskFormfield } from "./taskFormfield";
-import ClientForm from "@/components/ui/clientForm";
-import { Textarea } from "@/components/ui/textarea";
-import { DialogFooter } from "@/components/ui/dialog";
-import { ReactElement, useCallback, useEffect, useMemo } from "react";
+import { cn, pbSnackbarWrapper } from '@/lib/utils';
+import { useAtomValue } from 'jotai';
+import { useForm } from 'react-hook-form';
+import { Button } from '@/components/ui/button';
+import { TaskFormfield } from './taskFormfield';
+import ClientForm from '@/components/ui/clientForm';
+import { Textarea } from '@/components/ui/textarea';
+import { DialogFooter } from '@/components/ui/dialog';
+import { ReactElement, useCallback, useEffect, useMemo } from 'react';
 import {
   FormControl,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { useReviewDialog, getRangeKeysFromTask, getRangeMax } from "./utils";
-import { ReviewDialogContentProps } from "./type";
+} from '@/components/ui/form';
+import { useReviewDialog, getRangeKeysFromTask, getRangeMax } from './utils';
+import { ReviewDialogContentProps } from './type';
 import {
   AlertDialog,
   AlertDialogCancel,
@@ -25,11 +25,11 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
-import { userAtom } from "@/atoms/user";
-import { useRunTasks } from "@/@data/runTasks";
-import { pb } from "@/@data/client";
-import { RankingRecord } from "@/@data/rankings.types";
+} from '@/components/ui/alert-dialog';
+import { userAtom } from '@/atoms/user';
+import { useRunTasks } from '@/@data/runTasks';
+import { pb } from '@/@data/client';
+import { RankingRecord } from '@/@data/rankings.types';
 
 export function ReviewDialogContent(props: ReviewDialogContentProps) {
   const form = useForm();
@@ -56,9 +56,9 @@ export function ReviewDialogContent(props: ReviewDialogContentProps) {
 
   useEffect(() => {
     if (ranking?.comments) {
-      form.setValue("comments", ranking.comments);
+      form.setValue('comments', ranking.comments);
     } else {
-      form.setValue("comments", "");
+      form.setValue('comments', '');
     }
   }, [form, ranking]);
 
@@ -75,13 +75,13 @@ export function ReviewDialogContent(props: ReviewDialogContentProps) {
       try {
         if (ranking) {
           await pbSnackbarWrapper(
-            pb.collection("rankings").update(ranking.id, reqData),
-            "Review updated"
+            pb.collection('rankings').update(ranking.id, reqData),
+            'Review updated'
           );
         } else {
           const ranking = (await pbSnackbarWrapper(
-            pb.collection("rankings").create(reqData),
-            "Review created"
+            pb.collection('rankings').create(reqData),
+            'Review created'
           )) as never as RankingRecord;
           setDialogProps({ ranking });
         }
@@ -95,8 +95,8 @@ export function ReviewDialogContent(props: ReviewDialogContentProps) {
   const onDelete = useCallback(async () => {
     try {
       await pbSnackbarWrapper(
-        pb.collection("rankings").delete(ranking?.id as string),
-        "Review deleted"
+        pb.collection('rankings').delete(ranking?.id as string),
+        'Review deleted'
       );
       closeDialog();
     } catch (e) {
@@ -106,7 +106,7 @@ export function ReviewDialogContent(props: ReviewDialogContentProps) {
 
   const onKeyDown = useCallback(
     (e: React.KeyboardEvent<HTMLFormElement>) => {
-      if (!e.shiftKey && e.key === "Enter") {
+      if (!e.shiftKey && e.key === 'Enter') {
         e.preventDefault();
         e.stopPropagation();
         form.handleSubmit(onSubmit)();
@@ -117,7 +117,7 @@ export function ReviewDialogContent(props: ReviewDialogContentProps) {
 
   const additionalFormFields: ReactElement[] = useMemo(() => {
     return (
-      runTasks?.items.map((task) => (
+      runTasks?.items.map(task => (
         <TaskFormfield key={task.task_name} task={task} form={form} />
       )) ?? []
     );
@@ -131,7 +131,7 @@ export function ReviewDialogContent(props: ReviewDialogContentProps) {
         form={form}
         onSubmit={onSubmit}
         onKeyDown={onKeyDown}
-        className="flex flex-col gap-4 overflow-auto max-h-[70vh] py-2 pl-2 pr-1"
+        className="flex max-h-[70vh] flex-col gap-4 overflow-auto py-2 pl-2 pr-1"
       >
         <>{additionalFormFields}</>
         <FormField
@@ -149,9 +149,9 @@ export function ReviewDialogContent(props: ReviewDialogContentProps) {
         />
       </ClientForm>
       <p className="text-xs">
-        You can navigate with <span className="font-bold">tab</span>, and{" "}
-        {!ranking ? "save" : "update"} with{" "}
-        <span className="font-bold">enter</span> or close with{" "}
+        You can navigate with <span className="font-bold">tab</span>, and{' '}
+        {!ranking ? 'save' : 'update'} with{' '}
+        <span className="font-bold">enter</span> or close with{' '}
         <span className="font-bold">esc</span>
       </p>
       <DialogFooter>
@@ -178,7 +178,7 @@ export function ReviewDialogContent(props: ReviewDialogContentProps) {
           </AlertDialog>
         )}
         <Button type="submit" form={formId}>
-          {!ranking ? "Save" : "Update"}
+          {!ranking ? 'Save' : 'Update'}
         </Button>
       </DialogFooter>
     </div>

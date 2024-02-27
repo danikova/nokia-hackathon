@@ -1,19 +1,19 @@
-import { useMemo } from "react";
+import { useMemo } from 'react';
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from "@/components/ui/tooltip";
+} from '@/components/ui/tooltip';
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/popover";
-import { FaComment } from "react-icons/fa6";
-import { Stack } from "@/components/ui/stack";
-import { ICellRendererParams } from "ag-grid-community";
-import { UserAvatar } from "../userAvatar";
-import { WorkspaceRankingRecord } from "@/@data/workspaceRankings.types";
+} from '@/components/ui/popover';
+import { FaComment } from 'react-icons/fa6';
+import { Stack } from '@/components/ui/stack';
+import { ICellRendererParams } from 'ag-grid-community';
+import { UserAvatar } from '../userAvatar';
+import { WorkspaceRankingRecord } from '@/@data/workspaceRankings.types';
 
 const maxCommentBubble = 4;
 export function CommentsRenderer({
@@ -22,11 +22,11 @@ export function CommentsRenderer({
   const comments = useMemo(() => {
     const list = data?.expand?.rankings || [];
     const comments = list
-      .map((ranking) => ({
+      .map(ranking => ({
         comments: ranking.comments,
         user: ranking.expand.user,
       }))
-      .filter((c) => !!c.comments);
+      .filter(c => !!c.comments);
     return comments;
   }, [data]);
   const commentsLength = useMemo(() => comments.length, [comments]);
@@ -37,7 +37,7 @@ export function CommentsRenderer({
     <>
       <Popover>
         <PopoverTrigger>
-          <div className="h-[var(--ag-row-height)] flex items-center">
+          <div className="flex h-[var(--ag-row-height)] items-center">
             <Stack>
               {Array.from({
                 length: Math.min(commentsLength, maxCommentBubble),
@@ -53,7 +53,7 @@ export function CommentsRenderer({
                 );
               })}
               {commentsLength > maxCommentBubble && (
-                <div className="h-6 w-6 flex items-center justify-center pl-4">
+                <div className="flex h-6 w-6 items-center justify-center pl-4">
                   <span className="text-base">
                     +{commentsLength - maxCommentBubble}
                   </span>
@@ -62,8 +62,8 @@ export function CommentsRenderer({
             </Stack>
           </div>
         </PopoverTrigger>
-        <PopoverContent className="w-10 m-0 p-0 rounded-full box-content">
-          <ul className="w-10 p-1 flex flex-col items-center gap-2">
+        <PopoverContent className="m-0 box-content w-10 rounded-full p-0">
+          <ul className="flex w-10 flex-col items-center gap-2 p-1">
             {comments.map((comment, i) => {
               return (
                 <li key={i} className="h-8 w-8">
@@ -71,7 +71,7 @@ export function CommentsRenderer({
                     <TooltipTrigger>
                       <UserAvatar
                         user={comment.user}
-                        className="ring-1 ring-offset-1 ring-primary/25"
+                        className="ring-1 ring-primary/25 ring-offset-1"
                       />
                     </TooltipTrigger>
                     <TooltipContent side="left">

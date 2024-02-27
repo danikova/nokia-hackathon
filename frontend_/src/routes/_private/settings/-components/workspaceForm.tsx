@@ -1,11 +1,11 @@
-import * as z from "zod";
-import { useForm } from "react-hook-form";
-import { Input } from "@/components/ui/input";
-import { useCallback, useEffect } from "react";
-import { Button } from "@/components/ui/button";
-import ClientForm from "@/components/ui/clientForm";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { RepoState, repoRe, testGithubRepo } from "./action";
+import * as z from 'zod';
+import { useForm } from 'react-hook-form';
+import { Input } from '@/components/ui/input';
+import { useCallback, useEffect } from 'react';
+import { Button } from '@/components/ui/button';
+import ClientForm from '@/components/ui/clientForm';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { RepoState, repoRe, testGithubRepo } from './action';
 import {
   FormControl,
   FormDescription,
@@ -13,9 +13,9 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { WorkspaceRecord } from "@/@data/workspaces.types";
-import { useUpdateWorkspace } from "@/@data/workspaces";
+} from '@/components/ui/form';
+import { WorkspaceRecord } from '@/@data/workspaces.types';
+import { useUpdateWorkspace } from '@/@data/workspaces';
 
 const repoCache = new Map<string, RepoState>();
 async function testGithubRepoWithCache(repo_url: string) {
@@ -29,22 +29,22 @@ const formSchema = z
   .object({
     repo_url: z
       .string({
-        required_error: "Repo url is required.",
+        required_error: 'Repo url is required.',
         invalid_type_error:
-          "Repo url must be a valid github repo url. For example: https://github.com/(owner)/(repo)",
+          'Repo url must be a valid github repo url. For example: https://github.com/(owner)/(repo)',
       })
       .regex(repoRe, {
         message:
-          "Repo url must be a valid github repo url. For example: https://github.com/(owner)/(repo)",
+          'Repo url must be a valid github repo url. For example: https://github.com/(owner)/(repo)',
       })
       .refine(
-        async (repo_url) => {
+        async repo_url => {
           const result = await testGithubRepoWithCache(repo_url);
           return result === RepoState.SUCCESS;
         },
         {
           message:
-            "Repo what you try to submit is not exists or not a public repo.",
+            'Repo what you try to submit is not exists or not a public repo.',
         }
       ),
   })

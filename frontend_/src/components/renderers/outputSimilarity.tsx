@@ -1,6 +1,6 @@
-import { ICellRendererParams } from "ag-grid-community";
-import { RunStatisticRecord } from "@/@data/customViews.types";
-import { OutputSimilarityRenderer as OSR } from "../runResultDisplay";
+import { ICellRendererParams } from 'ag-grid-community';
+import { RunStatisticRecord } from '@/@data/customViews.types';
+import { OutputSimilarityRenderer as OSR } from '../runResultDisplay';
 
 export function OutputSimilarityRenderer(
   props: ICellRendererParams<RunStatisticRecord>

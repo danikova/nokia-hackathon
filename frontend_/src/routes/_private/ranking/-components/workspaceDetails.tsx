@@ -1,16 +1,16 @@
-import { useMemo } from "react";
-import { getEditorUrl } from "@/lib/utils";
-import { Link } from "@tanstack/react-router";
-import WindowLink from "@/components/floatingWindowService";
-import { WorkspaceRecord } from "@/@data/workspaces.types";
+import { useMemo } from 'react';
+import { getEditorUrl } from '@/lib/utils';
+import { Link } from '@tanstack/react-router';
+import WindowLink from '@/components/floatingWindowService';
+import { WorkspaceRecord } from '@/@data/workspaces.types';
 
 function MissingRepoUrl() {
   return (
     <div className="text-sm">
-      Currently there are no repo url set in this workspace, please go to the{" "}
+      Currently there are no repo url set in this workspace, please go to the{' '}
       <Link to="/settings" className="text-primary hover:underline">
         /settings
-      </Link>{" "}
+      </Link>{' '}
       and set it correctly.
     </div>
   );
@@ -26,8 +26,8 @@ export function WorkspaceDetails({
   withSha?: boolean;
 }) {
   const isRepoUrlSet = useMemo(() => !!workspace?.repo_url, [workspace]);
-  const url = workspace?.repo_url || "";
-  const actionsUrl = url + (url.endsWith("/") ? "actions" : "/actions");
+  const url = workspace?.repo_url || '';
+  const actionsUrl = url + (url.endsWith('/') ? 'actions' : '/actions');
   const editorUrl = getEditorUrl(
     url,
     withSha ? workspace?.last_valid_sha : undefined
@@ -38,24 +38,24 @@ export function WorkspaceDetails({
       {isRepoUrlSet ? (
         <>
           <p>
-            {!shortVersion ? "Repo url: " : ""}
+            {!shortVersion ? 'Repo url: ' : ''}
             <Link href={url} className="text-primary hover:underline">
-              {!shortVersion ? url : "Repo url"}
+              {!shortVersion ? url : 'Repo url'}
             </Link>
           </p>
           <p>
-            {!shortVersion ? "Actions url: " : ""}
+            {!shortVersion ? 'Actions url: ' : ''}
             <Link href={actionsUrl} className="text-primary hover:underline">
-              {!shortVersion ? actionsUrl : "Actions url"}
+              {!shortVersion ? actionsUrl : 'Actions url'}
             </Link>
           </p>
           <p className="flex gap-1">
-            {!shortVersion ? "Open editor: " : ""}
+            {!shortVersion ? 'Open editor: ' : ''}
             <Link
               href={editorUrl}
               className="flex gap-1 text-primary hover:underline"
             >
-              {!shortVersion ? editorUrl : "Open editor"}
+              {!shortVersion ? editorUrl : 'Open editor'}
               <WindowLink url={editorUrl} side="right" />
             </Link>
           </p>

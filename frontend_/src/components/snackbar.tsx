@@ -1,5 +1,5 @@
-import { SnackbarProvider } from "notistack";
-import { defaultSB, errorSB, successSB } from "./snackbarVariants";
+import { SnackbarProvider } from 'notistack';
+import { defaultSB, errorSB, successSB } from './snackbarVariants';
 
 export default function Snackbar() {
   return (

@@ -9,7 +9,7 @@ import { WorkspaceRecord, WorkspacesResponse } from './workspaces.types';
 import axios from 'axios';
 
 export function useWorkspaces(
-  options?: Partial<UseQueryOptions<WorkspacesResponse, Error>>,
+  options?: Partial<UseQueryOptions<WorkspacesResponse, Error>>
 ) {
   return useQuery({
     queryKey: ['workspaces'],
@@ -29,7 +29,7 @@ interface UpdateWorkspaceProps {
 export function useUpdateWorkspace(
   options?: Partial<
     UseMutationOptions<WorkspaceRecord, Error, UpdateWorkspaceProps>
-  >,
+  >
 ) {
   const queryClient = useQueryClient();
 
@@ -38,7 +38,7 @@ export function useUpdateWorkspace(
     mutationFn: async ({ workspaceId, data }) => {
       const response = await axios.patch(
         `/api/collections/workspaces/records/${workspaceId}`,
-        data,
+        data
       );
       return response.data;
     },

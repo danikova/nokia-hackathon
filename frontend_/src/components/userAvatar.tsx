@@ -1,8 +1,8 @@
-import { useMemo } from "react";
-import { cn } from "@/lib/utils";
-import { minidenticon } from "minidenticons";
-import { UserRecord } from "@/@data/users.types";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { useMemo } from 'react';
+import { cn } from '@/lib/utils';
+import { minidenticon } from 'minidenticons';
+import { UserRecord } from '@/@data/users.types';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
 export function UserAvatar({
   user,
@@ -14,7 +14,7 @@ export function UserAvatar({
   const name = useMemo(() => user?.name || user?.username, [user]);
   const fallback = useMemo(() => {
     if (!name) return null;
-    const parts = name.split(" ");
+    const parts = name.split(' ');
     if (parts.length === 1) {
       return name[0].toUpperCase();
     } else {
@@ -26,13 +26,13 @@ export function UserAvatar({
     if (user?.avatarUrl) return user?.avatarUrl;
     else
       return (
-        "data:image/svg+xml;utf8," +
+        'data:image/svg+xml;utf8,' +
         encodeURIComponent(minidenticon(name, 100, 50))
       );
   }, [name, user]);
 
   return (
-    <Avatar className={cn("bg-background", className)}>
+    <Avatar className={cn('bg-background', className)}>
       <AvatarImage src={avatarURI} alt={name} />
       <AvatarFallback>{fallback}</AvatarFallback>
     </Avatar>

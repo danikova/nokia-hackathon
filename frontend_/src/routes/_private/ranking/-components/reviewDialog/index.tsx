@@ -1,22 +1,22 @@
-import { useAtom } from "jotai";
+import { useAtom } from 'jotai';
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from "@/components/ui/tooltip";
+} from '@/components/ui/tooltip';
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
-import { useReviewDialog } from "./utils";
-import WorkspaceInfo from "./workspaceInfo";
-import { WorkspaceDetails } from "../workspaceDetails";
-import { workspaceInfoOpenAtom } from "@/atoms/workspace";
-import { ReviewDialogContent } from "./content";
-import { FaChevronRight, FaChevronLeft } from "react-icons/fa";
-import WorkspaceAvatar from "@/routes/_private/settings/-components/workspaceAvatar";
+} from '@/components/ui/dialog';
+import { useReviewDialog } from './utils';
+import WorkspaceInfo from './workspaceInfo';
+import { WorkspaceDetails } from '../workspaceDetails';
+import { workspaceInfoOpenAtom } from '@/atoms/workspace';
+import { ReviewDialogContent } from './content';
+import { FaChevronRight, FaChevronLeft } from 'react-icons/fa';
+import WorkspaceAvatar from '@/routes/_private/settings/-components/workspaceAvatar';
 
 export default function ReviewDialog() {
   const [isWorkspaceInfoOpen, setIsWorkspaceInfoOpen] = useAtom(
@@ -36,7 +36,7 @@ export default function ReviewDialog() {
     <Dialog open={state.open} onOpenChange={closeDialog}>
       <DialogContent className="max-w-fit">
         <DialogHeader>
-          <DialogTitle>{!ranking ? "Add" : "Update"} Review</DialogTitle>
+          <DialogTitle>{!ranking ? 'Add' : 'Update'} Review</DialogTitle>
           <div className="text-sm text-muted-foreground">
             <p className="flex items-center gap-2">
               <WorkspaceAvatar workspace={workspace} />
@@ -48,7 +48,7 @@ export default function ReviewDialog() {
               </div>
               <Tooltip>
                 <TooltipTrigger
-                  onClick={() => setIsWorkspaceInfoOpen((old) => !old)}
+                  onClick={() => setIsWorkspaceInfoOpen(old => !old)}
                 >
                   {!isWorkspaceInfoOpen ? (
                     <FaChevronRight />
@@ -57,7 +57,7 @@ export default function ReviewDialog() {
                   )}
                 </TooltipTrigger>
                 <TooltipContent side="left">
-                  Click to {!isWorkspaceInfoOpen ? "expand" : "collapse"}{" "}
+                  Click to {!isWorkspaceInfoOpen ? 'expand' : 'collapse'}{' '}
                   workspace info
                 </TooltipContent>
               </Tooltip>

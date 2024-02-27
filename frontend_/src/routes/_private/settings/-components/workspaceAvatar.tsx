@@ -1,18 +1,18 @@
-import { useMemo } from "react";
-import { minidenticon } from "minidenticons";
-import { WorkspaceRecord } from "@/@data/workspaces.types";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { useMemo } from 'react';
+import { minidenticon } from 'minidenticons';
+import { WorkspaceRecord } from '@/@data/workspaces.types';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
 export default function WorkspaceAvatar({
   workspace,
 }: {
   workspace: WorkspaceRecord | null;
 }) {
-  const workspaceId = workspace?.id ?? "";
+  const workspaceId = workspace?.id ?? '';
 
   const fallback = useMemo(() => {
     if (!workspaceId) return null;
-    const parts = workspaceId.split(" ");
+    const parts = workspaceId.split(' ');
     if (parts.length === 1) {
       return workspaceId[0].toUpperCase();
     } else {
@@ -21,14 +21,14 @@ export default function WorkspaceAvatar({
   }, [workspaceId]);
   const avatarURI = useMemo(
     () =>
-      "data:image/svg+xml;utf8," +
+      'data:image/svg+xml;utf8,' +
       encodeURIComponent(minidenticon(workspaceId, 100, 50)),
     [workspaceId]
   );
 
   return (
     <Avatar className="bg-background">
-      <AvatarImage src={avatarURI} alt={fallback || ""} />
+      <AvatarImage src={avatarURI} alt={fallback || ''} />
       <AvatarFallback>{fallback}</AvatarFallback>
     </Avatar>
   );

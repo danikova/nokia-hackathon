@@ -1,12 +1,12 @@
-import { useMemo } from "react";
-import { useWorkspaces } from "@/@data/workspaces";
-import WorkspaceForm from "./-components/workspaceForm";
-import { createFileRoute } from "@tanstack/react-router";
-import BreadCrumb from "@/components/navigation/breadCrumb";
-import WorkspaceAvatar from "./-components/workspaceAvatar";
-import { navBarItems } from "@/components/navigation/navBarItems";
+import { useMemo } from 'react';
+import { useWorkspaces } from '@/@data/workspaces';
+import WorkspaceForm from './-components/workspaceForm';
+import { createFileRoute } from '@tanstack/react-router';
+import BreadCrumb from '@/components/navigation/breadCrumb';
+import WorkspaceAvatar from './-components/workspaceAvatar';
+import { navBarItems } from '@/components/navigation/navBarItems';
 
-export const Route = createFileRoute("/_private/settings/")({
+export const Route = createFileRoute('/_private/settings/')({
   component: Settings,
 });
 
@@ -19,7 +19,7 @@ function Settings() {
       <BreadCrumb items={[navBarItems[3]]} />
       <div className="flex gap-4">
         <WorkspaceAvatar workspace={userWorkspace} />
-        <h2 className="text-2xl pb-8">Workspace settings</h2>
+        <h2 className="pb-8 text-2xl">Workspace settings</h2>
       </div>
       <WorkspaceForm workspace={userWorkspace} />
     </div>

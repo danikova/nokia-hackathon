@@ -1,10 +1,10 @@
-import { v4 as uuid4 } from "uuid";
-import { useAtom } from "jotai";
-import { FaLink } from "react-icons/fa";
-import { useEffect, useRef } from "react";
-import * as TooltipPrimitive from "@radix-ui/react-tooltip";
-import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
-import { floatingWindowPropsAtom } from "@/atoms/floatingWindow";
+import { v4 as uuid4 } from 'uuid';
+import { useAtom } from 'jotai';
+import { FaLink } from 'react-icons/fa';
+import { useEffect, useRef } from 'react';
+import * as TooltipPrimitive from '@radix-ui/react-tooltip';
+import { Tooltip, TooltipContent, TooltipTrigger } from './ui/tooltip';
+import { floatingWindowPropsAtom } from '@/atoms/floatingWindow';
 
 type WindowLinkProps = {
   url: string;
@@ -26,8 +26,8 @@ export default function WindowLink({ url, ...props }: WindowLinkProps) {
     <Tooltip>
       <TooltipTrigger>
         <FaLink
-          className="text-primary opacity-30 hover:opacity-70 cursor-pointer"
-          onClick={(e) => {
+          className="cursor-pointer text-primary opacity-30 hover:opacity-70"
+          onClick={e => {
             e.preventDefault();
             e.stopPropagation();
             wasItClicked.current = true;
@@ -50,8 +50,8 @@ export function FloatingWindowService() {
     if (floatingWindowProps.url) {
       windowRef.current = window.open(
         floatingWindowProps.url,
-        "MsgWindow",
-        "width=1200,height=800,toolbar=no,menubar=no,resizable=yes"
+        'MsgWindow',
+        'width=1200,height=800,toolbar=no,menubar=no,resizable=yes'
       );
     }
     return () => {

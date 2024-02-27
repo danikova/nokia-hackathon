@@ -1,29 +1,29 @@
-import AppBar from "@/components/appBar";
-import UserButton from "@/components/userButton";
-import CountDownTimer from "@/components/countDowntimer";
-import SideNavBar from "@/components/navigation/sideNavBar";
-import BottomNavBar from "@/components/navigation/bottomNavBar";
-import BredCrumbDisplay from "@/components/navigation/breadCrumbDisplay";
-import { FloatingWindowService } from "@/components/floatingWindowService";
+import AppBar from '@/components/appBar';
+import UserButton from '@/components/userButton';
+import CountDownTimer from '@/components/countDowntimer';
+import SideNavBar from '@/components/navigation/sideNavBar';
+import BottomNavBar from '@/components/navigation/bottomNavBar';
+import BredCrumbDisplay from '@/components/navigation/breadCrumbDisplay';
+import { FloatingWindowService } from '@/components/floatingWindowService';
 
 export function DashboardLayout({ children }: { children: React.ReactNode }) {
   return (
     <>
       <FloatingWindowService />
       <div
-        className="bg-background min-h-screen text-secondary-foreground grid overflow-hidden"
+        className="grid min-h-screen overflow-hidden bg-background text-secondary-foreground"
         style={{
-          gridTemplateColumns: "[start] 4rem [sidebar-end] 1fr [end]",
+          gridTemplateColumns: '[start] 4rem [sidebar-end] 1fr [end]',
           gridTemplateRows:
-            "[start] 3rem [appbar-end] 1fr [content-end] 4rem [end]",
+            '[start] 3rem [appbar-end] 1fr [content-end] 4rem [end]',
         }}
       >
-        <div className="drop-shadow-default col-[start/end] row-[start/appbar-end] z-50">
+        <div className="z-50 col-[start/end] row-[start/appbar-end] drop-shadow-default">
           <AppBar
             title={import.meta.env.VITE_APP_TITLE as string}
             subTitle={import.meta.env.VITE_APP_SUB_TITLE as string}
           >
-            <div className="flex flex-auto flex-row-reverse max-md:hidden gap-4">
+            <div className="flex flex-auto flex-row-reverse gap-4 max-md:hidden">
               <div className="flex items-center justify-center">
                 <UserButton />
               </div>
@@ -33,19 +33,19 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
             </div>
           </AppBar>
         </div>
-        <div className="max-md:hidden col-[start/sidebar-end] row-[appbar-end/end]">
+        <div className="col-[start/sidebar-end] row-[appbar-end/end] max-md:hidden">
           <SideNavBar />
         </div>
-        <div className="md:row-[appbar-end/end] md:col-[sidebar-end/end] max-md:row-[appbar-end/content-end] max-md:col-[start/end] flex flex-col relative">
-          <div className="content-with-scrollbar flex-auto h-0 overflow-y-auto overflow-x-hidden [--cm-titlebar-h:4rem] max-md:[--cm-titlebar-h:2rem]">
-            <div className="absolute top-0 left-0 right-0 z-40">
+        <div className="relative flex flex-col max-md:col-[start/end] max-md:row-[appbar-end/content-end] md:col-[sidebar-end/end] md:row-[appbar-end/end]">
+          <div className="content-with-scrollbar h-0 flex-auto overflow-y-auto overflow-x-hidden [--cm-titlebar-h:4rem] max-md:[--cm-titlebar-h:2rem]">
+            <div className="absolute left-0 right-0 top-0 z-40">
               <BredCrumbDisplay />
             </div>
             <div className="h-[--cm-titlebar-h]" />
             {children}
           </div>
         </div>
-        <div className="md:hidden col-[start/end] row-[content-end/end]">
+        <div className="col-[start/end] row-[content-end/end] md:hidden">
           <BottomNavBar />
         </div>
       </div>

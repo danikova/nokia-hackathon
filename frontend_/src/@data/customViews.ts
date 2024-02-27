@@ -4,7 +4,7 @@ import { UseQueryOptions, useQuery } from '@tanstack/react-query';
 import { WorkspaceRecord } from './workspaces.types';
 
 export function useRunStatistics(
-  options?: Partial<UseQueryOptions<RunStatisticResponse, Error>>,
+  options?: Partial<UseQueryOptions<RunStatisticResponse, Error>>
 ) {
   return useQuery({
     queryKey: ['runStatistic'],
@@ -18,13 +18,13 @@ export function useRunStatistics(
 
 export function useBestRuns(
   workspace: WorkspaceRecord,
-  options?: Partial<UseQueryOptions<RunResultResponse, Error>>,
+  options?: Partial<UseQueryOptions<RunResultResponse, Error>>
 ) {
   return useQuery({
     queryKey: ['bestRuns'],
     queryFn: async () => {
       const response = await axios.get(
-        `/custom_api/run_result_sum/?workspaceId=${workspace.id}`,
+        `/custom_api/run_result_sum/?workspaceId=${workspace.id}`
       );
       return response.data;
     },

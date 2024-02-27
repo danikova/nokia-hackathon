@@ -1,10 +1,10 @@
-import { cn } from "@/lib/utils";
-import { useEffect, useRef } from "react";
-import { Extension, useCodeMirror } from "@uiw/react-codemirror";
+import { cn } from '@/lib/utils';
+import { useEffect, useRef } from 'react';
+import { Extension, useCodeMirror } from '@uiw/react-codemirror';
 import {
   vscodeDark,
   defaultSettingsVscodeDark,
-} from "@uiw/codemirror-theme-vscode";
+} from '@uiw/codemirror-theme-vscode';
 
 export default function Code({
   children,
@@ -21,8 +21,8 @@ export default function Code({
     value: children,
     theme: vscodeDark,
     editable: false,
-    height: "100%",
-    width: "100%",
+    height: '100%',
+    width: '100%',
     extensions: extensions || [],
   });
 
@@ -35,7 +35,7 @@ export default function Code({
   return (
     <div
       className={cn(
-        "high-vis-scrollbar rounded-md w-full h-full relative overflow-auto box-border",
+        'high-vis-scrollbar relative box-border h-full w-full overflow-auto rounded-md',
         className
       )}
       style={{
@@ -43,7 +43,7 @@ export default function Code({
         border: `1px solid ${defaultSettingsVscodeDark.background}`,
       }}
     >
-      <div ref={editor} className="absolute w-full h-full break-words" />
+      <div ref={editor} className="absolute h-full w-full break-words" />
     </div>
   );
 }

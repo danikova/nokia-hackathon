@@ -63,8 +63,8 @@ export default function RunResultDisplay({
   return (
     <div
       className={cn(
-        'flex flex-col gap-2 bg-[rgba(0,0,0,0.02)] rounded-md min-w-min p-2',
-        className,
+        'flex min-w-min flex-col gap-2 rounded-md bg-[rgba(0,0,0,0.02)] p-2',
+        className
       )}
     >
       {href ? (
@@ -89,13 +89,13 @@ export default function RunResultDisplay({
           className={cn(
             'relative transition-all delay-150 duration-200',
             !showMore && 'h-[80px]',
-            showMore && 'h-[400px]',
+            showMore && 'h-[400px]'
           )}
         >
           <Code extensions={[EditorView.lineWrapping]}>{runResult.output}</Code>
           <Button
             tabIndex={tabIndex}
-            className="absolute right-2 bottom-2"
+            className="absolute bottom-2 right-2"
             onClick={e => {
               e.preventDefault();
               setShowMore(v => !v);
@@ -107,9 +107,9 @@ export default function RunResultDisplay({
           </Button>
           <Dialog>
             <DialogTrigger tabIndex={-1}>
-              <FaMaximize className="text-background w-5-h-5 absolute right-2 top-2" />
+              <FaMaximize className="w-5-h-5 absolute right-2 top-2 text-background" />
             </DialogTrigger>
-            <DialogContent className="max-w-[80vw] h-[80vh]">
+            <DialogContent className="h-[80vh] max-w-[80vw]">
               <DialogHeader>
                 <DialogTitle>{runResult.task} output</DialogTitle>
               </DialogHeader>
@@ -136,13 +136,13 @@ function Header({
   windowHref?: string;
 }) {
   return (
-    <div className="flex justify-between gap-2 h-8 whitespace-nowrap p-2 rounded-md bg-[rgba(0,0,0,0.04)]">
-      <div className="flex justify-start items-center gap-2">
+    <div className="flex h-8 justify-between gap-2 whitespace-nowrap rounded-md bg-[rgba(0,0,0,0.04)] p-2">
+      <div className="flex items-center justify-start gap-2">
         <StatusMark runResult={runResult} />
         {!hideTaskName && <div className="text-lg">{runResult.task}</div>}
         {windowHref && <WindowLink url={windowHref} side="right" />}
       </div>
-      <div className="flex justify-start items-center gap-2">
+      <div className="flex items-center justify-start gap-2">
         {!hideCreated && (
           <div>
             <FromNow date={runResult.created} />
@@ -215,22 +215,22 @@ function StatusMark({ runResult }: { runResult: RunResultRecord }) {
 
   if (status === 'success')
     state = {
-      icon: <FaCircle className="text-green-500 h-5 w-5" />,
+      icon: <FaCircle className="h-5 w-5 text-green-500" />,
       tooltipText: 'Success',
     };
   else if (status === 'fail')
     state = {
-      icon: <FaCircle className="text-red-500 h-5 w-5" />,
+      icon: <FaCircle className="h-5 w-5 text-red-500" />,
       tooltipText: 'Unexpected error, please check the logs',
     };
   else if (status === 'timeout')
     state = {
-      icon: <FaCircle className="text-orange-500 h-5 w-5" />,
+      icon: <FaCircle className="h-5 w-5 text-orange-500" />,
       tooltipText: 'Timeout',
     };
   else if (status === 'flowFail')
     state = {
-      icon: <FaCircleXmark className="text-red-500 h-5 w-5" />,
+      icon: <FaCircleXmark className="h-5 w-5 text-red-500" />,
       tooltipText: 'Flow fail, please check the logs',
     };
 

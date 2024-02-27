@@ -16,7 +16,7 @@ export function getEditorUrl(repo_url: string, sha?: string) {
 
 export async function pbSnackbarWrapper<T>(
   pbPromise: T,
-  successMessage?: string,
+  successMessage?: string
 ): Promise<T> {
   try {
     const result = await pbPromise;

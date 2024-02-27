@@ -8,7 +8,7 @@ export function useGlobals(options?: Partial<UseQueryOptions<Globals, Error>>) {
     queryFn: async () => {
       const globals: Globals = {};
       const response = await axios.get<GlobalsResponse>(
-        '/api/collections/globals/records',
+        '/api/collections/globals/records'
       );
       for (const item of response.data.items) {
         globals[item.key] = item.value;

@@ -1,12 +1,12 @@
-import { useMemo, useState } from "react";
-import Spinner from "@/components/spinner";
-import { useAuthMethods } from "@/@data/users";
-import { PasswordLogin } from "./-components/forms";
-import { createFileRoute } from "@tanstack/react-router";
-import { GithubLogIn, GoogleLogIn } from "./-components/oauth";
-import { LoginLayout } from "@/layouts/login";
+import { useMemo, useState } from 'react';
+import Spinner from '@/components/spinner';
+import { useAuthMethods } from '@/@data/users';
+import { PasswordLogin } from './-components/forms';
+import { createFileRoute } from '@tanstack/react-router';
+import { GithubLogIn, GoogleLogIn } from './-components/oauth';
+import { LoginLayout } from '@/layouts/login';
 
-export const Route = createFileRoute("/_public/login")({
+export const Route = createFileRoute('/_public/login')({
   component: Login,
 });
 
@@ -24,9 +24,9 @@ function LoginLogic() {
 
   const OAuthButtons = useMemo(() => {
     const oAuthButtons = [];
-    const providerNames = (authMethods?.authProviders ?? []).map((i) => i.name);
-    if (providerNames.includes("google")) oAuthButtons.push(GoogleLogIn);
-    if (providerNames.includes("github")) oAuthButtons.push(GithubLogIn);
+    const providerNames = (authMethods?.authProviders ?? []).map(i => i.name);
+    if (providerNames.includes('google')) oAuthButtons.push(GoogleLogIn);
+    if (providerNames.includes('github')) oAuthButtons.push(GithubLogIn);
     return oAuthButtons;
   }, [authMethods]);
 
@@ -39,10 +39,10 @@ function LoginLogic() {
 
   return (
     <div
-      className={`max-w-[500px] ${loading ? "pointer-events-none opacity-70" : ""}`}
+      className={`max-w-[500px] ${loading ? 'pointer-events-none opacity-70' : ''}`}
     >
-      {status === "pending" && (
-        <div className="mt-12 h-12 flex content-center justify-center">
+      {status === 'pending' && (
+        <div className="mt-12 flex h-12 content-center justify-center">
           <Spinner className="h-12 w-12" />
         </div>
       )}
@@ -52,7 +52,7 @@ function LoginLogic() {
         ))}
       </div>
       {OAuthButtons.length && Forms.length ? (
-        <h2 className="font-bold my-12 max-md:my-4 text-center">OR</h2>
+        <h2 className="my-12 text-center font-bold max-md:my-4">OR</h2>
       ) : null}
       <div>
         {Forms.map((Comp, i) => (

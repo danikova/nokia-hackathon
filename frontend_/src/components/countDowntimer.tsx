@@ -1,13 +1,13 @@
-import { cn } from "@/lib/utils";
-import FromNow from "@/lib/dayjs";
-import { useEffect, useMemo, useState } from "react";
+import { cn } from '@/lib/utils';
+import FromNow from '@/lib/dayjs';
+import { useEffect, useMemo, useState } from 'react';
 import {
   Tooltip,
   TooltipContent,
   TooltipDescription,
   TooltipTrigger,
-} from "@/components/ui/tooltip";
-import { useGlobals } from "@/@data/globals";
+} from '@/components/ui/tooltip';
+import { useGlobals } from '@/@data/globals';
 
 function isValidDate(d: Date): boolean {
   return d instanceof Date && !isNaN(d.getTime());
@@ -48,7 +48,7 @@ function useCountdownTime(endDate: Date) {
 export default function CountDownTimer(props: any) {
   const globals = useGlobals();
   const endDate = useMemo(
-    () => new Date(globals["event_end_date_time"]),
+    () => new Date(globals['event_end_date_time']),
     [globals]
   );
   const isValidEndDate = useMemo(() => isValidDate(endDate), [endDate]);
@@ -63,31 +63,31 @@ export default function CountDownTimer(props: any) {
       <TooltipTrigger className="-mb-[2px]">
         <span
           className={cn(
-            "countdown font-mono text-2xl opacity-40 hover:opacity-90 cursor-default",
+            'countdown cursor-default font-mono text-2xl opacity-40 hover:opacity-90',
             props.className
           )}
         >
           <span
             style={
-              { "--value": !isEnded ? days || 0 : 0 } as React.CSSProperties
+              { '--value': !isEnded ? days || 0 : 0 } as React.CSSProperties
             }
           ></span>
           :
           <span
             style={
-              { "--value": !isEnded ? hours || 0 : 0 } as React.CSSProperties
+              { '--value': !isEnded ? hours || 0 : 0 } as React.CSSProperties
             }
           ></span>
           :
           <span
             style={
-              { "--value": !isEnded ? minutes || 0 : 0 } as React.CSSProperties
+              { '--value': !isEnded ? minutes || 0 : 0 } as React.CSSProperties
             }
           ></span>
           :
           <span
             style={
-              { "--value": !isEnded ? seconds || 0 : 0 } as React.CSSProperties
+              { '--value': !isEnded ? seconds || 0 : 0 } as React.CSSProperties
             }
           ></span>
         </span>

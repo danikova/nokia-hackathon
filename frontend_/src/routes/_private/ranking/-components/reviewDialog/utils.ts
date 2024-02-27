@@ -24,7 +24,7 @@ export function useReviewDialog() {
     (props: ReviewDialogProps) => {
       setState({ open: true, props });
     },
-    [setState],
+    [setState]
   );
 
   const closeDialog = useCallback(() => {
@@ -36,7 +36,7 @@ export function useReviewDialog() {
       if (state.props)
         setState({ ...state, props: { ...state.props, ...props } });
     },
-    [state, setState],
+    [state, setState]
   );
 
   return { openDialog, closeDialog, setDialogProps, state };

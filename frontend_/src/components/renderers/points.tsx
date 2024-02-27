@@ -1,6 +1,6 @@
-import { ICellRendererParams } from "ag-grid-community";
-import { WorkspaceRankingRecord } from "@/@data/workspaceRankings.types";
-import { NumberRenderer } from "./number";
+import { ICellRendererParams } from 'ag-grid-community';
+import { WorkspaceRankingRecord } from '@/@data/workspaceRankings.types';
+import { NumberRenderer } from './number';
 
 export function PointsRenderer({
   value,

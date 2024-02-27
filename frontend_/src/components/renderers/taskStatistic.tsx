@@ -3,9 +3,9 @@ import {
   TooltipContent,
   TooltipDescription,
   TooltipTrigger,
-} from "@/components/ui/tooltip";
-import { ICellRendererParams } from "ag-grid-community";
-import { RunStatisticRecord } from "@/@data/customViews.types";
+} from '@/components/ui/tooltip';
+import { ICellRendererParams } from 'ag-grid-community';
+import { RunStatisticRecord } from '@/@data/customViews.types';
 
 export function TaskStatisticRenderer({
   data,
@@ -13,7 +13,7 @@ export function TaskStatisticRenderer({
   return (
     <div className="flex gap-1">
       <Tooltip>
-        <span className="flex-[1_1_100px] flex justify-center items-center font-bold">
+        <span className="flex flex-[1_1_100px] items-center justify-center font-bold">
           <TooltipTrigger>{data?.number_of_evaluated_tasks}</TooltipTrigger>
         </span>
         <TooltipContent side="right">
@@ -24,9 +24,9 @@ export function TaskStatisticRenderer({
         </TooltipContent>
       </Tooltip>
       <span className="opacity-50">/</span>
-      <span className="flex-[1_1_100px] flex justify-center items-center gap-1">
+      <span className="flex flex-[1_1_100px] items-center justify-center gap-1">
         <Tooltip>
-          <span className="text-green-500 font-bold">
+          <span className="font-bold text-green-500">
             <TooltipTrigger>{data?.number_of_successful_tasks}</TooltipTrigger>
           </span>
           <TooltipContent side="right">
@@ -38,11 +38,11 @@ export function TaskStatisticRenderer({
         </Tooltip>
         {!!data?.number_of_failure_tasks && (
           <Tooltip>
-            <span className="text-xs text-red-500 font-bold">
+            <span className="text-xs font-bold text-red-500">
               <TooltipTrigger>
-                {"("}
+                {'('}
                 <span>{data?.number_of_failure_tasks}</span>
-                {")"}
+                {')'}
               </TooltipTrigger>
             </span>
             <TooltipContent side="right">
@@ -55,11 +55,11 @@ export function TaskStatisticRenderer({
         )}
         {!!data?.number_of_timeouted_tasks && (
           <Tooltip>
-            <span className="text-xs text-orange-500 font-bold">
+            <span className="text-xs font-bold text-orange-500">
               <TooltipTrigger>
-                {"("}
+                {'('}
                 <span>{data?.number_of_timeouted_tasks}</span>
-                {")"}
+                {')'}
               </TooltipTrigger>
             </span>
             <TooltipContent side="right">
@@ -74,7 +74,7 @@ export function TaskStatisticRenderer({
       </span>
       <span className="opacity-50">/</span>
       <Tooltip>
-        <span className="flex-[1_1_100px] flex justify-center items-center text-red-500 font-bold">
+        <span className="flex flex-[1_1_100px] items-center justify-center font-bold text-red-500">
           <TooltipTrigger>{data?.number_of_flow_failure_tasks}</TooltipTrigger>
         </span>
         <TooltipContent side="right">

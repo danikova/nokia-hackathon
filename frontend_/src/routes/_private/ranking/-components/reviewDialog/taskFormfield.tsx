@@ -2,14 +2,14 @@ import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from "@/components/ui/tooltip";
-import { Label } from "@/components/ui/label";
-import { CSSProperties, ReactElement } from "react";
-import { getRangeKeysFromTask, getRangeMax } from "./utils";
-import { ControllerRenderProps } from "react-hook-form";
-import { FaCogs, FaWrench, FaCrown } from "react-icons/fa";
-import { FormField, FormLabel } from "@/components/ui/form";
-import { RunTaskRecord } from "@/@data/runTasks.types";
+} from '@/components/ui/tooltip';
+import { Label } from '@/components/ui/label';
+import { CSSProperties, ReactElement } from 'react';
+import { getRangeKeysFromTask, getRangeMax } from './utils';
+import { ControllerRenderProps } from 'react-hook-form';
+import { FaCogs, FaWrench, FaCrown } from 'react-icons/fa';
+import { FormField, FormLabel } from '@/components/ui/form';
+import { RunTaskRecord } from '@/@data/runTasks.types';
 
 export function TaskFormfield({
   task,
@@ -35,7 +35,7 @@ export function TaskFormfield({
               icon={
                 <Tooltip>
                   <TooltipTrigger>
-                    <FaCogs className="w-5 h-5" />
+                    <FaCogs className="h-5 w-5" />
                   </TooltipTrigger>
                   <TooltipContent side="left">Implementation</TooltipContent>
                 </Tooltip>
@@ -54,7 +54,7 @@ export function TaskFormfield({
               icon={
                 <Tooltip>
                   <TooltipTrigger>
-                    <FaWrench className="w-5 h-5" />
+                    <FaWrench className="h-5 w-5" />
                   </TooltipTrigger>
                   <TooltipContent side="left">Functionality</TooltipContent>
                 </Tooltip>
@@ -73,7 +73,7 @@ export function TaskFormfield({
               icon={
                 <Tooltip>
                   <TooltipTrigger>
-                    <FaCrown className="w-5 h-5" />
+                    <FaCrown className="h-5 w-5" />
                   </TooltipTrigger>
                   <TooltipContent side="left">Prettiness</TooltipContent>
                 </Tooltip>
@@ -99,7 +99,7 @@ function IconRange({
   const rangeMax = getRangeMax(scoreMultipler);
 
   return (
-    <div className="flex gap-2 w-full h-6">
+    <div className="flex h-6 w-full gap-2">
       <div className="flex-[0_0_24px]">
         <Label className="text-lg font-bold">{field.value}</Label>
       </div>
@@ -112,11 +112,11 @@ function IconRange({
           max={rangeMax}
           style={
             {
-              "--range-shdw": "var(--primary)",
+              '--range-shdw': 'var(--primary)',
             } as CSSProperties
           }
           {...field}
-          onChange={(event) => field.onChange(+event.target.value)}
+          onChange={event => field.onChange(+event.target.value)}
         />
       </div>
       <div className="flex flex-[0_0_24px] justify-end">{icon}</div>

@@ -2,10 +2,10 @@ import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from "@/components/ui/tooltip";
-import { ICellRendererParams } from "ag-grid-community";
-import { WorkspaceRecord } from "@/@data/workspaces.types";
-import WorkspaceAvatar from "../../routes/_private/settings/-components/workspaceAvatar";
+} from '@/components/ui/tooltip';
+import { ICellRendererParams } from 'ag-grid-community';
+import { WorkspaceRecord } from '@/@data/workspaces.types';
+import WorkspaceAvatar from '../../routes/_private/settings/-components/workspaceAvatar';
 
 interface WorkspaceAvatarRendererProps extends ICellRendererParams {
   workspace: WorkspaceRecord | null;
@@ -16,7 +16,7 @@ export function WorkspaceAvatarRenderer(props: WorkspaceAvatarRendererProps) {
   const { workspace } = props;
 
   return (
-    <div className="h-full w-full flex items-center justify-center">
+    <div className="flex h-full w-full items-center justify-center">
       <Tooltip>
         <TooltipTrigger>
           <WorkspaceAvatar workspace={{ id: workspaceId } as WorkspaceRecord} />

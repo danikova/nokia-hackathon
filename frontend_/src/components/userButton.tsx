@@ -1,6 +1,6 @@
-import { BiLogOut } from "react-icons/bi";
-import { enqueueSnackbar } from "notistack";
-import { useCallback, useMemo } from "react";
+import { BiLogOut } from 'react-icons/bi';
+import { enqueueSnackbar } from 'notistack';
+import { useCallback, useMemo } from 'react';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -8,12 +8,12 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Skeleton } from "./ui/skeleton";
-import { useAtomValue } from "jotai";
-import { userAtom } from "@/atoms/user";
-import { useLogout } from "@/lib/hooks";
-import { UserAvatar } from "./userAvatar";
+} from '@/components/ui/dropdown-menu';
+import { Skeleton } from './ui/skeleton';
+import { useAtomValue } from 'jotai';
+import { userAtom } from '@/atoms/user';
+import { useLogout } from '@/lib/hooks';
+import { UserAvatar } from './userAvatar';
 
 export default function UserButton() {
   const logoutFlow = useLogout();
@@ -22,7 +22,7 @@ export default function UserButton() {
 
   const logout = useCallback(() => {
     logoutFlow();
-    enqueueSnackbar("Successful logout", { variant: "success" });
+    enqueueSnackbar('Successful logout', { variant: 'success' });
   }, [logoutFlow]);
 
   return (
@@ -38,12 +38,12 @@ export default function UserButton() {
         <DropdownMenuLabel>
           <div className="flex flex-col">
             <p>{name}</p>
-            <p className="text-[13px] -mt-1 opacity-75">{model?.email}</p>
+            <p className="-mt-1 text-[13px] opacity-75">{model?.email}</p>
           </div>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuItem onClick={logout}>
-          <BiLogOut className="w-5 h-5 mr-2" />
+          <BiLogOut className="mr-2 h-5 w-5" />
           Logout
         </DropdownMenuItem>
       </DropdownMenuContent>

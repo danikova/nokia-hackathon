@@ -3,7 +3,7 @@ import { RuntTasksResponse } from './runTasks.types';
 import { UseQueryOptions, useQuery } from '@tanstack/react-query';
 
 export function useRunTasks(
-  options?: Partial<UseQueryOptions<RuntTasksResponse, Error>>,
+  options?: Partial<UseQueryOptions<RuntTasksResponse, Error>>
 ) {
   return useQuery({
     queryKey: ['runTasks'],

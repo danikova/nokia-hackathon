@@ -1,12 +1,12 @@
-import { useAtom } from "jotai";
-import { Tooltip, TooltipContent } from "../ui/tooltip";
-import { TooltipTrigger } from "@radix-ui/react-tooltip";
-import { FaChevronRight, FaInfoCircle } from "react-icons/fa";
-import { Link } from "@tanstack/react-router";
+import { useAtom } from 'jotai';
+import { Tooltip, TooltipContent } from '../ui/tooltip';
+import { TooltipTrigger } from '@radix-ui/react-tooltip';
+import { FaChevronRight, FaInfoCircle } from 'react-icons/fa';
+import { Link } from '@tanstack/react-router';
 import {
   globalBreadCrumbAtom,
   globelBredCrumbChildrenAtom,
-} from "@/atoms/breadcrumbs";
+} from '@/atoms/breadcrumbs';
 
 export default function BredCrumbDisplay() {
   const [globalBreadCrumb] = useAtom(globalBreadCrumbAtom);
@@ -17,7 +17,7 @@ export default function BredCrumbDisplay() {
 
   return (
     <div className="h-[--cm-titlebar-h] w-full bg-secondary/50 px-6 drop-shadow-default backdrop-blur-sm">
-      <div className="min-h-full flex items-center max-md:text-base text-xl justify-between">
+      <div className="flex min-h-full items-center justify-between text-xl max-md:text-base">
         <div>
           <div className="flex items-center gap-2">
             {globalBreadCrumb.map((bcItem, i) => {

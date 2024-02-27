@@ -11,7 +11,7 @@ import {
 
 export function useOutsideClickObserver(
   ref: MutableRefObject<any>,
-  onNotClick: (event: MouseEvent) => void,
+  onNotClick: (event: MouseEvent) => void
 ) {
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {

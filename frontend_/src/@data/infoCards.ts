@@ -3,7 +3,7 @@ import { InfoCardsResponse } from './infoCards.types';
 import { UseQueryOptions, useQuery } from '@tanstack/react-query';
 
 export function useInfoCards(
-  options?: Partial<UseQueryOptions<InfoCardsResponse, Error>>,
+  options?: Partial<UseQueryOptions<InfoCardsResponse, Error>>
 ) {
   return useQuery({
     queryKey: ['infoCards'],

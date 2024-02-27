@@ -1,15 +1,15 @@
-import { useMemo } from "react";
+import { useMemo } from 'react';
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from "@/components/ui/tooltip";
-import { FaComment } from "react-icons/fa6";
-import { Button } from "@/components/ui/button";
-import { Dialog } from "@/components/ui/dialog";
-import { ICellRendererParams } from "ag-grid-community";
-import { useReviewDialog } from "@/routes/_private/ranking/-components/reviewDialog/utils";
-import { WorkspaceRankingRecord } from "@/@data/workspaceRankings.types";
+} from '@/components/ui/tooltip';
+import { FaComment } from 'react-icons/fa6';
+import { Button } from '@/components/ui/button';
+import { Dialog } from '@/components/ui/dialog';
+import { ICellRendererParams } from 'ag-grid-community';
+import { useReviewDialog } from '@/routes/_private/ranking/-components/reviewDialog/utils';
+import { WorkspaceRankingRecord } from '@/@data/workspaceRankings.types';
 
 export function CommentRenderer({
   data,
@@ -59,14 +59,14 @@ export function CommentRenderer({
       );
 
   if (rankingLength === 1)
-    return (data?.expand?.rankings || []).map((ranking) => {
+    return (data?.expand?.rankings || []).map(ranking => {
       const { comments } = ranking;
       return (
         <div key={ranking.id} className="flex justify-between">
           {comments && (
             <Tooltip>
               <TooltipTrigger>
-                <div className="h-[var(--ag-row-height)] flex items-center">
+                <div className="flex h-[var(--ag-row-height)] items-center">
                   <FaComment className="h-6 w-6" />
                 </div>
               </TooltipTrigger>

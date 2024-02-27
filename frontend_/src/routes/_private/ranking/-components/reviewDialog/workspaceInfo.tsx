@@ -1,8 +1,8 @@
-import { getEditorUrl } from "@/lib/utils";
-import { Skeleton } from "@/components/ui/skeleton";
-import { useBestRuns } from "@/@data/customViews";
-import { WorkspaceRecord } from "@/@data/workspaces.types";
-import RunResultDisplay from "@/components/runResultDisplay";
+import { getEditorUrl } from '@/lib/utils';
+import { Skeleton } from '@/components/ui/skeleton';
+import { useBestRuns } from '@/@data/customViews';
+import { WorkspaceRecord } from '@/@data/workspaces.types';
+import RunResultDisplay from '@/components/runResultDisplay';
 
 export default function WorkspaceInfo({
   workspace,
@@ -12,9 +12,9 @@ export default function WorkspaceInfo({
   const { data: runResults, status } = useBestRuns(workspace);
 
   return (
-    <div className="p-4 w-[28rem] max-h-[70vh] overflow-auto">
+    <div className="max-h-[70vh] w-[28rem] overflow-auto p-4">
       <h2 className="text-lg font-bold">Best runs</h2>
-      {status === "pending" && (
+      {status === 'pending' && (
         <>
           <div className="flex flex-col gap-2 p-2">
             <Skeleton className="h-8 w-full" />
@@ -26,7 +26,7 @@ export default function WorkspaceInfo({
           </div>
         </>
       )}
-      {runResults?.map((runResult) => {
+      {runResults?.map(runResult => {
         return (
           <RunResultDisplay
             tabIndex={-1}

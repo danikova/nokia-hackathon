@@ -10,7 +10,7 @@ export type FormFieldContextValue<
 };
 
 export const FormFieldContext = createContext<FormFieldContextValue>(
-  {} as FormFieldContextValue,
+  {} as FormFieldContextValue
 );
 
 export type FormItemContextValue = {
@@ -18,7 +18,7 @@ export type FormItemContextValue = {
 };
 
 export const FormItemContext = createContext<FormItemContextValue>(
-  {} as FormItemContextValue,
+  {} as FormItemContextValue
 );
 
 export type EditorHistoryStateContext = {
@@ -26,5 +26,5 @@ export type EditorHistoryStateContext = {
 };
 
 export const EditorHistoryContext = createContext<EditorHistoryStateContext>(
-  {},
+  {}
 );

@@ -3,7 +3,7 @@ import { AuthMethodsResponse } from './users.types';
 import { UseQueryOptions, useQuery } from '@tanstack/react-query';
 
 export function useAuthMethods(
-  options?: Partial<UseQueryOptions<AuthMethodsResponse, Error>>,
+  options?: Partial<UseQueryOptions<AuthMethodsResponse, Error>>
 ) {
   return useQuery({
     queryKey: ['authMethods'],
