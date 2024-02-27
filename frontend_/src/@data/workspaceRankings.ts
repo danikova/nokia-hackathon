@@ -7,8 +7,9 @@ import {
 
 export function useWorkspaceRankings(
   options?: Partial<UseQueryOptions<WorkspaceRankingResponse, Error>>,
-  onChange?: (data: WorkspaceRankingRecord) => void // eslint-disable-line @typescript-eslint/no-unused-vars
+  onChange?: (data: WorkspaceRankingRecord) => void
 ) {
+  onChange && onChange({} as WorkspaceRankingRecord);
   return useQuery({
     queryKey: ['workspaceRankings'],
     queryFn: async () => {

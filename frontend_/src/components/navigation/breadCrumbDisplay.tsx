@@ -1,12 +1,12 @@
-import { useAtom } from 'jotai';
-import { Tooltip, TooltipContent } from '../ui/tooltip';
-import { TooltipTrigger } from '@radix-ui/react-tooltip';
-import { FaChevronRight, FaInfoCircle } from 'react-icons/fa';
-import { Link } from '@tanstack/react-router';
 import {
   globalBreadCrumbAtom,
   globelBredCrumbChildrenAtom,
 } from '@/atoms/breadcrumbs';
+import { useAtom } from 'jotai';
+import { Link } from '@tanstack/react-router';
+import { Tooltip, TooltipContent } from '../ui/tooltip';
+import { TooltipTrigger } from '@radix-ui/react-tooltip';
+import { FaChevronRight, FaInfoCircle } from 'react-icons/fa';
 
 export default function BredCrumbDisplay() {
   const [globalBreadCrumb] = useAtom(globalBreadCrumbAtom);
@@ -24,7 +24,7 @@ export default function BredCrumbDisplay() {
               const isLast = i === globalBreadCrumb.length - 1;
               const titleItem =
                 bcItem.rootPath && !isLast ? (
-                  <Link key={bcItem.title} href={bcItem.rootPath}>
+                  <Link key={bcItem.title} to={bcItem.rootPath}>
                     {bcItem.title}
                   </Link>
                 ) : (

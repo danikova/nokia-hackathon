@@ -39,20 +39,20 @@ export function WorkspaceDetails({
         <>
           <p>
             {!shortVersion ? 'Repo url: ' : ''}
-            <Link href={url} className="text-primary hover:underline">
+            <Link to={url} className="text-primary hover:underline">
               {!shortVersion ? url : 'Repo url'}
             </Link>
           </p>
           <p>
             {!shortVersion ? 'Actions url: ' : ''}
-            <Link href={actionsUrl} className="text-primary hover:underline">
+            <Link to={actionsUrl} className="text-primary hover:underline">
               {!shortVersion ? actionsUrl : 'Actions url'}
             </Link>
           </p>
           <p className="flex gap-1">
             {!shortVersion ? 'Open editor: ' : ''}
             <Link
-              href={editorUrl}
+              to={editorUrl}
               className="flex gap-1 text-primary hover:underline"
             >
               {!shortVersion ? editorUrl : 'Open editor'}

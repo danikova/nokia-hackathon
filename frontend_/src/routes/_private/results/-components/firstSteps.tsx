@@ -52,7 +52,7 @@ export default function FirstSteps() {
           <li className="flex flex-wrap items-center whitespace-nowrap">
             You should create a new repository by clicking this button
             <Spacer />
-            <Link href={globals.primary_project || 'https://github.com'}>
+            <Link to={globals.primary_project || 'https://github.com'}>
               <img
                 className="min-w-[150px]"
                 src={'/use-this-template-btn.png'}
@@ -67,7 +67,7 @@ export default function FirstSteps() {
           <li className="flex flex-wrap whitespace-nowrap">
             After creating the repository, you should go to
             <Spacer />
-            <Link href="/settings" className="text-primary hover:underline">
+            <Link to="/settings" className="text-primary hover:underline">
               /settings
             </Link>
             <Spacer />

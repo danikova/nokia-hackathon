@@ -14,6 +14,7 @@ export default function NavBarItem({ item }: { item: NavBarItem }) {
   }, [item, pathname]);
 
   return (
+    // @ts-ignore
     <Link
       to={item.rootPath}
       className={cn(

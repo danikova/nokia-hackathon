@@ -13,7 +13,7 @@ export default function AppBar({
   return (
     <div className="h-full bg-primary px-4">
       <div className="flex min-h-full items-center">
-        <Link href="/" className="inline-block">
+        <Link to="/" className="inline-block">
           <img src="/nokia.svg" height={30} width={90} alt="Nokia logo" />
         </Link>
         <h1 className="ml-4 text-xl text-background">{title}</h1>
