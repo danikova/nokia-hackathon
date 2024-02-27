@@ -40,7 +40,7 @@ func AddGetRunResultsSumView(app *pocketbase.PocketBase, e *core.ServeEvent) {
 		Method: http.MethodGet,
 		Path:   "/custom_api/run_result_sum/",
 		Handler: func(c echo.Context) error {
-			info := apis.RequestData(c)
+			info := apis.RequestInfo(c)
 			workspaceId := strings.TrimSpace(c.QueryParam("workspaceId"))
 
 			if workspaceId == "" {

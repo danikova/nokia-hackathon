@@ -14,7 +14,7 @@ import (
 
 func OnRecordsListRequest(app *pocketbase.PocketBase) {
 	app.OnRecordsListRequest(utils.RunTasksCollectionName).Add(func(e *core.RecordsListEvent) error {
-		if apis.RequestData(e.HttpContext).Admin == nil {
+		if apis.RequestInfo(e.HttpContext).Admin == nil {
 			for _, record := range e.Records {
 				record.Set("etalon_result", ":(")
 			}
