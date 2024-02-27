@@ -1,3 +1,5 @@
+import { RunResultRecord } from './runResults.types';
+
 export interface RunStatisticRecord {
   id: string;
   collectionId: string;
@@ -15,23 +17,4 @@ export interface RunStatisticRecord {
 
 export type RunStatisticResponse = RunStatisticRecord[];
 
-export interface RunResultRecord {
-  id: string;
-  collectionId: string;
-  collectionName: string;
-  created: string;
-  updated: string;
-  workspace: string;
-  run_id: string;
-  task: string;
-  execution_time?: number;
-  output_similarity: number;
-  status: 'success' | 'fail' | 'timeout' | 'flowFail';
-  output: string;
-  returncode: number;
-  is_success: boolean;
-  stderr?: string;
-  sha: string;
-}
-
-export type RunResultResponse = RunResultRecord[];
+export type RunResultSumResponse = RunResultRecord[];
