@@ -40,9 +40,7 @@ function DevtoolHandler() {
             <SelectValue placeholder="Selected devtool" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem onClick={() => setSelect(0)} value="router">
-              React Router
-            </SelectItem>
+            <SelectItem value="router">React Router</SelectItem>
             <SelectItem value="query">React Query</SelectItem>
             <SelectItem value="jotai">Jotai</SelectItem>
           </SelectContent>
