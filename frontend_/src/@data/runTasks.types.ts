@@ -1,4 +1,4 @@
-import { BaseCollectionResponse } from "./base.types";
+import { BaseCollectionResponse } from './base.types';
 
 export interface RunTaskRecord {
   id: string;

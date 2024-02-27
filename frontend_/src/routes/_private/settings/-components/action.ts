@@ -14,7 +14,7 @@ export async function testGithubRepo(repo_url: string): Promise<RepoState> {
       string,
     ];
     const res = await fetch(`https://api.github.com/repos/${owner}/${repo}`, {
-      headers: { Accept: "application/vnd.github+json" },
+      headers: { Accept: 'application/vnd.github+json' },
     });
     return res.status < 300 ? RepoState.SUCCESS : RepoState.FAILURE;
   } catch (e) {

@@ -1,8 +1,8 @@
-import axios from "axios";
-import PocketBase from "pocketbase";
-import { enqueueSnackbar } from "notistack";
-import { MutationCache, QueryCache, QueryClient } from "@tanstack/react-query";
-import { createSyncStoragePersister } from "@tanstack/query-sync-storage-persister";
+import axios from 'axios';
+import PocketBase from 'pocketbase';
+import { enqueueSnackbar } from 'notistack';
+import { MutationCache, QueryCache, QueryClient } from '@tanstack/react-query';
+import { createSyncStoragePersister } from '@tanstack/query-sync-storage-persister';
 
 export const queryClient = new QueryClient({
   defaultOptions: {
@@ -11,17 +11,17 @@ export const queryClient = new QueryClient({
     },
   },
   queryCache: new QueryCache({
-    onError: (error) => {
+    onError: error => {
       enqueueSnackbar(error.message, {
-        variant: "error",
+        variant: 'error',
         preventDuplicate: true,
       });
     },
   }),
   mutationCache: new MutationCache({
-    onError: (error) => {
+    onError: error => {
       enqueueSnackbar(error.message, {
-        variant: "error",
+        variant: 'error',
         preventDuplicate: true,
       });
     },

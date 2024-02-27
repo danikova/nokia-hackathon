@@ -1,6 +1,6 @@
-import { BaseCollectionResponse } from "./base.types";
-import { RankingRecord } from "./rankings.types";
-import { WorkspaceRecord } from "./workspaces.types";
+import { BaseCollectionResponse } from './base.types';
+import { RankingRecord } from './rankings.types';
+import { WorkspaceRecord } from './workspaces.types';
 
 export interface WorkspaceRankingRecord {
   id: string;

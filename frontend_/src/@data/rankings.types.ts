@@ -1,5 +1,5 @@
-import { BaseCollectionResponse } from "./base.types";
-import { UserRecord } from "./users.types";
+import { BaseCollectionResponse } from './base.types';
+import { UserRecord } from './users.types';
 
 export interface RankingRecord {
   id: string;

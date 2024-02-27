@@ -1,5 +1,5 @@
-import { ReactElement } from "react";
-import { LinkProps } from "@tanstack/react-router";
+import { ReactElement } from 'react';
+import { LinkProps } from '@tanstack/react-router';
 
 export type BreadCrumbItem = {
   title: string;
@@ -10,7 +10,7 @@ export type BreadCrumbItem = {
 export type NavBarItem = {
   icon: ReactElement;
   title: string;
-  rootPath: Exclude<LinkProps["to"], undefined>;
+  rootPath: Exclude<LinkProps['to'], undefined>;
   description: string;
   shortDescription?: string;
 };

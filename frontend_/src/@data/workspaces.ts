@@ -4,17 +4,17 @@ import {
   useMutation,
   useQuery,
   useQueryClient,
-} from "@tanstack/react-query";
-import { WorkspaceRecord, WorkspacesResponse } from "./workspaces.types";
-import axios from "axios";
+} from '@tanstack/react-query';
+import { WorkspaceRecord, WorkspacesResponse } from './workspaces.types';
+import axios from 'axios';
 
 export function useWorkspaces(
-  options?: Partial<UseQueryOptions<WorkspacesResponse, Error>>
+  options?: Partial<UseQueryOptions<WorkspacesResponse, Error>>,
 ) {
   return useQuery({
-    queryKey: ["workspaces"],
+    queryKey: ['workspaces'],
     queryFn: async () => {
-      const response = await axios.get("/api/collections/workspaces/records");
+      const response = await axios.get('/api/collections/workspaces/records');
       return response.data;
     },
     ...options,
@@ -22,28 +22,28 @@ export function useWorkspaces(
 }
 
 interface UpdateWorkspaceProps {
-  workspaceId: WorkspaceRecord["id"];
+  workspaceId: WorkspaceRecord['id'];
   data: Partial<WorkspaceRecord>;
 }
 
 export function useUpdateWorkspace(
   options?: Partial<
     UseMutationOptions<WorkspaceRecord, Error, UpdateWorkspaceProps>
-  >
+  >,
 ) {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationKey: ["workspace", "update"],
+    mutationKey: ['workspace', 'update'],
     mutationFn: async ({ workspaceId, data }) => {
       const response = await axios.patch(
         `/api/collections/workspaces/records/${workspaceId}`,
-        data
+        data,
       );
       return response.data;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["workspaces"] });
+      queryClient.invalidateQueries({ queryKey: ['workspaces'] });
     },
     ...options,
   });

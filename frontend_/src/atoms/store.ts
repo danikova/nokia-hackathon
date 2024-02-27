@@ -1,3 +1,3 @@
-import { getDefaultStore } from "jotai";
+import { getDefaultStore } from 'jotai';
 
 export const jotaiStore = getDefaultStore();

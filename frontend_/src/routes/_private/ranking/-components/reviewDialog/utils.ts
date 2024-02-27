@@ -1,8 +1,8 @@
-import { workspaceDialogStateAtom } from "@/atoms/workspace";
-import { useAtom } from "jotai";
-import { useCallback } from "react";
-import { ReviewDialogProps } from "./type";
-import { RunTaskRecord } from "@/@data/runTasks.types";
+import { workspaceDialogStateAtom } from '@/atoms/workspace';
+import { useAtom } from 'jotai';
+import { useCallback } from 'react';
+import { ReviewDialogProps } from './type';
+import { RunTaskRecord } from '@/@data/runTasks.types';
 
 export const rangeMaxBase = 7;
 export const getRangeMax = (scoreMultipler: number) => {
@@ -24,7 +24,7 @@ export function useReviewDialog() {
     (props: ReviewDialogProps) => {
       setState({ open: true, props });
     },
-    [setState]
+    [setState],
   );
 
   const closeDialog = useCallback(() => {
@@ -36,7 +36,7 @@ export function useReviewDialog() {
       if (state.props)
         setState({ ...state, props: { ...state.props, ...props } });
     },
-    [state, setState]
+    [state, setState],
   );
 
   return { openDialog, closeDialog, setDialogProps, state };

@@ -1,14 +1,14 @@
-import { UseQueryOptions, useQuery } from "@tanstack/react-query";
-import axios from "axios";
-import { Globals, GlobalsResponse } from "./globals.types";
+import { UseQueryOptions, useQuery } from '@tanstack/react-query';
+import axios from 'axios';
+import { Globals, GlobalsResponse } from './globals.types';
 
 export function useGlobals(options?: Partial<UseQueryOptions<Globals, Error>>) {
   const { data } = useQuery({
-    queryKey: ["globals"],
+    queryKey: ['globals'],
     queryFn: async () => {
       const globals: Globals = {};
       const response = await axios.get<GlobalsResponse>(
-        "/api/collections/globals/records"
+        '/api/collections/globals/records',
       );
       for (const item of response.data.items) {
         globals[item.key] = item.value;
