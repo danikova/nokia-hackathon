@@ -1,16 +1,18 @@
 import { cn } from '@/lib/utils';
-import NavBarItemC from './navBarItem';
 import {
   Tooltip,
   TooltipContent,
   TooltipDescription,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
+import { useAtomValue } from 'jotai';
+import NavBarItem from './navBarItem';
+import { userAtom } from '@/atoms/user';
+import { type NavBarItem as NavBarItemType } from './types';
 import { navBarItems, staffNavBarItems } from './navBarItems';
-import { NavBarItem } from './types';
 
 export default function SideNavBar() {
-  const role: string = 'user';
+  const user = useAtomValue(userAtom);
   const lastItem = navBarItems[navBarItems.length - 1];
 
   return (
@@ -19,7 +21,7 @@ export default function SideNavBar() {
         {navBarItems.slice(0, -1).map(item => (
           <NavBarItemWrapper key={item.title} item={item} />
         ))}
-        {role === 'staff' && (
+        {user?.role === 'staff' && (
           <>
             <Divider className="my-4" />
             {staffNavBarItems.map(item => (
@@ -40,11 +42,11 @@ function Divider({ className }: { className?: string }) {
   return <div className={cn('border-t-2 border-secondary', className)} />;
 }
 
-function NavBarItemWrapper({ item }: { item: NavBarItem }) {
+function NavBarItemWrapper({ item }: { item: NavBarItemType }) {
   return (
     <Tooltip delayDuration={600} key={item.title}>
       <TooltipTrigger className="h-16 w-16 transition-all hover:cursor-pointer hover:bg-secondary hover:shadow-inner">
-        <NavBarItemC item={item} />
+        <NavBarItem item={item} />
       </TooltipTrigger>
       <TooltipContent side="right">
         {item.title}

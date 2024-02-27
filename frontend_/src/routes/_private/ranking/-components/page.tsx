@@ -1,43 +1,39 @@
-import { useAtom } from 'jotai';
-import { ColDef } from 'ag-grid-community';
+"use client";
+
+import { useAtom } from "jotai";
+import { useRowData } from "./rowData";
+import ReviewDialog from "./ReviewDialog";
+import { ColDef } from "ag-grid-community";
+import { AgGridReact } from "ag-grid-react";
 import BreadCrumb, {
   BreadCrumbChildren,
-} from '@/components/navigation/breadCrumb';
-import { AgGridReact } from 'ag-grid-react';
-import { Label } from '@/components/ui/label';
-import { Switch } from '@/components/ui/switch';
-import { useRowData } from './-components/rowData';
-import ReviewDialog from './-components/reviewDialog';
-import { useColumnDefs } from './-components/columnDefs';
-import { createFileRoute } from '@tanstack/react-router';
-import { useColumnTypes } from './-components/columnTypes';
-import { FullPageAgGridReact } from '@/components/ui/table';
-import { useCallback, useEffect, useMemo, useRef } from 'react';
-import { staffNavBarItems } from '@/components/navigation/navBarItems';
-import { WorkspaceRankingRecord } from '@/@data/workspaceRankings.types';
-import { globalRankingAtom, hideEmptyWorkspacesAtom } from '@/atoms/ranking';
+} from "@/components/navigation/BreadCrumb";
+import { useColumnDefs } from "./columnDefs";
+import { Label } from "@/components/ui/label";
+import { useColumnTypes } from "./columnTypes";
+import { Switch } from "@/components/ui/switch";
+import { staffNavBarItems } from "@/lib/navBar";
+import { FullPageAgGridReact } from "@/components/ui/table";
+import { WorkspaceRanking, useRunTasks } from "@/lib/dataHooks";
+import { useCallback, useEffect, useMemo, useRef } from "react";
+import { globalRankingAtom, hideEmptyWorkspacesAtom } from "./atoms";
 
-export const Route = createFileRoute('/_private/ranking/')({
-  component: Ranking,
-});
+export default function RankingPage() {
+  useRunTasks();
 
-function Ranking() {
   const [globalRankings, setGlobalRankings] = useAtom(globalRankingAtom);
   const [hideEmptyWorkspaces, setHideEmptyWorkspaces] = useAtom(
     hideEmptyWorkspacesAtom
   );
-  const gridRef = useRef<AgGridReact<WorkspaceRankingRecord>>();
+  const gridRef = useRef<AgGridReact<WorkspaceRanking>>();
 
   const redrawRowOnChange = useCallback(
-    (data: WorkspaceRankingRecord) => {
+    (data: WorkspaceRanking) => {
       const row = gridRef.current?.api?.getRowNode(data.id);
       if (row)
-        setTimeout(
-          () => {
-            gridRef.current?.api?.redrawRows({ rowNodes: [row] });
-          },
-          Math.random() * 200 + 150
-        );
+        setTimeout(() => {
+          gridRef.current?.api?.redrawRows({ rowNodes: [row] });
+        }, Math.random() * 200 + 150);
     },
     [gridRef]
   );
@@ -46,15 +42,15 @@ function Ranking() {
   const columnDefs = useColumnDefs();
 
   const columnTypes = useColumnTypes();
-  const defaultColDef = useMemo<ColDef<WorkspaceRankingRecord>>(
+  const defaultColDef = useMemo<ColDef<WorkspaceRanking>>(
     () => ({
       sortable: true,
       filter: false,
       flex: 1,
-      cellClass: params =>
+      cellClass: (params) =>
         !params.data?.expand.workspace?.repo_url
-          ? 'line-through-cell opacity-30'
-          : '',
+          ? "line-through-cell opacity-30"
+          : "",
     }),
     []
   );
@@ -74,7 +70,7 @@ function Ranking() {
       <BreadCrumbChildren>
         <div className="flex flex-col items-end space-y-1">
           <div className="flex items-center space-x-2">
-            <Label>{globalRankings ? 'Global' : 'My'} rankings</Label>
+            <Label>{globalRankings ? "Global" : "My"} rankings</Label>
             <Switch
               checked={globalRankings}
               onCheckedChange={setGlobalRankings}
@@ -92,7 +88,7 @@ function Ranking() {
       <ReviewDialog />
       <FullPageAgGridReact
         columnTypes={columnTypes}
-        key={globalRankings ? 'global' : 'local'}
+        key={globalRankings ? "global" : "local"}
         gridRef={gridRef}
         rowData={rowData}
         columnDefs={columnDefs}
@@ -101,7 +97,7 @@ function Ranking() {
         getRowId={({ data }) => data.id}
         noRowsOverlayComponent={() => {
           return (
-            <div className="flex h-full w-full flex-col items-center justify-center">
+            <div className="flex flex-col items-center justify-center h-full w-full">
               <div className="text-2xl font-bold text-gray-500">No data</div>
             </div>
           );
