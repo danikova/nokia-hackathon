@@ -8,7 +8,7 @@
     "build": "tsc && vite build",
     "preview": "vite preview",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0 --ignore-path .eslintignore",
-    "format": "prettier --ignore-path .gitignore --write \"**/*.+(js|ts|json)\""
+    "format": "prettier --write \"**/*.+(js|ts|json)\" --ignore-path .prettierignore"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.3.4",
