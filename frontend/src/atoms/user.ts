@@ -5,3 +5,4 @@ import { UserRecord } from '@/@data/users.types';
 export const userAtom = atom<UserRecord | null>(
   pb.authStore.model as UserRecord
 );
+userAtom.debugLabel = 'userAtom';
