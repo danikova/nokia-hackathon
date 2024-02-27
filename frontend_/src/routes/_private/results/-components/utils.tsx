@@ -5,7 +5,9 @@ import { GroupedRunResult, lastN } from './helpers';
 import { useMemo } from 'react';
 
 export function useBestGridCells(workspace?: WorkspaceRecord) {
-  const { data: bestSolutions } = useBestRuns(workspace ?? {id: ''} as WorkspaceRecord);
+  const { data: bestSolutions } = useBestRuns(
+    workspace ?? ({ id: '' } as WorkspaceRecord)
+  );
   const bestCells = useMemo(() => {
     const cells = [];
     for (const runResults of bestSolutions ?? []) {
