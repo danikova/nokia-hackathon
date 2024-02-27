@@ -37,13 +37,16 @@ function useOnSubmit(setLoading: LoginComponentProps['setLoading']) {
   return useCallback(
     async ({ userIdentifier, password }: z.infer<typeof formSchema>) => {
       setLoading(true);
-      await pbSnackbarWrapper(
-        pb
-          .collection('users')
-          .authWithPassword<UserRecord>(userIdentifier, password),
-        'Successful login'
-      );
-      setLoading(false);
+      try {
+        await pbSnackbarWrapper(
+          pb
+            .collection('users')
+            .authWithPassword<UserRecord>(userIdentifier, password),
+          'Successful login'
+        );
+      } finally {
+        setLoading(false);
+      }
       navigate({
         to: '/',
         replace: false,

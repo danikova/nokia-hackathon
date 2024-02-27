@@ -13,11 +13,14 @@ function useOAuthOnClick(
 
   const onClick = useCallback(async () => {
     setLoading(true);
-    await pbSnackbarWrapper(
-      pb.collection('users').authWithOAuth2({ provider }),
-      'Successful login'
-    );
-    setLoading(false);
+    try {
+      await pbSnackbarWrapper(
+        pb.collection('users').authWithOAuth2({ provider }),
+        'Successful login'
+      );
+    } finally {
+      setLoading(false);
+    }
     navigate({
       to: '/',
       replace: false,
