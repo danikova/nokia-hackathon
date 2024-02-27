@@ -5,3 +5,5 @@ export interface BaseCollectionResponse<T> {
   totalItems: number;
   items: T[];
 }
+
+export type Expandable<T> = { expand?: Partial<T> };

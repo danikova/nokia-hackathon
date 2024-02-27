@@ -1,8 +1,12 @@
-import { BaseCollectionResponse } from './base.types';
+import { BaseCollectionResponse, Expandable } from './base.types';
 import { RankingRecord } from './rankings.types';
 import { WorkspaceRecord } from './workspaces.types';
 
-export interface WorkspaceRankingRecord {
+export interface WorkspaceRankingRecord
+  extends Expandable<{
+    workspace: WorkspaceRecord;
+    rankings: RankingRecord[];
+  }> {
   id: string;
   collectionId: string;
   collectionName: string;
@@ -10,10 +14,6 @@ export interface WorkspaceRankingRecord {
   updated: string;
   workspace: string;
   rankings: string[];
-  expand: {
-    workspace: WorkspaceRecord;
-    rankings: RankingRecord[];
-  };
 }
 
 export type WorkspaceRankingResponse =
