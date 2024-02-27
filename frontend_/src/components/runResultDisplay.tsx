@@ -22,7 +22,7 @@ import humanizeDuration from "humanize-duration";
 import { EditorView } from "@uiw/react-codemirror";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useEffect, useMemo, useState } from "react";
-import { RunResultRecord } from "@/@data/customViews.type";
+import { RunResultRecord } from "@/@data/customViews.types";
 import WindowLink from "@/components/floatingWindowService";
 import { FaCircle, FaCircleXmark, FaMaximize } from "react-icons/fa6";
 

@@ -2,7 +2,7 @@ import { cn } from "@/lib/utils";
 import { pb } from "@/@data/client";
 import ReactMarkdown from "react-markdown";
 import { useInfoCards } from "@/@data/infoCards";
-import { InfoCardRecord } from "@/@data/infoCards.type";
+import { InfoCardRecord } from "@/@data/infoCards.types";
 import { createFileRoute } from "@tanstack/react-router";
 import BreadCrumb from "@/components/navigation/breadCrumb";
 import { navBarItems } from "@/components/navigation/navBarItems";

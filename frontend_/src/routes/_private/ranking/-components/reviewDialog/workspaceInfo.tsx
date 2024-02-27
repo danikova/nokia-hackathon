@@ -1,7 +1,7 @@
 import { getEditorUrl } from "@/lib/utils";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useBestRuns } from "@/@data/customViews";
-import { WorkspaceRecord } from "@/@data/workspaces.type";
+import { WorkspaceRecord } from "@/@data/workspaces.types";
 import RunResultDisplay from "@/components/runResultDisplay";
 
 export default function WorkspaceInfo({

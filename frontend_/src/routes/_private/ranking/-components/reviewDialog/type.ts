@@ -1,6 +1,6 @@
-import { WorkspaceRankingRecord } from "@/@data/WorkspaceRankingRecord";
-import { RankingRecord } from "@/@data/rankings.type";
-import { WorkspaceRecord } from "@/@data/workspaces.type";
+import { RankingRecord } from "@/@data/rankings.types";
+import { WorkspaceRankingRecord } from "@/@data/workspaceRankings.types";
+import { WorkspaceRecord } from "@/@data/workspaces.types";
 
 export interface ReviewDialogProps {
   data: WorkspaceRankingRecord;

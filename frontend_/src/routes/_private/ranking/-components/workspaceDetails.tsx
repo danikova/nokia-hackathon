@@ -2,7 +2,7 @@ import { useMemo } from "react";
 import { getEditorUrl } from "@/lib/utils";
 import { Link } from "@tanstack/react-router";
 import WindowLink from "@/components/floatingWindowService";
-import { WorkspaceRecord } from "@/@data/workspaces.type";
+import { WorkspaceRecord } from "@/@data/workspaces.types";
 
 function MissingRepoUrl() {
   return (

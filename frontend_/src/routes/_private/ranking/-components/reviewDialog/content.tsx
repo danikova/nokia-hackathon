@@ -29,7 +29,7 @@ import {
 import { userAtom } from "@/atoms/user";
 import { useRunTasks } from "@/@data/runTasks";
 import { pb } from "@/@data/client";
-import { RankingRecord } from "@/@data/rankings.type";
+import { RankingRecord } from "@/@data/rankings.types";
 
 export function ReviewDialogContent(props: ReviewDialogContentProps) {
   const form = useForm();

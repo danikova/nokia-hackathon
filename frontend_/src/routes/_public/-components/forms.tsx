@@ -15,7 +15,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { pb } from "@/@data/client";
-import { UserRecord } from "@/@data/users.type";
+import { UserRecord } from "@/@data/users.types";
 import { useNavigate } from "@tanstack/react-router";
 import { pbSnackbarWrapper } from "@/lib/utils";
 

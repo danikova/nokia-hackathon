@@ -8,6 +8,7 @@ export default defineConfig({
   server: {
     proxy: {
       "/api": "http://localhost:8090",
+      "/custom_api": "http://localhost:8090",
     },
   },
   resolve: {
