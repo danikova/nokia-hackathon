@@ -1,6 +1,9 @@
 name: CICD
 
-on: [push]
+on:
+  push:
+    branches:
+      - main
 
 jobs:
   test-frontend:
@@ -24,57 +27,11 @@ jobs:
           npm run lint
           npm run format-check
 
-#   build-backend:
-#     runs-on: ubuntu-latest
-#     steps:
-#       - uses: actions/checkout@v3
-
-#       - name: Set up Go
-#         uses: actions/setup-go@v4
-#         with:
-#           go-version: '1.20'
-#           cache-dependency-path: backend/go.sum
-#           cache: true
-
-#       - name: Install dependencies
-#         run: |
-#           cd backend
-#           go mod download
-
-#       - name: Build executable
-#         run: |
-#           cd backend
-#           export CGO_ENABLED=0
-#           go build -o hackathon-backend
-
-#       - name: Stop server
-#         uses: appleboy/ssh-action@master
-#         with:
-#           host: ${{ secrets.HOST }}
-#           username: ${{ secrets.USER_NAME }}
-#           key: ${{ secrets.SSH_PRIVATE_KEY }}
-#           port: ${{ secrets.PORT }}
-#           script: |
-#             systemctl stop pocketbase.service
-#             systemctl status --no-pager -l pocketbase.service || true
-
-#       - name: Copy to linode
-#         uses: burnett01/rsync-deployments@6.0.0
-#         with:
-#           switches: -avz
-#           path: ./backend/hackathon-backend
-#           remote_path: /home/pocketbase/backend/hackathon-backend
-#           remote_host: ${{ secrets.HOST }}
-#           remote_user: ${{ secrets.USER_NAME }}
-#           remote_key: ${{ secrets.SSH_PRIVATE_KEY }}
-
-#       - name: Start server
-#         uses: appleboy/ssh-action@master
-#         with:
-#           host: ${{ secrets.HOST }}
-#           username: ${{ secrets.USER_NAME }}
-#           key: ${{ secrets.SSH_PRIVATE_KEY }}
-#           port: ${{ secrets.PORT }}
-#           script: |
-#             systemctl start pocketbase.service
-#             systemctl status --no-pager -l pocketbase.service || true
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: superfly/flyctl-actions/setup-flyctl@master
+      - run: flyctl deploy --remote-only
+        env:
+          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}

@@ -1,0 +1,30 @@
+# fly.toml app configuration file generated for nokia-hackathon on 2024-02-29T14:34:54+01:00
+#
+# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
+#
+
+app = 'nokia-hackathon'
+primary_region = 'ams'
+
+[mounts]
+  destination = "/app/pb_data"
+  source = "pb_data"
+
+[build]
+
+[http_service]
+  internal_port = 8080
+  force_https = true
+  auto_stop_machines = true
+  auto_start_machines = true
+  min_machines_running = 0
+  processes = ['app']
+  [http_service.concurrency]
+    type = "requests"
+    soft_limit = 500
+    hard_limit = 550
+
+[[vm]]
+  memory = '512mb'
+  cpu_kind = 'shared'
+  cpus = 1
