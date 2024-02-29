@@ -5,12 +5,13 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build",
+    "build": "npm run lint && vite build",
     "preview": "vite preview",
     "es-lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0 --ignore-path .eslintignore",
     "ts-lint": "tsc --noEmit",
     "lint": "npm run es-lint && npm run ts-lint",
-    "format": "prettier --write \"**/*.+(js|ts|tsx|json)\" --ignore-path .prettierignore"
+    "format": "prettier --write \"**/*.+(js|ts|tsx|json)\" --ignore-path .prettierignore",
+    "format-check": "prettier --check \"**/*.+(js|ts|tsx|json)\" --ignore-path .prettierignore"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.3.4",
