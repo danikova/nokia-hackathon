@@ -54,3 +54,6 @@ node_modules/
 .env
 .env.development
 .env.production
+
+# deployed files
+deploy/tmp

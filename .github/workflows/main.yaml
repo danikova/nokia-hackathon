@@ -18,10 +18,11 @@ jobs:
           cd frontend
           npm install
 
-      - name: Run lint
+      - name: Run checks
         run: |
           cd frontend
           npm run lint
+          npm run format-check
 
 #   build-backend:
 #     runs-on: ubuntu-latest

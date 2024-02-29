@@ -3,3 +3,4 @@ frontend/node_modules
 
 # Ignore bin in the backend folder
 backend/bin
+backend/pb_data

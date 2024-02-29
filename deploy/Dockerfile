@@ -6,26 +6,28 @@ RUN go mod download
 COPY backend/ ./
 RUN CGO_ENABLED=0 GOOS=linux go build -o backendBin .
 
+FROM alpine:latest AS backend
+WORKDIR /app/backend
+COPY deploy/files/backend/ /
+COPY backend/migrations/ ./migrations/
+COPY --from=backend-builder /app/backend/backendBin .
+CMD ["sh", "./start.sh"]
 
 # Stage 2: Build the js frontend
-# FROM node:18 AS frontend-builder
-# WORKDIR /app/frontend
-# COPY frontend/package*.json ./
-# RUN npm install
-# COPY frontend/ ./
-# RUN npm run build
+FROM node:18 AS frontend-builder
+WORKDIR /app/frontend
+COPY frontend/package*.json ./
+RUN npm install
+COPY frontend/ ./
+RUN npm run build
 
+# Stage 3: Create the proxy image
+FROM nginx:mainline-alpine3.18-perl AS proxy
+WORKDIR /app/proxy
+COPY deploy/files/proxy /
+COPY --from=frontend-builder /app/frontend/dist/ ./frontend/
+CMD ["sh", "./start.sh"]
 
-# Stage 3: Create the final image
-FROM nginx:stable-alpine3.17-slim
-WORKDIR /app/
-
-COPY --from=backend-builder /app/backend/backendBin /app/api
-# COPY --from=frontend-builder /app/frontend/build/ /usr/share/nginx/html
-COPY deploy/root /
-
-RUN apk add certbot certbot-nginx
-RUN crontab -l | { cat; echo "0 12 * * * /usr/bin/certbot renew --quiet"; } | crontab -
-
-EXPOSE 80 433
-# CMD ["/bin/sh", "/app/start.sh"]
+# Stage 4: Create the certbot image
+FROM certbot/certbot:latest AS certbot
+WORKDIR /app/certbot
