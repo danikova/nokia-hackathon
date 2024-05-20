@@ -26,7 +26,7 @@
         "request": "launch",
         "mode": "debug",
         "program": "${workspaceFolder:backend}/main.go",
-        "args": ["serve"]
+        "args": ["serve", "--dev"]
       }
     ]
   },
