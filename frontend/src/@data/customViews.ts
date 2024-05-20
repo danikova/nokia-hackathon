@@ -36,7 +36,7 @@ export function useRunStatistics(
 }
 
 export function useBestRuns(
-  workspace: WorkspaceRecord,
+  workspace?: WorkspaceRecord,
   options?: Partial<UseQueryOptions<RunResultRecord[], Error>>
 ) {
   return useQuery({
@@ -45,7 +45,7 @@ export function useBestRuns(
       await sw(
         pb.send<RunResultRecord[]>('/custom_api/run_result_sum/', {
           method: 'GET',
-          query: { workspaceId: workspace.id },
+          query: { workspaceId: workspace?.id },
         })
       ),
     ...options,

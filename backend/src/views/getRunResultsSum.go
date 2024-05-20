@@ -57,7 +57,7 @@ func AddGetRunResultsSumView(app *pocketbase.PocketBase, e *core.ServeEvent) {
 			}
 
 			results, err := getRunResults(app, workspaceId)
-			if err != nil || len(results) == 0 {
+			if err != nil {
 				log.Panic(err)
 				return echo.NewHTTPError(http.StatusBadRequest, "Wrong query")
 			}

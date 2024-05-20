@@ -9,7 +9,9 @@ export default function WorkspaceInfo({
 }: {
   workspace: WorkspaceRecord;
 }) {
-  const { data: runResults, status } = useBestRuns(workspace);
+  const { data: runResults, status } = useBestRuns(workspace, {
+    enabled: !!workspace,
+  });
 
   return (
     <div className="max-h-[70vh] w-[28rem] overflow-auto p-4">
