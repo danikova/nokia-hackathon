@@ -16,6 +16,7 @@ import { useCallback, useEffect, useMemo, useRef } from 'react';
 import { staffNavBarItems } from '@/components/navigation/navBarItems';
 import { WorkspaceRankingRecord } from '@/@data/workspaceRankings.types';
 import { globalRankingAtom, hideEmptyWorkspacesAtom } from '@/atoms/ranking';
+import { uniqueId } from 'lodash';
 
 export const Route = createFileRoute('/_private/ranking/')({
   component: Ranking,
@@ -27,6 +28,7 @@ function Ranking() {
     hideEmptyWorkspacesAtom
   );
   const gridRef = useRef<AgGridReact<WorkspaceRankingRecord>>();
+  const dataGridKey = useMemo(() => uniqueId(), [globalRankings]); // eslint-disable-line
 
   const redrawRowOnChange = useCallback(
     (data: WorkspaceRankingRecord) => {
@@ -92,13 +94,12 @@ function Ranking() {
       <ReviewDialog />
       <FullPageAgGridReact
         columnTypes={columnTypes}
-        key={globalRankings ? 'global' : 'local'}
+        key={dataGridKey}
         gridRef={gridRef}
         rowData={rowData}
         columnDefs={columnDefs}
         defaultColDef={defaultColDef}
-        animateRows={true}
-        getRowId={({ data }) => data.id}
+        animateRows={false}
         noRowsOverlayComponent={() => {
           return (
             <div className="flex h-full w-full flex-col items-center justify-center">
