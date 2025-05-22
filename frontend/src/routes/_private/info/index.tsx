@@ -48,7 +48,7 @@ function Section({
       )}
     >
       {leftImageSrc && <img height={200} width={200} src={leftImageSrc} />}
-      <div className="prose">
+      <div>
         <ReactMarkdown>{infoCard.text}</ReactMarkdown>
       </div>
       {RightImageSrc && <img height={200} width={200} src={RightImageSrc} />}
